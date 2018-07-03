@@ -1,7 +1,3 @@
-# Command Center
-
-> Command Center of LEAP
-
 ## Build Setup
 
 ``` bash
