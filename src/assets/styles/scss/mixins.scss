@@ -1,0 +1,43 @@
+@mixin remove-border-styling() {
+    box-shadow: none;
+    border-color: transparent;
+    border-radius: 0;
+}
+
+@mixin active-cta() {
+    background-color: #000000;
+    color: #ffed00;
+    cursor: pointer;
+}
+
+@mixin singleLineEllipsis() {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin multiLineEllipsis($lineHeight, $lineCount, $bgColor){
+  overflow: hidden;
+  position: relative;
+  line-height: $lineHeight;
+  max-height: $lineHeight * $lineCount; 
+  margin-right: -1em;
+  padding-right: 1em;
+  
+  &:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 2px;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: $bgColor;
+  }
+}
