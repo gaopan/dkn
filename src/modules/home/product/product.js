@@ -4,7 +4,7 @@ export default {
 		rfid: {
 			required: true
 		}
-	}
+	},
 	data(){
 	},
 	created(){
