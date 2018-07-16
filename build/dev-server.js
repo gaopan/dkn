@@ -13,7 +13,7 @@ var webpackConfig = require('./webpack.' + envConf.env_short + '.conf');
 
 // default port where dev server listens for incoming traffic
 // var port = process.env.PORT || config.dev.port
-var port = 7777;
+var port = 7676;
 // automatically open browser, if not set will be false
 var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
