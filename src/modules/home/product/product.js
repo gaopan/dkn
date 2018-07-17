@@ -24,8 +24,8 @@ export default {
 	created(){
 	},
 	methods:{
-		handleSlideClick(){
-			console.log("handleSlideClick")
+		handleSlideClick(args){
+			console.log(args)
 		}
 	},
 	components:{

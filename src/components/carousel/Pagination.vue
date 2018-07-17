@@ -1,5 +1,5 @@
 <template>
-  <div v-show="carousel.pageCount > 1" class="carousel-pagination">
+  <div class="carousel-pagination">
     <ul class="carousel-dot-container" role="tablist">
       <li
         class="carousel-dot"
@@ -16,7 +16,7 @@
           role="button"
           class="carousel-dot-button"
           :tabindex="index"
-          :style="`background: ${isCurrentDot(index) ? 'rgb(5,41,131)' : carousel.paginationColor};`"
+          :style="`background: ${isCurrentDot(index) ? 'rgb(5,41,131)' : 'gray'};`"
         ></button>
       </li>
     </ul>
@@ -29,32 +29,20 @@ export default {
   inject: ["carousel"],
   computed: {
     pagniationCount() {
-      return this.carousel.scrollPerPage
-        ? this.carousel.pageCount
-        : this.carousel.slideCount - 2;
+      return this.carousel.slideCount;
+    },
+    currentPage(){
+      return this.carousel.currentPage;
     }
+
   },
   methods: {
-    /**
-     * Change page by index
-     * @param {number} index
-     * return {void}
-     */
+
     goToPage(index) {
-      /**
-       * @event paginationclick
-       * @type {number}
-       */
       this.$emit("paginationclick", index);
     },
-
-    /**
-     * Check on current dot
-     * @param {number} index - dot index
-     * @return {boolean}
-     */
     isCurrentDot(index) {
-      return index === this.carousel.currentPage;
+      return index === this.currentPage;
     }
   }
 };

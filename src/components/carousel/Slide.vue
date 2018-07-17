@@ -32,36 +32,21 @@ export default {
   },
   computed: {
     activeSlides() {
-      const { currentPage, perPage, $children, slideCount } = this.carousel;
+      const { currentPage, $children, slideCount } = this.carousel;
       const activeSlides = [];
       const children = $children
-        .filter(
-          child =>
-            child.$el && child.$el.className.indexOf("carousel-slide") >= 0
-        )
+        .filter(child =>child.$el && child.$el.className.indexOf("carousel-slide") >= 0)
         .map(child => child._uid);
-
-      let i = 0;
-      while (i < perPage) {
-        const child = children[currentPage * perPage + i];
-        activeSlides.push(child);
-        i++;
-      }
 
       return activeSlides;
     },
-    /**
-     * `isActive` describes whether a slide is visible
-     * @return {Boolean}
-     */
+    //describes whether a slide is visible
     isActive() {
       return this.activeSlides.indexOf(this._uid) >= 0;
     },
-    /**
-     * `isCenter` describes whether a slide is in the center of all visible slides
-     * if perPage is an even number, we quit
-     * @return {Boolean}
-     */
+   
+     // `isCenter` describes whether a slide is in the center of all visible slides,
+     //if perPage is an even number, we quit
     isCenter() {
       const { perPage } = this.carousel;
       if (perPage % 2 === 0 || !this.isActive) return false;
@@ -70,18 +55,13 @@ export default {
   },
   methods: {
     onTouchEnd(e) {
-      console.log(e)
-      const eventPosX =
-        this.carousel.isTouch && e.changedTouches && e.changedTouches.length > 0
-          ? e.changedTouches[0].clientX
-          : e.clientX;
-          
+      let bTouch = this.carousel.isTouch && e.changedTouches && e.changedTouches.length > 0;
+      const eventPosX = bTouch? e.changedTouches[0].clientX : e.clientX;
+
       const deltaX = this.carousel.dragStartX - eventPosX;
 
-      if (
-        this.carousel.minSwipeDistance === 0 ||
-        Math.abs(deltaX) < this.carousel.minSwipeDistance
-      ) {
+      if (this.carousel.minSwipeDistance === 0 ||Math.abs(deltaX) < this.carousel.minSwipeDistance) {
+        //user click the slide
         this.$emit("slideClick", Object.assign({}, e.currentTarget.dataset));
       }
     }
@@ -91,12 +71,14 @@ export default {
 
 <style>
 .carousel-slide {
-  flex-basis: inherit;
-  flex-grow: 0;
-  flex-shrink: 0;
+  /*flex-basis: inherit;*/
+  /*flex-grow: 0;*/
+  /*flex-shrink: 0;*/
   user-select: none;
-  backface-visibility: hidden;
-  -webkit-touch-callout: none;
+  /*backface-visibility: hidden;*/
+  /*-webkit-touch-callout: none;*/
   outline: none;
+  width: 100%;
+  height: 100%;
 }
 </style>
