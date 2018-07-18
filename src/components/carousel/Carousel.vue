@@ -398,13 +398,22 @@ export default {
   overflow: hidden;  
 }
 
+.micro-carousel-wrapper {
+    position: absolute;
+    top: .24rem;
+    left: .24rem;
+}
+
 .carousel-inner {
   height: 100%;
 }
 
 .micro-carousel-wrapper .micro-carousel-inner {
-    width: 40px;
-    height: 30px;
+    width: .8rem;
+    height: .8rem;
     display: inline-block;
+}
+.micro-carousel-wrapper div + div {
+  margin-left: .12rem;
 }
 </style>

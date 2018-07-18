@@ -12,7 +12,6 @@ import './filters'
 import VeeValidate from 'vee-validate'
 import isURL from 'validator/lib/isURL';
 
-let maintenanceTimer = null;
 
 let bootstrap = function() {
 
