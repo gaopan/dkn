@@ -8,8 +8,8 @@ let instance = axiosHelper.createAxios({
 export default{
 	getProductInfo( id = 1277 ){
 		let url  = 'mock/rfid/345348986394/store_id/' + id;
-		return instance.get(url)
-		// return Promise.resolve(MockData.getProductInfo);
+		// return instance.get(url)
+		return Promise.resolve(MockData.getProductInfo);
 	}
 	
 }

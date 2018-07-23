@@ -58,7 +58,7 @@ export default {
       	value:null
       },
       bShowShadow:false,
-
+      bShowQRCode:false,
       productInfoData:{},
       productReviews:[],
       // productConcept:{},
@@ -206,6 +206,10 @@ export default {
 			console.log(args)
 			this.bShowShadow = args;
 		},
+		toggleQRCode(){
+			this.bShowQRCode = !this.bShowQRCode;
+			console.log(this.bShowQRCode)
+		}
 	},
 	components:{
 		Carousel,

@@ -43,7 +43,7 @@
 			<div class="product-size-option">
 				<span class="size-label">
 					<span class="size-mark">Size</span>
-					<span class="size-access">Stock: {{productInfoByCurrentSize.stock}}</span>
+					<span class="size-access">Stock: {{productInfoByCurrentSize.stock <=0 ? "unavailable":"available"}}</span>
 				</span>
 				<div class="product-size-select">
 					<custom-select 
@@ -54,12 +54,17 @@
 						> 
 					</custom-select>
 				</div>
-				<div class="product-dimensional-code">
-					<span class="code-tip">Want to buy online?Click me!</span>
+				<div class="product-dimensional-code" :class = "{'zIndex1': bShowQRCode}">
+					<i :class = '{"icon-QR_code":!bShowQRCode,"icon-close":bShowQRCode}' @click = "toggleQRCode"></i>
+					<div class="product-QR-code" v-show = "bShowQRCode">
+						<p>Scan this QR code with your phone, get product information on decathlon.com!</p>
+						<div class="QR-code-img"><i class="icon-QR_code"></i></div>
+					</div>
+					<span class="code-tip" v-show = "!bShowQRCode">Want to buy online?Click me!</span>
 				</div>
 			</div>
 
-			<div class="product-shadow" v-show = "bShowShadow"></div>
+			<div class="product-shadow" v-show = "bShowShadow||bShowQRCode"></div>
 		</section>
 
 		<section class="product-description">

@@ -2,7 +2,7 @@
 	<div class="custom-select">
 		<div class="select-label-wrapper"  @click = "showMenu">
 			<span class="select-label">{{selectLabel||"Please Select"}}</span>
-			<span class="arrow-icon">^</span>
+			<i class= "icon-down arrow-icon"></i>
 		</div>
 		<div class="select-menu" :class = "{'select-menu-up':true,'select-menu-down':false}" v-show = "bShowMenu">
 			<ul class="select-menu-list">
@@ -89,11 +89,13 @@
 		margin-left: 0.4rem;
 	}	
 	.arrow-icon{
-		display: inline-block;
-		width: 1.32rem;
-		text-align: center;
+    width: 1.32rem;
+    text-align: center;
     display: inline-block;
-    font-size: 0.32rem;		
+    font-size: .32rem;
+    font-size: 0.48rem;
+    font-weight: bold;
+    line-height: 1.32rem;	
 	}
 
 	.select-menu{

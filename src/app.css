@@ -3,7 +3,7 @@
 /*@import "./assets/styles/font-awesome.min.css";*/
 @import "./reset.css";
 @import './assets/fonts/font.css';
-/*@import './assets/icon/style.css';*/
+@import './assets/dkn-icon/style.css';
 /*the whole page's scroll bar style*/
 
 /* ::-webkit-scrollbar {

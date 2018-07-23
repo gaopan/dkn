@@ -197,7 +197,7 @@
         position: absolute;
         top: 3.98rem;
         left: 1.6rem;
-        height: 100%;
+        height: 16.86rem;
         width: 100%;
         display: flex;
         color: #898989;
@@ -263,25 +263,32 @@
         border: 0.04rem solid #dfdfdf;
         position: absolute;
         left: -0.32rem;
+        top:20%;
         background-color: white;
         z-index: 1;
     }
     .tab-item-li>span.active-tab-item:before{
         border: 0.04rem solid black;
     }
+
+    .scrollnav-tab-item > li:first-child>span:after,
     .scrollnav-tab-item > li:last-child>span:after{
         width: 0.02rem;
         display: inline-block;
         position: absolute;
         left: -0.22rem;
-        top: 0.2rem;
         z-index: 1;
         content: "";
         height: 100%;
-        background-color: #fff;
+        background-color: #fafafa;
     }
-
-
+    .scrollnav-tab-item > li:first-child>span:after{
+        top: -1.12rem;
+    }
+    .scrollnav-tab-item > li:last-child>span:after{    
+        top: .5rem;
+    }
+    
     .scrollnav-content {
         flex: 1;
         overflow-y: auto;
