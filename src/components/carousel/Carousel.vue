@@ -4,18 +4,14 @@
 
       <div ref="carousel-inner" class="carousel-inner" role="listbox"
         :style="{
-          'transform': `translate(0,${currentOffset}px)`,
+          'transform': `translate(0,${currentOffset/50}rem)`,
           'transition': dragging ? 'none' : transitionStyle,         
           'visibility': carouselHeight ? 'visible' : 'hidden',
         }">
         <slot></slot>
       </div> 
     </div>
-    <div class="micro-carousel-wrapper">
-      <div class="micro-carousel-inner" @click="goToPage(urlIndex)" v-for = "(url,urlIndex) in imageUrl" :style="{'border':currentPage == urlIndex ?'2px rgb(5,41,131) solid':'2px white solid'}">
-          <img :src="url" width= "100%" height="100%"/>
-      </div>
-    </div>
+    
     <pagination v-if="paginationEnabled && slideCount > 0"
       @paginationclick="goToPage($event, 'pagination')"/>
 

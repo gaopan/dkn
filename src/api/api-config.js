@@ -7,7 +7,7 @@ import router from '../router'
 import store from '../store'
 import StoreManager from '../utils/store-manager.js'
 import CookiesManager from '../utils/cookies-manager.js'
-import Noty from '@/utils/noty-operation.js'
+// import Noty from '@/utils/noty-operation.js'
 import CommonGenerators from '@/utils/common-generators.js'
 
 let CancelToken = axios.CancelToken

@@ -4,5 +4,7 @@
 	</div>
 </template>
 <style type="text/css">
-
+	.product-home{
+		height: 100%;
+	}
 </style>

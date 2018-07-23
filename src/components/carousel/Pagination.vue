@@ -1,25 +1,20 @@
 <template>
   <div class="carousel-pagination">
-    <ul class="carousel-dot-container" role="tablist">
-      <li
-        class="carousel-dot"
-        aria-hidden="false"
-        role="presentation"
-        :aria-selected="isCurrentDot(index) ? 'true' : 'false'"
-        v-bind:class="{ 'carousel-dot--active': isCurrentDot(index) }"
-        v-for="(page, index) in pagniationCount"
-        :key="`${page}_${index}`"
-        v-on:click="goToPage(index)"
-      >
-        <button
-          type="button"
+    <i
           role="button"
           class="carousel-dot-button"
-          :tabindex="index"
-          :style="`background: ${isCurrentDot(index) ? 'rgb(5,41,131)' : 'gray'};`"
-        ></button>
-      </li>
-    </ul>
+          :style="`background: ${currentPage === 0 ? 'rgb(5,41,131)' : 'gray'};`"
+          v-on:click="goToPage('prev')"
+    ></i>  
+    <span class="carousel-page-item current-page-item">{{currentPage+1}}</span>
+    <span class="carousel-page-item">/</span>
+    <span class="carousel-page-item carousel-page-count">{{pagniationCount}}</span>
+    <i
+          role="button"
+          class="carousel-dot-button icon-img_list_bglight_star_n"
+          :style="`background: ${pagniationCount-1 === currentPage ? 'rgb(5,41,131)' : 'gray'};`"
+          v-on:click="goToPage('next')"
+    ></i>       
   </div>
 </template>
 
@@ -27,20 +22,32 @@
 export default {
   name: "pagination",
   inject: ["carousel"],
+  data(){
+    return {
+      currentPage:0
+    }
+  },
   computed: {
     pagniationCount() {
       return this.carousel.slideCount;
-    },
-    currentPage(){
-      return this.carousel.currentPage;
     }
 
   },
   methods: {
 
-    goToPage(index) {
-      this.$emit("paginationclick", index);
+    goToPage(type) {
+
+      if(type == "prev"){
+        if(this.currentPage === 0)return;
+        this.currentPage -= 1;
+      }else if(type == "next"){
+        if(this.currentPage == this.pagniationCount-1)return;
+        this.currentPage += 1;
+      }
+
+      this.$emit("paginationclick", this.currentPage);
     },
+
     isCurrentDot(index) {
       return index === this.currentPage;
     }
@@ -50,41 +57,28 @@ export default {
 
 <style scoped>
 .carousel-pagination {
-  /* width: 100%; */
   position: absolute;
-  bottom: 0;
-  right: 0;
+  right: -1.4rem;
+  top: 4.44rem;
 }
 
-.carousel-dot-container {
-  display: inline-block;
-  margin: 0 auto;
-  padding: 0;
+.carousel-page-item {
+    display: block;
+    color: #5f5f5f;
+    text-align: center;
+    line-height: .46rem;
+    font-size: .4rem;
+}
+.current-page-item,
+.carousel-page-count{
 }
 
-.carousel-dot {
-  display: block;
-  cursor: pointer;
-  width: 10px;
-  height: 10px;
-}
-
-.carousel-dot-container  li+li{
-  margin-top: 4px;
-}
 .carousel-dot-button {
-  appearance: none;
-  border: none;
-  background-color: transparent;
-  padding: 0;
-  /* border-radius: 100%; */
-  outline: none;
+  display: inline-block;
   cursor: pointer;
-  width: 8px;
-  height: 8px;
+  width: .72rem;
+  height: .72rem;
+  border-radius: 100%;
 }
 
-.carousel-dot-button:focus {
-  outline: 1px solid lightblue;
-}
 </style>

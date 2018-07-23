@@ -1,99 +1,144 @@
 <template>
 	<div class="product-container">
 		<!-- <span>RFID: {{rfid}}</span> -->
-		<div class="product-picture">
-			<carousel :per-page="1" :imageUrl = "imageUrl">
-		    <slide @slideClick="handleSlideClick" v-for = "(url,urlIndex) in imageUrl">
-		      <img :src="url" width= "100%" height="100%">
-		    </slide>
-	  	</carousel>
-		</div>
+		<section class="product-photo-container">
 
-		<div class="product-description">
-	    <scroll-nav>
-	        <scroll-nav-panel :label="item.label" v-for="(item, key) in list" :key="key">
-						<template>
-		          <p class="product-info-title">{{item.label}}</p>
-	            <div class="panel-cell-wrapper" v-if = "item.label === 'PRODUCT BENEFITS'">
-		            <div class = "panel-cell-1" v-for= "i in 4">
-		            	<div class = "panel-cell-photo">
-		            		
-		            	</div>
-		            	<div class="panel-cell-info-wrapper">
-			            	<p class = "panel-cell-title">CAPACITY1</p> 
-			            	<p class = "panel-cell-info">
-			            		High living room 5 m2 with groundsheet covering, bedroom 210 * 240 cm
-			            	</p> 		            		
+			<div class="product-info">
+				<span class="product-code">Item code: 1616 8304664</span>
+				<div class="product-price">
+					<p class="product-name">浮潜运动口鼻呼吸 物理防雾 高清大视野男女青少年全干式浮潜面罩 SUBEA EASYBREATH</p>
+					<div class="product-price-mark">
+						<span class="product-price-discount">
+							<span>$</span>
+							<span class="product-price-integer">{{productInfoByCurrentSize.price.discountInt}}</span>
+							<span class="product-price-decimal">{{productInfoByCurrentSize.price.discountDecimal}}</span>
+						</span>
+						<span class="product-price-original">$ {{productInfoByCurrentSize.price.original}}</span>
+						<span class="price-discount-off">{{productInfoByCurrentSize.price.off}}%off</span>
+						
+					</div>
+				</div>
+			</div>
+			<!-- select different colors of product  -->
+			<div class="product-color-option">
+				<span class="product-color-selected">
+					Color option: <span>{{productInfoByCurrentColor.colorName}}</span>
+				</span>
+				<ul class="product-color-list">
+					<li class="product-color-item" :class="{'selected':color.checked}" v-for = "(color,colorIndex) in productColors" @click = "selectProductColor(color,colorIndex)">
+						<img :src="color.imgUrl"/>
+						<i :class="{'icon-selected':color.checked,'icon-unSelected':!color.checked}"/>
+					</li>
+				</ul>
+
+			</div>
+			<div class="product-photo-carousel">
+				<carousel :per-page="1" :imageUrl = "imageUrl">
+			    <slide @slideClick="handleSlideClick" v-for = "(url,urlIndex) in imageUrl">
+			      <img :src="url" width= "100%" height="100%">
+			    </slide>
+		  	</carousel>
+			</div>
+
+			<div class="product-size-option">
+				<span class="size-label">
+					<span class="size-mark">Size</span>
+					<span class="size-access">Stock: {{productInfoByCurrentSize.stock}}</span>
+				</span>
+				<div class="product-size-select">
+					<custom-select 
+						:label = "sizeSelected.label"
+						:options = "productInfoByCurrentColor.sizeOptions" 
+						@selectOption = "selectProductSize" 
+						@menuShow = "showSizeMenu"
+						> 
+					</custom-select>
+				</div>
+				<div class="product-dimensional-code">
+					<span class="code-tip">Want to buy online?Click me!</span>
+				</div>
+			</div>
+
+			<div class="product-shadow" v-show = "bShowShadow"></div>
+		</section>
+
+		<section class="product-description">
+			<p class="product-info-title">{{containerTitle}}</p>
+	    <scroll-nav @activeIndexChanged = "activeNavIndexChanged">
+	        <scroll-nav-panel :label="item.label" v-for="(item, index) in list" :key="index">
+            <!-- DESIGNED FOR -->
+            <div 
+          		class="panel-cell-wrapper" 
+          		:class="{'panel-designed-for':item.label === 'DESIGNED FOR'}" 
+          		:style = "{ visibility:activeNavIndex == index ? 'visible':'hidden' }"
+          		v-if = "item.label === 'DESIGNED FOR'">
+
+	            <p>{{productInfoData.DesignedFor}}</p> 
+	            <p>{{productInfoData.Catchline}}</p> 
+
+            </div>
+						<!-- PRODUCT BENEFITS -->
+            <div class="panel-cell-wrapper" 
+            		:style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
+            		v-else-if = "item.label === 'PRODUCT BENEFITS'">
+		            <div class = "product-benefits-item" v-for= "(benefit,benefitIndex) in productInfoData.Benefits">
+		            	<p class = "benefits-points">{{benefit.label}}</p> 
+		            	<p class = "benefits-points-content">{{benefit.text}}</p> 
+		            </div>
+	          </div>
+						<!-- USER REVIEWS -->
+            <div class="panel-cell-wrapper" :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}"v-else-if = "item.label === 'USER REVIEWS'">
+            		<div class="product-scorce-wrapper">
+            			<p>{{productScore}} / 5  </p> 
+            			<span>{{productReviews.length}} reviews</span>
+            		</div>
+		            <div class = "user-review-content" v-for= "(review,reviewIndex) in productReviews">
+		            	<div class = "review-created-on">
+		            		<p>
+		            			<span>{{review.published_at}}</span>
+		            			<span>{{review.firstname}}</span>
+		            		</p>
+		            		<p>On Easybreath surface snorkelling mask LIGHT BLUE</p>
+		            	</div> 
+
+		            	<div class="review-content">
+			            	<p class = "">{{review.title}}</p> 
+			            	<p class = "">{{review.body}}</p> 
 		            	</div>
 		            </div>
-	            </div>
-
-	            <div class="panel-cell-wrapper" v-else>
-		            <div class = "panel-cell-2" v-for= "i in 4">
-		            	<p class = "panel-cell-title">CAPACITY2</p> 
-		            	<p class = "panel-cell-info">
-		            		High living room 5 m2 with groundsheet covering, bedroom 210 * 240 cm
-		            	</p> 
+	          </div>		
+						<!-- PRODUCT CONCEPT & TECHNOLOGY -->
+            <div class="panel-cell-wrapper" 
+            		 :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
+            		 v-else-if = "item.label === 'TPRODUCT CONCEPT & TECHNOLOGY'">
+		            <div class = "information-wrapper">
+		            	<p class = "information-queation">MAINTENANCE ADVICE</p> 
+		            	<p class = "information-answer">{{productInfoData.MaintenanceAdv}}</p> 
 		            </div>
-		          </div>
-						</template>
+		            <div class = "information-wrapper">
+		            	<p class = "information-queation">STORAGE ADVICE</p> 
+		            	<p class = "information-answer">{{productInfoData.StorageAdv}}</p> 
+		            </div>
+		            <div class = "information-wrapper">
+		            	<p class = "information-queation">USE RESTRICTIONS</p> 
+		            	<p class = "information-answer">{{productInfoData.UsageRestriction}}</p> 
+		            </div>
+	          </div>
+						<!-- TECHNICAL INFORMATION -->
+            <div class="panel-cell-wrapper" 
+            		 :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
+            		 v-else-if = "item.label === 'TECHNICAL INFORMATION'">
+		            <div class = "information-wrapper" v-for= "(Functionality,FunctionalityIndex) in productInfoData.Functionalities">
+		            	<p class = "information-queation">{{Functionality.label}}</p> 
+		            	<p class = "information-answer">{{Functionality.text}}</p> 
+		            </div>
+	          </div>
+
 	        </scroll-nav-panel>
 	    </scroll-nav>	
-	  </div>	
+	  </section>	
 	</div>
 </template>
 
 <script src="./product.js"></script>
-<style type="text/css">
-	.product-container {
-    display: flex;
-	}
-.product-picture {
-  width: 10rem;
-  height: 10rem;
-}
-
-.product-description {
-    overflow-y: auto;
-    position: relative;
-    margin: 0 24px;
-    flex: 1;
-}	
-
-
-.panel-cell-1{
-	display: flex;
-}
-.panel-cell-1,
-.panel-cell-2{
-	padding-left: 0.6rem;
-	padding-bottom: .24rem;
-}
-.panel-cell-photo{
-	width:1rem;
-	height:1rem;
-	background: gray
-}
-.panel-cell-wrapper {
-    margin-bottom: .4rem;
-}
-.panel-cell-info-wrapper{
-	flex: 1;
-	margin-top: .12rem;
-	margin-left: .12rem;
-}
-.product-info-title {
-  padding-bottom: 0.36rem;	
-}
-
-.panel-cell-title,
-.product-info-title {
-    font-size: 0.36rem;
-    font-weight: bold;
-}
-
-.panel-cell-title,
-.panel-cell-info{
-	/* display: inline-block; */
-}
-</style>
+<style src="./product.css"></style>

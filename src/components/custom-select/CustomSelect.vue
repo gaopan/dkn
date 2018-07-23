@@ -1,0 +1,133 @@
+<template>
+	<div class="custom-select">
+		<div class="select-label-wrapper"  @click = "showMenu">
+			<span class="select-label">{{selectLabel||"Please Select"}}</span>
+			<span class="arrow-icon">^</span>
+		</div>
+		<div class="select-menu" :class = "{'select-menu-up':true,'select-menu-down':false}" v-show = "bShowMenu">
+			<ul class="select-menu-list">
+				<li v-for = "(item,itemIndex) in $props.options" @click = "selectItem(item,itemIndex)" :key = "itemIndex" :class = "{'selected': item.label == selectLabel}">
+					{{item.label}}
+				</li>
+			</ul>
+		</div>
+	</div>
+</template>
+<script type="text/javascript">
+	export default{
+		name:"custom-select",
+		props:{
+			label:{
+				type:[String,Number],
+				default:"Please Select"
+			},
+			options:{	
+				type:Array
+			}
+		},
+		data(){
+			return{
+				bShowMenu:false,
+				menuOption:[]
+			}
+		},
+		created(){
+			this.selectLabel = this.$props.label;
+			document.addEventListener("click",this.fnBlur,false)
+		},
+		beforeDestroy(){
+			document.removeEventListener("click",this.fnBlur,false)
+			this.$off("selectOption")
+			this.$off("menuShow")
+		},
+		methods:{
+			fnBlur(){
+				if(this.$el&&!this.$el.contains(event.target)){
+					this.bShowMenu = false;
+				}			
+			},
+			selectItem(item,itemIndex){
+				// this.selectLabel = item.label;
+				this.$emit("selectOption",item)
+				this.bShowMenu = false;
+			},
+			showMenu(){
+				if(this.$props.options.length===0)return;
+				this.bShowMenu = !this.bShowMenu;
+			}
+		},
+		watch:{
+			bShowMenu(newV,olcV){
+				this.$emit("menuShow",newV)
+			},
+			"$props.label":{
+				handler(newV,oldV){
+					console.log(newV);
+					this.selectLabel = newV;
+				}
+			}
+		}
+	}
+</script>
+<style type="text/css">
+	.custom-select{
+		width:100%;
+		line-height: 1.32rem;
+		position: relative;
+	}
+	.select-label-wrapper{
+		width: 100%;
+		display: flex;
+    cursor: pointer;
+	}
+	.select-label {
+    flex: 1;
+    font-size: 0.4rem;
+    height: 100%;
+    font-size: 0.54rem;
+    color: #393939;
+		margin-left: 0.4rem;
+	}	
+	.arrow-icon{
+		display: inline-block;
+		width: 1.32rem;
+		text-align: center;
+    display: inline-block;
+    font-size: 0.32rem;		
+	}
+
+	.select-menu{
+    width: 100%;
+    position: absolute;
+    left: -1px;
+    border: 1px solid gray;
+    z-index: 2;
+    background: #fff;
+	}
+	.select-menu-up{
+		bottom:100%;
+	}
+	.select-menu-down{
+		top:100%;
+	}
+	.select-menu-list{
+		max-height: 10.8rem;
+		overflow-y: auto;
+		padding-left: 0.4rem;
+
+	}
+	.select-menu-list li.selected{
+		color: #393939;
+    font-weight: 700;
+	}
+	.select-menu-list li{
+		line-height: 1.36rem;
+	  font-size: 0.54rem;
+	  color: #5f5f5f;	
+	  cursor: pointer;	
+	}
+	.select-menu-list li+li{
+		border-top:1px solid #e6e6e6;
+	}
+
+</style>

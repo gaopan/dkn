@@ -1,9 +1,9 @@
 /* This the application level css that will be global to all application module */
 
-@import "./assets/styles/font-awesome.min.css";
+/*@import "./assets/styles/font-awesome.min.css";*/
 @import "./reset.css";
-
-
+@import './assets/fonts/font.css';
+/*@import './assets/icon/style.css';*/
 /*the whole page's scroll bar style*/
 
 /* ::-webkit-scrollbar {
@@ -20,10 +20,10 @@
   border-radius: 10px;
 } */
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 0;
   height: 0;
-}
+} */
 
 
 
@@ -49,7 +49,12 @@
   color: #cccccc;
 }
  */
+ body{
+  width: 38.4rem;
+  font-family: Roboto;
+ }
 .as-mainwrapper {
-    width: 25.6rem;
-    margin: 20px auto;
+    margin: 0 auto;
+    height: 21.6rem;
+    width: 38.4rem;    
 }
