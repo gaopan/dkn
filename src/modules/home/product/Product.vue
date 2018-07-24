@@ -30,12 +30,13 @@
 						<i :class="{'icon-selected':color.checked,'icon-unSelected':!color.checked}"/>
 					</li>
 				</ul>
-
 			</div>
+			<!-- carousel for display the photos-->
 			<div class="product-photo-carousel">
-				<carousel :per-page="1" :imageUrl = "imageUrl">
-			    <slide @slideClick="handleSlideClick" v-for = "(url,urlIndex) in imageUrl">
-			      <img :src="url" width= "100%" height="100%">
+				<carousel :per-page="1" :imageUrl = "imageUrl" :navigateTo = "navigateToPhoto" @pageChange = "pageChange">
+			    <slide @slideClick="handleSlideClick" v-for = "(img,imgIndex) in imageUrl">
+			      <img :src="img.url" width= "100%" height="100%" v-if = "img.type == 'img'"/>
+			      <iframe :src="img.url" width= "100%" height="100%" v-if = "img.type == 'vedio'"></iframe>
 			    </slide>
 		  	</carousel>
 			</div>
@@ -58,7 +59,7 @@
 					<i :class = '{"icon-QR_code":!bShowQRCode,"icon-close":bShowQRCode}' @click = "toggleQRCode"></i>
 					<div class="product-QR-code" v-show = "bShowQRCode">
 						<p>Scan this QR code with your phone, get product information on decathlon.com!</p>
-						<div class="QR-code-img"><i class="icon-QR_code"></i></div>
+						<div class="QR-code-img" ref = "qrcodeContainer"></div>
 					</div>
 					<span class="code-tip" v-show = "!bShowQRCode">Want to buy online?Click me!</span>
 				</div>
@@ -94,8 +95,8 @@
 						<!-- USER REVIEWS -->
             <div class="panel-cell-wrapper" :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}"v-else-if = "item.label === 'USER REVIEWS'">
             		<div class="product-scorce-wrapper">
-            			<p>{{productScore}} / 5  </p> 
-            			<span>{{productReviews.length}} reviews</span>
+            			<rate :rate = "productScore"></rate> 
+            			<span class="user-review-count">{{productReviews.length}} reviews</span>
             		</div>
 		            <div class = "user-review-content" v-for= "(review,reviewIndex) in productReviews">
 		            	<div class = "review-created-on">

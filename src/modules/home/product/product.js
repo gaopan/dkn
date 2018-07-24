@@ -1,20 +1,12 @@
 import { Carousel,Slide } from "@/components/carousel"
 import {ScrollNav, ScrollNavPanel} from "@/components/scrollNav"
 import CustomSelect from "@/components/custom-select"
+import Rate from "@/components/rate/Rate.vue"
 
 import ProductApi from "@/api/modules/product/productInfo.js"
+import Qrcode from "qrcodejs2"
 
-import tree from "@/assets/picture/tree.jpg"
-import beach from "@/assets/picture/beach.jpg"
-import mountains from "@/assets/picture/mountains.jpg"
 
-import tree1 from "@/assets/picture/tree1.jpg"
-import beach1 from "@/assets/picture/beach1.jpg"
-import mountains1 from "@/assets/picture/mountains1.jpg"
-
-let dataInfo = {
-	"DesignedFor" : "PRODUCT BENEFITS"
-}
 export default {
 	name: 'product',
 	props: {
@@ -24,7 +16,8 @@ export default {
 	},
 	data(){
 		return{
-			imageUrl:[tree,beach,mountains,tree1,beach1,mountains1],
+			navigateToPhoto:1,
+			imageUrl:[],
 			list: [
         {label: 'DESIGNED FOR'},
         {label: 'PRODUCT BENEFITS'},
@@ -53,12 +46,13 @@ export default {
 	      	off:100
 	      }
       },
-      sizeSelected:{
+      sizeSelected:{  //value for display the label of sected size
       	label:null,
       	value:null
       },
       bShowShadow:false,
       bShowQRCode:false,
+      qrcodeEle:null,
       productInfoData:{},
       productReviews:[],
       // productConcept:{},
@@ -80,13 +74,13 @@ export default {
 
 				if(d.Images&&d.Images.length){
 					d.Videos.forEach(d=>{
-						videos.push(d.link);
+						videos.push({type:"vedio",url:d.link});
 					})
 				}
 
 				if(d.Images&&d.Images.length){
 					d.Images.forEach(d=>{
-						images.push(d.link);
+						images.push({type:"img",url:d.link});
 					})
 				}
 
@@ -128,7 +122,7 @@ export default {
 				 let colorName = d.BusinessColors[0].label;
 				this.productAllInfoByColor.push({
 					colorName: colorName,
-					videosAndImages:[...videos,...images],
+					videosAndImages:[/*...videos,*/...images],
 					items:items,
 					sizeOptions:sizeOptions
 				})
@@ -143,13 +137,18 @@ export default {
 			});
 			this.productInfoByCurrentColor = this.productAllInfoByColor[0];
 
+			this.imageUrl = this.productInfoByCurrentColor.videosAndImages
+			this.imageUrl.length = 6;
+			console.log(this.productInfoByCurrentColor)
+			// console.log(this.productAllInfoByColor)
+
 			let score = 0;
 			this.productInfoData = res.data.dsm;
 			this.productReviews = res.data.reviews;
 			this.productReviews.forEach(d => {
 				score += ~~d.note
 			})
-			this.productScore = (score/this.productReviews.length).toFixed(2);
+			this.productScore = +((score/this.productReviews.length).toFixed(2));
 
 		},err=>{
 			console.log(err)
@@ -157,6 +156,9 @@ export default {
 
 	},
 	methods:{
+		pageChange(args){
+			this.navigateToPhoto = args;
+		},
 		selectProductColor(color,colorIndex){
 			this.productColors.forEach(d=>{
 				d.checked = false;
@@ -166,6 +168,8 @@ export default {
       this.productAllInfoByColor.every(d=>{
       	if(d.colorName == color.colorName){
 		      this.productInfoByCurrentColor = Object.assign({},d);
+		      this.imageUrl = this.productInfoByCurrentColor.videosAndImages;
+		      this.imageUrl.length = 6;
 		      return false;
       	}
 		    return true;
@@ -181,15 +185,14 @@ export default {
 	      }
       }
       this.sizeSelected = {label:null,value:null}
-			// let productSize = this.productInfoByCurrentColor.items[0];
-			// this.productInfoByCurrentSize =  Object.assign({},{stock:productSize.Stock,price:productSize.prices})
-      // this.sizeSelected = Object.assign({},{label:productSize.SizeValueLabel,value:productSize.SizeValueId}) 
 
+      	this.navigateToPhoto = 1;
+      // setTimeout(()=>{
+      // },300)
 
 		},
 		handleSlideClick(){},
 		activeNavIndexChanged(args){
-			console.log(args)
 			this.activeNavIndex = args;
 			this.containerTitle = this.list[args].label;
 		},
@@ -203,12 +206,24 @@ export default {
 			})
 		},
 		showSizeMenu(args){
-			console.log(args)
 			this.bShowShadow = args;
 		},
 		toggleQRCode(){
 			this.bShowQRCode = !this.bShowQRCode;
-			console.log(this.bShowQRCode)
+
+			if(this.bShowQRCode){
+				if(!!this.qrcodeEle){
+					this.qrcodeEle.clear();
+					this.qrcodeEle.makeCode("a");					
+				}else{
+					this.qrcodeEle = new Qrcode(this.$refs.qrcodeContainer,{
+						text: 'a',
+						width:'164',
+						height:'164',
+					})
+
+				}
+			}
 		}
 	},
 	components:{
@@ -216,6 +231,7 @@ export default {
 		Slide,
 		ScrollNav,
 		ScrollNavPanel,
-		CustomSelect
+		CustomSelect,
+		Rate
 	}
 }

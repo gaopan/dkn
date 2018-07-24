@@ -91,6 +91,7 @@
     background: gray;
     border:0.04rem solid #c8c8c8;
     float: left;
+    cursor: pointer;
     position: relative;
 }
 .product-color-item.selected {
@@ -172,19 +173,22 @@
     z-index: 1;
 }
 .product-QR-code p{
-    width: 7.26rem;
+    width: 6.78rem;
     height: 3.36rem;
-    padding:0.24rem;
-    font-size: 0.64rem;
-    font-weight: bold;
+    margin-right: .48rem;
+    font-size: .64rem;
+    font-weight: 700;
     line-height: 1.31;
-    color: #393939;    
+    color: #393939;
     display: inline-block;
+    vertical-align: top;
 }
 .QR-code-img{
     display: inline-block;
-    width: 3.56rem;
-    height: 3.56rem;
+    width: 3.28rem;
+    height: 3.28rem;
+    padding: 0.28rem;
+    border: 1px solid #e6e6e6;
 }
 .code-tip {
     position: absolute;
@@ -294,8 +298,17 @@
 
 /*USER REVIEW*/
 .product-scorce-wrapper {
-  height: 1.84rem;
-  padding-bottom: 1.2rem;
+  padding-bottom: 0.64rem;
+}
+.product-scorce-wrapper .rate{
+    display: inline-block;
+    margin-right: 0.84rem;   
+}
+
+.user-review-count{
+    color:#393939;
+    font-size: 0.64rem;
+    font-weight: bold; 
 }
 .user-review-content{
 	margin-bottom: 1.4rem;

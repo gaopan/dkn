@@ -62,7 +62,6 @@
 			},
 			"$props.label":{
 				handler(newV,oldV){
-					console.log(newV);
 					this.selectLabel = newV;
 				}
 			}

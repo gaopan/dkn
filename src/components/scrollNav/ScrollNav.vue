@@ -210,7 +210,7 @@
     .scrollnav-tab {
         display: flex;
         position: absolute;
-        bottom: 9.32rem;
+        bottom: 0.52rem;
         right: 2.8rem;  
         font-size: 0.4rem;   
     }

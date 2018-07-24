@@ -25,33 +25,25 @@ i {
 
 .icon-arrowdown:before {
   content: "\e900";
-  color: #5f5f5f;
 }
 .icon-check:before {
   content: "\e901";
-  color: #5f5f5f;
 }
 .icon-close:before {
   content: "\e902";
-  color: #5f5f5f;
 }
 .icon-down:before {
   content: "\e903";
-  color: #5f5f5f;
 }
 .icon-QR_code:before {
   content: "\e904";
-  color: #5f5f5f;
 }
 .icon-right:before {
   content: "\e905";
-  color: #5f5f5f;
 }
-.icon-starton:before {
+.icon-star:before {
   content: "\e906";
-  color: #5f5f5f;
 }
 .icon-up:before {
   content: "\e907";
-  color: #5f5f5f;
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="carousel-pagination">
-    <span class="carousel-dot-button carousel-dot-buttonUp" :class="{'page-disabled':currentPage === 0}">
+    <span class="carousel-dot-button carousel-dot-buttonUp" :class="{'page-disabled':currentPage === 1}">
       <i
         role="button"
         class="icon-up"
@@ -8,10 +8,10 @@
         v-on:click="goToPage('prev')"
       ></i>  
     </span>
-    <span class="carousel-page-item current-page-item">{{currentPage+1}}</span>
+    <span class="carousel-page-item current-page-item">{{currentPage}}</span>
     <span class="carousel-page-item">/</span>
     <span class="carousel-page-item carousel-page-count">{{pagniationCount}}</span>
-    <span class="carousel-dot-button carousel-dot-buttonDown" :class="{'page-disabled': pagniationCount-1 === currentPage}">
+    <span class="carousel-dot-button carousel-dot-buttonDown" :class="{'page-disabled': pagniationCount === currentPage}">
       <i
         role="button"
         class="icon-down"
@@ -25,34 +25,46 @@
 export default {
   name: "pagination",
   inject: ["carousel"],
+  props:{
+    activetPage:{
+      type:Number,
+      validator(val){
+        return val >= 1;
+      }
+    }
+  },
   data(){
     return {
-      currentPage:0
+      // currentPage:1
     }
+  },
+  created(){
+    // if(typeof this.$props.activetPage == "number"){
+    //   if(this.$props.activetPage>this.pagniationCount)this.$props.activetPage = this.pagniationCount;
+    //   this.currentPage = this.$props.activetPage;
+    // }
   },
   computed: {
     pagniationCount() {
       return this.carousel.slideCount;
+    },
+    currentPage(){
+      console.log("get page from carousel",this.carousel.currentPage)
+      return this.carousel.currentPage;
     }
-
   },
   methods: {
-
     goToPage(type) {
-
+      let currentPage = this.currentPage;
       if(type == "prev"){
-        if(this.currentPage === 0)return;
-        this.currentPage -= 1;
+        if(this.currentPage === 1)return;
+        currentPage -= 1;
       }else if(type == "next"){
-        if(this.currentPage == this.pagniationCount-1)return;
-        this.currentPage += 1;
+        if(this.currentPage == this.pagniationCount)return;
+        currentPage += 1;
       }
 
-      this.$emit("paginationclick", this.currentPage);
-    },
-
-    isCurrentDot(index) {
-      return index === this.currentPage;
+      this.$emit("paginationclick", currentPage);
     }
   }
 };
@@ -72,21 +84,22 @@ export default {
     text-align: center;
     line-height: .46rem;
     font-size: .4rem;
+    font-weight:bold;
 }
 .current-page-item,
 .carousel-page-count{
 }
 
 .carousel-dot-button {
-    display: inline-block;
-    cursor: pointer;
-    width: .64rem;
-    line-height: .72rem;
-    height: .64rem;
-    text-align: center;
-    border-radius: 50%;
-    font-size: .44rem;
-    border: 2px solid #5f5f5f;
+  display: inline-block;
+  cursor: pointer;
+  width: .64rem;
+  line-height: .72rem;
+  height: .64rem;
+  text-align: center;
+  border-radius: 50%;
+  font-size: .44rem;
+  border: 2px solid #5f5f5f;
 }
 
 
