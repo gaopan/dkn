@@ -50,11 +50,11 @@
 }
  */
  body{
-  width: 41.2rem;
   font-family: Roboto;
+  width: 38.4rem;    
  }
 .as-mainwrapper {
-    margin: 0 auto;
+    /* margin: 0 auto; */
     height: 21.6rem;
     width: 38.4rem;    
 }

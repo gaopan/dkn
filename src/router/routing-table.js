@@ -10,7 +10,7 @@ let routerTable = {
       default: () =>
         import ('@/modules/home/Home.vue')
     },
-    redirect: '/product',
+    redirect: '/index',
     children: [{
       path: 'index',
       name: 'Home Index',
