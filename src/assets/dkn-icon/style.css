@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'dkn-icon';
   src:
-    url('fonts/dkn-icon.ttf?g9qhi4') format('truetype'),
-    url('fonts/dkn-icon.woff?g9qhi4') format('woff'),
-    url('fonts/dkn-icon.svg?g9qhi4#dkn-icon') format('svg');
+    url('fonts/dkn-icon.ttf?jzqvju') format('truetype'),
+    url('fonts/dkn-icon.woff?jzqvju') format('woff'),
+    url('fonts/dkn-icon.svg?jzqvju#dkn-icon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -23,7 +23,7 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-arrowdown:before {
+.icon-arrow-down:before {
   content: "\e900";
 }
 .icon-check:before {

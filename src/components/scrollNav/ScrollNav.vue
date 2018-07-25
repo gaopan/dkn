@@ -27,7 +27,6 @@
         name: 'scrollnav',
         data() {
             return {
-                toggle: false,
                 activeIndex: this.index,
                 navList: [],
                 currentOffset: 0,
@@ -42,36 +41,13 @@
                 },
                 default: 0
             },
-            currentColor: {
-                // default: '2px solid rgb(20,21,131)'
-                default: 'black'
-            },
-            toggleText: {
-                type: String,
-                default: 'Toggle'
-            },
-            bgcolor: {
-                validator(value) {
-                    if (!value) return true;
-                    return isColor(value);
-                },
-                default: '#FFF'
-            },
-            borderColor: {
-                validator(value) {
-                    if (!value) return true;
-                    return isColor(value);
-                },
-                default: '#EFEFEF'
-            },
             callback: {
                 type: Function
             }
         },
         watch: {
-            activeIndex(val) {
-               
-                // this.scrollNav(this.navList[val]._uid);
+            activeIndex(val) {       
+                this.scrollToTargetContent(this.activeIndex,false);     
                 this.$emit("activeIndexChanged",this.activeIndex);
             },
             index(index) {
@@ -86,13 +62,10 @@
                 this.contentOffsetTop = this.scrollView.getBoundingClientRect().top;
 
                 this.scrollView.addEventListener('scroll', this.scrollHandler);
-                window.addEventListener('resize', this.scrollHandler);
+                // window.addEventListener('resize', this.scrollHandler);
 
                 //scroll to the index specified
-                if (this.index > 0) {
-                    // this.scrollNav(this.navList[this.index]._uid, false);
-                    this.scrollToTargetContent(this.index, false);
-                }
+                if (this.index > 0)this.scrollToTargetContent(this.index, false);
             },
             addItem(panel) {
                 this.navList.push(panel);
@@ -107,47 +80,28 @@
                 
                 if (this.scrolling) return;
 
-                const panels = this.getPanels();
-                const panelsLength = panels.length;
+                const panels = this.panels;
                 const scrollBox = this.scrollView;
 
                 //prevent to scroll out of scroll content
-                if (scrollBox.scrollTop >= panels[0].$el.offsetHeight * panelsLength - scrollBox.offsetHeight) {
-                    this.activeIndex = panelsLength - 1;
+                if (scrollBox.scrollTop >= panels[0].$el.offsetHeight * panels.length - scrollBox.offsetHeight) {
+                    this.activeIndex = panels.length - 1;
                     return;
                 }
 
                 panels.forEach((panel, index) => {
-                    if (panel.$el.getBoundingClientRect().top <= /*scrollBox.offsetHeight / 2*/100 + this.contentOffsetTop) {
-                        // console.log(this.contentOffsetTop)
+                    if (panel.$el.getBoundingClientRect().top <= 100 + this.contentOffsetTop) {
                         this.activeIndex = index;
                     }
                 });
             },
-            /*scrollNav(_uid, animate = true) {
-                const navWidth = ~~this.$refs.nav.offsetWidth / 2;
-
-                this.navList.every((item, index) => {
-                    if (item._uid === _uid) {
-                        debugger
-                        const navitem = this.$refs['navitem_' + index][0];
-                        const scrollOffset = navitem.offsetLeft - navWidth + navitem.offsetWidth / 2;
-
-                        this.scrollLeft(this.currentOffset, scrollOffset, animate, () => {
-                            this.callback && this.callback(index);
-                        });
-                        return false;
-                    }
-                    return true;
-                });
-            },*/
             scrollToTargetContent(index, animate = true) {
                 // debugger
-                this.toggle = false;
                 this.activeIndex = index;
                 this.scrolling = true;
 
-                const panel = this.getPanels()[index].$el;
+                // const panel = this.getPanels()[index].$el;
+                const panel = this.panels[index].$el;
                 const speed = animate && (window.navigator && window.navigator.userAgent || '').indexOf('MicroMessenger') < 0 ? 500 : 0;
 
                 scrollTop(this.scrollView, this.currentPosition, panel.offsetTop, speed, () => {
@@ -155,38 +109,15 @@
                 });
 
                 this.currentPosition = panel.offsetTop;
-
-                // console.log(this.currentPosition)
-            },
-            scrollLeft(from, to, animate, callback) {
-                const difference = Math.abs(from - to);
-                const step = animate ? Math.ceil(difference / 600 * 50) : difference;
-                const self = this;
-
-                function scroll(start, end, step) {
-                    if (start === end) {
-                        callback && callback();
-                        return;
-                    }
-
-                    let d = (start + step > end) ? end : start + step;
-                    if (start > end) {
-                        d = (start - step < end) ? end : start - step;
-                    }
-                    self.$refs.nav.scrollLeft = d;
-                    self.currentOffset = d;
-                    window.requestAnimationFrame(() => scroll(d, end, step));
-                }
-
-                scroll(from, to, step);
             }
         },
         mounted() {
             this.$nextTick(this.init);
+            this.panels = this.getPanels();
         },
         beforeDestroy() {
             this.scrollView.removeEventListener('scroll', this.scrollHandler);
-            window.removeEventListener('resize', this.scrollHandler);
+            // window.removeEventListener('resize', this.scrollHandler);
             this.$off("activeIndexChanged")
         }
     }

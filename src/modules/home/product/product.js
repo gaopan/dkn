@@ -122,23 +122,21 @@ export default {
 				 let colorName = d.BusinessColors[0].label;
 				this.productAllInfoByColor.push({
 					colorName: colorName,
-					videosAndImages:[/*...videos,*/...images],
+					videosAndImages:[...videos,...images],
 					items:items,
 					sizeOptions:sizeOptions
 				})
-
 				this.productColors.push({
 					colorName: colorName,
-					imgUrl:"",
+					imgUrl:images[0].url,
 					checked:productColorChecked
 				})
-
-
 			});
+
 			this.productInfoByCurrentColor = this.productAllInfoByColor[0];
 
 			this.imageUrl = this.productInfoByCurrentColor.videosAndImages
-			this.imageUrl.length = 6;
+			// this.imageUrl.length = 6;
 			console.log(this.productInfoByCurrentColor)
 			// console.log(this.productAllInfoByColor)
 
@@ -169,7 +167,7 @@ export default {
       	if(d.colorName == color.colorName){
 		      this.productInfoByCurrentColor = Object.assign({},d);
 		      this.imageUrl = this.productInfoByCurrentColor.videosAndImages;
-		      this.imageUrl.length = 6;
+		      // this.imageUrl.length = 6;
 		      return false;
       	}
 		    return true;
@@ -191,7 +189,9 @@ export default {
       // },300)
 
 		},
-		handleSlideClick(){},
+		handleSlideClick(){
+
+		},
 		activeNavIndexChanged(args){
 			this.activeNavIndex = args;
 			this.containerTitle = this.list[args].label;

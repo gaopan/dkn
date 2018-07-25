@@ -27,7 +27,7 @@
 				<ul class="product-color-list">
 					<li class="product-color-item" :class="{'selected':color.checked}" v-for = "(color,colorIndex) in productColors" @click = "selectProductColor(color,colorIndex)">
 						<img :src="color.imgUrl"/>
-						<i :class="{'icon-selected':color.checked,'icon-unSelected':!color.checked}"/>
+						<i :class="{'icon-check':color.checked,'icon-unSelected':!color.checked}"/>
 					</li>
 				</ul>
 			</div>
@@ -61,7 +61,7 @@
 						<p>Scan this QR code with your phone, get product information on decathlon.com!</p>
 						<div class="QR-code-img" ref = "qrcodeContainer"></div>
 					</div>
-					<span class="code-tip" v-show = "!bShowQRCode">Want to buy online?Click me!</span>
+					<span class="code-tip" v-show = "!bShowQRCode">Want to buy online?Click me!</span> 
 				</div>
 			</div>
 
@@ -101,8 +101,8 @@
 		            <div class = "user-review-content" v-for= "(review,reviewIndex) in productReviews">
 		            	<div class = "review-created-on">
 		            		<p>
-		            			<span>{{review.published_at}}</span>
-		            			<span>{{review.firstname}}</span>
+		            			<span class = "review-created-date">{{review.published_at}}</span>
+		            			<span class = "review-created-name">{{review.firstname}}</span>
 		            		</p>
 		            		<p>On Easybreath surface snorkelling mask LIGHT BLUE</p>
 		            	</div> 

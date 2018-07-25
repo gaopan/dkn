@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="scroll-nav-panel">
         <slot></slot>
     </div>
 </template>

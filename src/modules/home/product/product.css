@@ -94,12 +94,18 @@
     cursor: pointer;
     position: relative;
 }
+.product-color-item img{
+    height: 100%;
+    width: 100%;
+}
 .product-color-item.selected {
     border:0.04rem solid #0082c3;
 }
-.product-color-item .icon-selected {
-    width: 0.44rem;
-    height: 0.44rem;
+.product-color-item .icon-check {
+    color: #fff;
+    font-size: 22px;
+    width: .44rem;
+    height: .44rem;
     background: #0082c3;
     display: inline-block;
     position: absolute;
@@ -265,7 +271,7 @@
 
 .panel-designed-for{
 	font-size: 0.8rem;
-	margin-top: 4rem;
+	padding-top: 4rem;
 }
 .panel-cell-info-wrapper{
 	flex: 1;
@@ -328,19 +334,19 @@
 }
 /*Techlonogy Information*/
 .information-wrapper {
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.8rem;
 }
 .information-queation{
-	  height: 0.76rem;
+	  /* height: 0.76rem; */
     font-size: 0.64rem;
     font-weight: bold;
     font-style: normal;
     line-height: normal;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.4rem;
 }
 
 .information-answer{
-	  height: 3.3rem;
+	/* height: 3.3rem; */
     font-size: 0.48rem;
     font-weight: normal;
     line-height: 1.25;
