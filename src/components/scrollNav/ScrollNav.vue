@@ -129,7 +129,7 @@
         top: 3.98rem;
         left: 1.6rem;
         height: 16.86rem;
-        width: 100%;
+        /* width: 100%; */
         display: flex;
         color: #898989;
         flex-direction: column;
@@ -142,7 +142,7 @@
         display: flex;
         position: absolute;
         bottom: 0.52rem;
-        right: 2.8rem;  
+        right: -4rem;  
         font-size: 0.4rem;   
     }
     .scrollnav-tab-item {

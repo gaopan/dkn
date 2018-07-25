@@ -8,14 +8,22 @@
 				<div class="product-price">
 					<p class="product-name">浮潜运动口鼻呼吸 物理防雾 高清大视野男女青少年全干式浮潜面罩 SUBEA EASYBREATH</p>
 					<div class="product-price-mark">
-						<span class="product-price-discount">
-							<span>$</span>
-							<span class="product-price-integer">{{productInfoByCurrentSize.price.discountInt}}</span>
-							<span class="product-price-decimal">{{productInfoByCurrentSize.price.discountDecimal}}</span>
-						</span>
-						<span class="product-price-original">$ {{productInfoByCurrentSize.price.original}}</span>
-						<span class="price-discount-off">{{productInfoByCurrentSize.price.off}}%off</span>
-						
+						<div class="product-with-discount" v-if = "productInfoByCurrentSize.price.off !== 100">
+							<span class="product-price-discount">
+								<span>$</span>
+								<span class="product-price-integer">{{productInfoByCurrentSize.price.discount.int}}</span>
+								<span class="product-price-decimal">{{productInfoByCurrentSize.price.discount.decimal}}</span>
+							</span>
+							<span class="product-price-original">$ {{productInfoByCurrentSize.price.original.int}}{{productInfoByCurrentSize.price.original.decimal}}</span>
+							<span class="price-discount-off">{{productInfoByCurrentSize.price.off}}%off</span>
+						</div>
+						<div class="product-without-discount" v-else>
+							<span class="product-price-noDiscount">
+								<span>$</span>
+								<span class="product-price-integer">{{productInfoByCurrentSize.price.original.int}}</span>
+								<span class="product-price-decimal">{{productInfoByCurrentSize.price.original.decimal}}</span>
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>

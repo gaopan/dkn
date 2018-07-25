@@ -35,21 +35,29 @@
 .product-price-mark {
     display: inline-block;
     width: 3.2rem;
-    height: 1rem;
+    height: 2rem;
     line-height: 1rem;
     font-weight: bold;
     text-align: center;
 }
-.product-price-discount {
+.product-price-discount ,
+.product-price-noDiscount{
     font-size: 0.64rem;
-    color: #ffffff;
-    background-color: #fe0000;
     display: block;
 }
+
+.product-price-discount{
+    color: #ffffff;
+    background-color: #fe0000;
+}
+.product-price-noDiscount{
+    color: #393939;
+   background-color: #feea27;
+}
+
 .product-price-decimal {
     font-size: 0.4rem;
     font-weight: bold;
-    color: #ffffff;
     margin-left: -0.14rem;
 }
 .product-price-original {
@@ -264,7 +272,7 @@
     min-height: 19.04rem;
     color: #393939;
     line-height: 1.5;
-    width:17.16rem;  
+    width:15.16rem;  
     visibility: none;  
 }
 
@@ -280,7 +288,7 @@
 }
 /*Product Benefits*/
 .product-benefits-item {
-    width: 7.74rem;
+    width: 6.74rem;
     height: 2.4rem;
     float: left;
     margin-right: .84rem;
@@ -326,6 +334,9 @@
     line-height: normal;
     color: #898989;
     margin-bottom: 0.4rem;
+}
+.review-created-date{
+    margin-right: 0.4rem;
 }
 .review-content {
     height: auto;

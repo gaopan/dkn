@@ -6,6 +6,7 @@ import Rate from "@/components/rate/Rate.vue"
 import ProductApi from "@/api/modules/product/productInfo.js"
 import Qrcode from "qrcodejs2"
 
+import TimeUtil from "@/utils/datetime-utils.js"
 
 export default {
 	name: 'product',
@@ -40,9 +41,14 @@ export default {
       productInfoByCurrentSize:{
       	stock:0,
       	price:{
-	      	original:"0.00",
-	      	discountInt:"0",
-	      	discountDecimal:".00",
+	      	original:{
+	      		int:"0",
+	      		decimal:".00"
+	      	},
+	      	discount:{
+	      		int:"0",
+	      		decimal:".00"
+	      	},	      	
 	      	off:100
 	      }
       },
@@ -86,18 +92,23 @@ export default {
 
 				if(d.items&&d.items.length){
 					d.items.forEach(d=>{
-						let original = "0.00", 
-								discountInt = "0", 
-								discountDecimal = ".00",
+						let original = {
+									int:"0",
+									decimal: ".00"
+								}, 
+								discount = {
+									int: "0", 
+									decimal: ".00",
+								},
 								off = 100;
 						if(!!d.prices){
 							if(!!d.prices.sale_price){
-							 	original = d.prices.sale_price;
-
+								original.int = d.prices.sale_price.substr(0,d.prices.sale_price.indexOf("."))
+								original.decimal = d.prices.sale_price.substr(d.prices.sale_price.indexOf("."),d.prices.sale_price.length);							 	
 							}
 							if(!!d.prices.strickout_price){
-								discountInt = d.prices.strickout_price.substr(0,d.prices.strickout_price.indexOf("."))
-								discountDecimal = d.prices.strickout_price.substr(d.prices.strickout_price.indexOf("."),d.prices.strickout_price.length);
+								discount.int = d.prices.strickout_price.substr(0,d.prices.strickout_price.indexOf("."))
+								discount.decimal = d.prices.strickout_price.substr(d.prices.strickout_price.indexOf("."),d.prices.strickout_price.length);
 								off = +(((+d.prices.strickout_price)*100/(+d.prices.sale_price)).toFixed(0))
 							}
 						}
@@ -107,8 +118,7 @@ export default {
 							Stock:d.Stock&&d.Stock.store?d.Stock.store:0,							
 							prices:{
 								original,
-								discountInt,
-								discountDecimal,
+								discount,
 								off
 							}
 						})
@@ -144,6 +154,7 @@ export default {
 			this.productInfoData = res.data.dsm;
 			this.productReviews = res.data.reviews;
 			this.productReviews.forEach(d => {
+				d.published_at = TimeUtil.getFullDate(new Date(d.published_at),'yyyy-MM-dd')
 				score += ~~d.note
 			})
 			this.productScore = +((score/this.productReviews.length).toFixed(2));
@@ -176,9 +187,14 @@ export default {
       this.productInfoByCurrentSize = {
       	stock:0,
       	price:{
-	      	original:"0.00",
-	      	discountInt:"0",
-	      	discountDecimal:".00",
+	      	original:{
+	      		int:"0",
+	      		decimal:".00"
+	      	},
+	      	discount:{
+	      		int:"0",
+	      		decimal:".00"
+	      	},	      	
 	      	off:100
 	      }
       }
