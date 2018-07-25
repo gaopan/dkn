@@ -4,7 +4,7 @@
 		<section class="product-photo-container">
 
 			<div class="product-info">
-				<span class="product-code">Item code: 1616 8304664</span>
+				<span class="product-code">Item code: {{productInfoByCurrentSize.itemCode}}</span>
 				<div class="product-price">
 					<p class="product-name">浮潜运动口鼻呼吸 物理防雾 高清大视野男女青少年全干式浮潜面罩 SUBEA EASYBREATH</p>
 					<div class="product-price-mark">

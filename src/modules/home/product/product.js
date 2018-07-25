@@ -40,6 +40,7 @@ export default {
       },
       productInfoByCurrentSize:{
       	stock:0,
+      	itemCode:"",
       	price:{
 	      	original:{
 	      		int:"0",
@@ -115,13 +116,15 @@ export default {
 						items.push({
 							SizeValueId:d.SizeValueId,
 							SizeValueLabel:d.SizeValueLabel,
-							Stock:d.Stock&&d.Stock.store?d.Stock.store:0,							
+							stock:d.Stock&&d.Stock.store?d.Stock.store:0,							
+							itemCode:d.ItemCode,							
 							prices:{
 								original,
 								discount,
 								off
 							}
 						})
+
 						sizeOptions.push({
 							label: d.SizeValueLabel,
 							value: d.SizeValueId
@@ -185,6 +188,7 @@ export default {
       })	
 
       this.productInfoByCurrentSize = {
+      	itemCode:"",
       	stock:0,
       	price:{
 	      	original:{
@@ -217,7 +221,11 @@ export default {
 
 			this.productInfoByCurrentColor.items.forEach(d=>{
 				if(args.value == d.SizeValueId){
-					this.productInfoByCurrentSize =  Object.assign({},{stock:d.Stock,price:d.prices})
+					this.productInfoByCurrentSize =  Object.assign({},{
+						stock:d.stock,
+						price:d.prices,
+						itemCode:d.itemCode
+					})
 				}
 			})
 		},
