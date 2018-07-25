@@ -127,9 +127,8 @@
     .scrollnav {
         position: absolute;
         top: 3.98rem;
-        left: 1.6rem;
         height: 16.86rem;
-        /* width: 100%; */
+        width: 100%;
         display: flex;
         color: #898989;
         flex-direction: column;
@@ -139,10 +138,10 @@
       height: 0;
     }
     .scrollnav-tab {
-        display: flex;
+        /* display: flex; */
         position: absolute;
         bottom: 0.52rem;
-        right: -4rem;  
+        right: 2rem;  
         font-size: 0.4rem;   
     }
     .scrollnav-tab-item {
@@ -225,6 +224,7 @@
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        margin-left: 1.6rem;
     }
 
 </style>
