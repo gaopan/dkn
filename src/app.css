@@ -56,6 +56,9 @@
  }
 .as-mainwrapper {
     height: 21.6rem;
-    /* width: 38.4rem; */    
+    /* height: 100%; */ 
     width: 100%;
+    min-width: 30rem;
+    overflow-x: auto;
+    overflow-y: hidden;
 }

@@ -269,14 +269,19 @@
 }
 
 .panel-cell-wrapper {
+
     margin-bottom: .4rem;
     min-height: 19.04rem;
     color: #393939;
     line-height: 1.5;
-    width:15.16rem;  
-    visibility: none;  
+    /* width: 15.16rem; */
+    margin-right: 4.4rem;
+    min-width: 7rem;    
 }
 
+.panel-cell-wrapper p{
+    margin-right: 1rem;
+}
 
 .panel-designed-for{
 	font-size: 0.8rem;

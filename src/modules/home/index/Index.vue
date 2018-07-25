@@ -44,11 +44,12 @@
 	transition: 0.5s ease-out transform;
 }
 	.product-index{
-		color:#ffffff;
-		width:38.4rem;
-		height:21.6rem;
-		background-color: #0082c3;
-
+    color: #fff;
+    width: 38.4rem;
+    /* height: 21.6rem; */
+    background-color: #0082c3;
+    width: 100%;
+    height: 100%;		
 	}
 	.p-wrapper{
 		width:27.52rem;
@@ -68,7 +69,7 @@
 	}
 
 	.p-level2 {
-	  height: 5.48rem;
+	  height: 5.2rem;
 	  font-size: 2rem;
 	  font-weight: normal;
 	  font-style: italic;
