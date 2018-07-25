@@ -1,10 +1,10 @@
 <template>
-	<div class="product-index">
+	<div class="product-index" :class = "{'transition':bRedirection}">
 		<div class="p-wrapper">
 			<p class="p-level1">Don’t know </p>
 			<p class="p-level1 row2">how to choose?</p>
 			<p class="p-level2">Scan the product down here and get your decision done</p>
-			<i class="icon-arrowdown" @click = "redirectToProductPage"></i>
+			<i class="icon-arrowdown" @click = "redirection"></i>
 		</div>
 	</div>
 </template>
@@ -13,17 +13,28 @@
 		name:"product-index",
 		data(){
 			return {
-
+				bRedirection: false
 			}
 		},
 		methods:{
-			redirectToProductPage(){
-				this.$router.push("/product")
+			redirection(){
+
+				this.bRedirection = true;
+				let timer = setTimeout(()=>{
+					console.log(timer);
+					clearTimeout(timer);
+					// this.bRedirection = false;
+					this.$router.push("/product")
+				},510)
 			}
 		}
 	}
 </script>
 <style type="text/css">
+.transition{
+	transform:translate(0, -21.6rem);
+	transition: 0.5s ease-out transform;
+}
 	.product-index{
 		color:#ffffff;
 		width:38.4rem;
