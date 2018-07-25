@@ -49,7 +49,6 @@ export default {
       return this.carousel.slideCount;
     },
     currentPage(){
-      console.log("get page from carousel",this.carousel.currentPage)
       return this.carousel.currentPage;
     }
   },

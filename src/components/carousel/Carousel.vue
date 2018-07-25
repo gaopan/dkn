@@ -181,6 +181,82 @@ export default {
         this.currentPage = page;
       }
     },
+    onStart(e) {
+      if(this.currentPage + 1 == 28)e.preventDefault();
+
+      let moveEvent = this.isTouch ? "touchmove" : "mousemove", 
+          upEvent = this.isTouch ? "touchend" : "mouseup";
+      document.addEventListener(moveEvent,this.onDrag,true);
+      document.addEventListener(upEvent,this.onEnd,true);
+
+      this.startTime = e.timeStamp;
+      this.dragging = true;
+
+      if(this.isTouch){
+        this.dragStartX = e.touches[0].clientX;
+        this.dragStartY = e.touches[0].clientY;        
+      }else{
+        this.dragStartX = e.clientX;
+        this.dragStartY = e.clientY;
+      }  
+    },
+
+    onDrag(e) {
+      let eventPosY,eventPosX;
+
+      if(this.isTouch){
+        eventPosX = e.touches[0].clientX;
+        eventPosY = e.touches[0].clientY;        
+      }else{
+        eventPosX = e.clientX;
+        eventPosY = e.clientY;
+      }   
+
+      let newOffsetX = this.dragStartX - eventPosX,
+          newOffsetY = this.dragStartY - eventPosY;
+
+      // if it is a touch device, check if we are below the min swipe threshold
+      // (if user scroll the page on the component)
+      if (this.isTouch && Math.abs(newOffsetY) < Math.abs(newOffsetX)) {
+        return;
+      }
+
+      e.stopImmediatePropagation();
+
+      this.dragOffset = newOffsetY;
+      const nextOffset = this.offset + newOffsetY;
+
+      if (nextOffset < 0) {
+        this.dragOffset = -Math.sqrt(-this.resistanceCoef * this.dragOffset);
+      } else if (nextOffset > this.maxOffset) {
+        this.dragOffset = Math.sqrt(this.resistanceCoef * this.dragOffset);
+      }
+    },
+
+    onEnd(e) {
+
+      const eventPosY = this.isTouch ? e.changedTouches[0].clientY : e.clientY,
+            deltaY = this.dragStartY - eventPosY;
+
+      this.dragMomentum = deltaY / (e.timeStamp - this.startTime);
+
+      // take care of the minSwipt eDistance prop, if not 0 and delta is bigger than delta
+      if (this.minSwipeDistance !== 0 && Math.abs(deltaY) >= this.minSwipeDistance) {
+        this.dragOffset = this.dragOffset + Math.sign(deltaY) * (this.carouselHeight / 2);
+      }
+
+      this.offset += this.dragOffset;
+      this.dragOffset = 0;
+      this.dragging = false;
+
+      this.render();
+
+      // clear events listeners
+      let moveEvent = this.isTouch ? "touchmove" : "mousemove", 
+          upEvent = this.isTouch ? "touchend" : "mouseup";
+      document.removeEventListener(upEvent,this.onEnd,true);
+      document.removeEventListener(moveEvent,this.onDrag,true);
+    },    
     onResize() {
       this.computeCarouselHeight();
 
@@ -191,8 +267,7 @@ export default {
     },
     render() {
       // add extra slides depending on the momemtum speed
-      let min = Math.round(this.dragMomentum);
-      this.offset += min * this.carouselHeight;
+      // this.offset += Math.round(this.dragMomentum) * this.carouselHeight;
 
       // & snap the new offset on a slide or page if scrollPerPage
       const height = this.carouselHeight;
@@ -219,15 +294,21 @@ export default {
     this.$nextTick(() => {
       this.computeCarouselHeight();
     });
+    // setup the start event only if touch device or mousedrag activated
+    let event  = this.isTouch ? "touchstart" : "mousedown";
+    this.$refs["carousel-wrapper"].addEventListener(event,this.onStart);
 
     this.transitionStyle =  `0.4s ease transform`;
     if(typeof this.$props.navigateTo == "number"){
       this.offset =  Math.min(this.carouselHeight * (this.$props.navigateTo-1), this.maxOffset)
     }
+
   },
 
   beforeDestroy() {
     window.removeEventListener("resize", this.getBrowserWidth);
+    let event = this.isTouch ? "touchstart" : "mousedown";
+    this.$refs["carousel-wrapper"].removeEventListener(event,this.onStart);    
   }
 };
 </script>
