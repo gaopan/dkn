@@ -71,7 +71,7 @@
 <style type="text/css">
 	.custom-select{
 		width:100%;
-		line-height: 1.32rem;
+		line-height: 66px;
 		position: relative;
 	}
 	.select-label-wrapper{
@@ -81,20 +81,20 @@
 	}
 	.select-label {
     flex: 1;
-    font-size: 0.4rem;
+    font-size: 20px;
     height: 100%;
-    font-size: 0.54rem;
+    font-size: 27px;
     color: #393939;
-		margin-left: 0.4rem;
+		margin-left: 20px;
 	}	
 	.arrow-icon{
-    width: 1.32rem;
+    width: 66px;
     text-align: center;
     display: inline-block;
-    font-size: .32rem;
-    font-size: 0.48rem;
+    font-size: 16px;
+    font-size: 24px;
     font-weight: bold;
-    line-height: 1.32rem;	
+    line-height: 66px;	
 	}
 
 	.select-menu{
@@ -112,9 +112,9 @@
 		top:100%;
 	}
 	.select-menu-list{
-		max-height: 10.8rem;
+		max-height: 540px;
 		overflow-y: auto;
-		padding-left: 0.4rem;
+		padding-left: 20px;
 
 	}
 	.select-menu-list li.selected{
@@ -122,8 +122,8 @@
     font-weight: 700;
 	}
 	.select-menu-list li{
-		line-height: 1.36rem;
-	  font-size: 0.54rem;
+		line-height: 68px;
+	  font-size: 27px;
 	  color: #5f5f5f;	
 	  cursor: pointer;	
 	}

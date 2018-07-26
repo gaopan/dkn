@@ -28,8 +28,8 @@
 </script>
 <style type="text/css">
 	.rate-wrapper{
-		font-size: 0.64rem;
-		margin-right:0.4rem;
+		font-size: 32px;
+		margin-right:20px;
 	}
 	.high-light{
 		color:#ffb339;
@@ -39,7 +39,7 @@
 	}
 	.rate-score{
 		color:#393939;
-		font-size: 0.64rem;
+		font-size: 32px;
 		font-weight: bold;
 	}
 </style>

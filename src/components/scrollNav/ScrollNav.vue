@@ -126,8 +126,8 @@
 <style>
     .scrollnav {
         position: absolute;
-        top: 3.98rem;
-        height: 16.86rem;
+        top: 200px;
+        height: 844px;
         width: 100%;
         display: flex;
         color: #898989;
@@ -140,9 +140,9 @@
     .scrollnav-tab {
         /* display: flex; */
         position: absolute;
-        bottom: 0.52rem;
-        right: 2rem;  
-        font-size: 0.4rem;   
+        bottom: 52px;
+        right: 100px;  
+        font-size: 20px;   
     }
     .scrollnav-tab-item {
         -webkit-overflow-scrolling: touch;
@@ -150,8 +150,8 @@
         margin: 0;
         flex: 1;
         list-style: none;
-        border-left: 0.02rem rgb(225,225,225) solid;
-        padding-left: .2rem;        
+        border-left: 1px rgb(225,225,225) solid;
+        padding-left: 10px;        
     }
     .tab-item-li {
         position: relative;
@@ -166,18 +166,18 @@
         font-weight: bold;
     }
     .scrollnav-tab-item > li.scrollnav-current > i {
-        width: .32rem;
+        width: 16px;
         height: inherit;
         position: absolute;
         top: 0;
-        left: 0.01rem;
+        left: 0.5px;
         display: flex;
         align-items: center;
     }          
 
     .tab-item-li > span {
-        margin-bottom: 0.4rem;
-        width: 2rem;
+        margin-bottom: 20px;
+        width: 100px;
         display: inline-block;   
 
     }
@@ -186,37 +186,37 @@
     }
     .tab-item-li>span:before{
         content: "";
-        width: .12rem;
-        height: .12rem;
+        width: 6px;
+        height: 6px;
         border-radius: 100%;
         display: inline-block;
-        border: 0.04rem solid #dfdfdf;
+        border: 2px solid #dfdfdf;
         position: absolute;
-        left: -0.32rem;
+        left: -16px;
         top:20%;
         background-color: white;
         z-index: 1;
     }
     .tab-item-li>span.active-tab-item:before{
-        border: 0.04rem solid black;
+        border: 2px solid black;
     }
 
     .scrollnav-tab-item > li:first-child>span:after,
     .scrollnav-tab-item > li:last-child>span:after{
-        width: 0.02rem;
+        width: 1px;
         display: inline-block;
         position: absolute;
-        left: -0.22rem;
+        left: -11px;
         z-index: 1;
         content: "";
         height: 100%;
         background-color: #fafafa;
     }
     .scrollnav-tab-item > li:first-child>span:after{
-        top: -1.12rem;
+        top: -56px;
     }
     .scrollnav-tab-item > li:last-child>span:after{    
-        top: .5rem;
+        top: 25px;
     }
     
     .scrollnav-content {
@@ -224,7 +224,7 @@
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
-        margin-left: 1.6rem;
+        margin-left: 80px;
     }
 
 </style>

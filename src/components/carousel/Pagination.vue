@@ -71,9 +71,9 @@ export default {
 
 <style scoped>
 .carousel-pagination {
-  position: absolute;
-  right: -1.4rem;
-  top: 4.44rem;
+    flex: 1;
+    text-align: center;
+    padding-top: 224px;
 }
 
 .carousel-page-item {
@@ -81,8 +81,7 @@ export default {
     color: #5f5f5f;
     display: block;
     text-align: center;
-    line-height: .46rem;
-    font-size: .4rem;
+    font-size: 20px;
     font-weight:bold;
 }
 .current-page-item,
@@ -92,12 +91,12 @@ export default {
 .carousel-dot-button {
   display: inline-block;
   cursor: pointer;
-  width: .64rem;
-  line-height: .72rem;
-  height: .64rem;
+  width: 32px;
+  line-height: 36px;
+  height: 32px;
   text-align: center;
   border-radius: 50%;
-  font-size: .44rem;
+  font-size: 22px;
   border: 2px solid #5f5f5f;
 }
 
@@ -109,10 +108,10 @@ export default {
   cursor: not-allowed;
 }
 .carousel-dot-buttonUp{
-  margin-bottom: 0.48rem;
+  margin-bottom: 24px;
 }
 
 .carousel-dot-buttonDown{
-  margin-top: 0.48rem;
+  margin-top: 24px;
 }
 </style>

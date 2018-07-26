@@ -5,7 +5,7 @@
 
 			<div class="product-info">
 				<span class="product-code">Item code: {{productInfoByCurrentSize.itemCode}}</span>
-				<div class="product-price">
+				<div class="product-price-container">
 					<p class="product-name">浮潜运动口鼻呼吸 物理防雾 高清大视野男女青少年全干式浮潜面罩 SUBEA EASYBREATH</p>
 					<div class="product-price-mark">
 						<div class="product-with-discount" v-if = "productInfoByCurrentSize.price.off !== 100">
@@ -54,22 +54,24 @@
 					<span class="size-mark">Size</span>
 					<span class="size-access">Stock: {{productInfoByCurrentSize.stock <=0 ? "unavailable":"available"}}</span>
 				</span>
-				<div class="product-size-select">
-					<custom-select 
-						:label = "sizeSelected.label"
-						:options = "productInfoByCurrentColor.sizeOptions" 
-						@selectOption = "selectProductSize" 
-						@menuShow = "showSizeMenu"
-						> 
-					</custom-select>
-				</div>
-				<div class="product-dimensional-code" :class = "{'zIndex1': bShowQRCode}">
-					<i :class = '{"icon-QR_code":!bShowQRCode,"icon-close":bShowQRCode}' @click = "toggleQRCode"></i>
-					<div class="product-QR-code" v-show = "bShowQRCode">
-						<p>Scan this QR code with your phone, get product information on decathlon.com!</p>
-						<div class="QR-code-img" ref = "qrcodeContainer"></div>
+				<div class="product-size-wrapper">
+					<div class="product-size-select">
+						<custom-select 
+							:label = "sizeSelected.label"
+							:options = "productInfoByCurrentColor.sizeOptions" 
+							@selectOption = "selectProductSize" 
+							@menuShow = "showSizeMenu"
+							> 
+						</custom-select>
 					</div>
-					<span class="code-tip" v-show = "!bShowQRCode">Want to buy online?Click me!</span> 
+					<div class="product-dimensional-code" :class = "{'zIndex1': bShowQRCode}">
+						<i :class = '{"icon-QR_code":!bShowQRCode,"icon-close":bShowQRCode}' @click = "toggleQRCode"></i>
+						<div class="product-QR-code" v-show = "bShowQRCode">
+							<p>Scan this QR code with your phone, get product information on decathlon.com!</p>
+							<div class="QR-code-img" ref = "qrcodeContainer"></div>
+						</div>
+						<span class="code-tip" v-show = "!bShowQRCode">Want to buy online?Click me!</span> 
+					</div>
 				</div>
 			</div>
 

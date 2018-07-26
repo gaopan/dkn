@@ -4,7 +4,7 @@
 
       <div ref="carousel-inner" class="carousel-inner" role="listbox"
         :style="{
-          'transform': `translate(0,${currentOffset/50}rem)`,
+          'transform': `translate(0,${currentOffset}px)`,
           'transition': dragging ? 'none' : transitionStyle,         
           'visibility': carouselHeight ? 'visible' : 'hidden',
         }">
@@ -314,27 +314,26 @@ export default {
 </script>
 <style>
 .carousel {
-  position: relative;
-  height: 100%;
+  display: flex;
 }
 
 .carousel-wrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;  
+  width: 540px;
+  overflow: hidden;
+   flex: 0 0 72.38%; 
+  height: 540px;
 }
 
-.micro-carousel-wrapper {
-    position: absolute;
-    top: .24rem;
-    left: .24rem;
-}
 
 .carousel-inner {
   height: 100%;
 }
 
+/* .micro-carousel-wrapper {
+    position: absolute;
+    top: .24rem;
+    left: .24rem;
+}
 .micro-carousel-wrapper .micro-carousel-inner {
     width: .8rem;
     height: .8rem;
@@ -342,5 +341,5 @@ export default {
 }
 .micro-carousel-wrapper div + div {
   margin-left: .12rem;
-}
+} */
 </style>
