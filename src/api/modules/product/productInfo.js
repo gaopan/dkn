@@ -20,8 +20,8 @@ export default{
 		let url = `voice/item_code/${itemCode}`;
 		// return instance.get(url)
 	},
-	getQrcode(){
-		let url = `qrcode/item_code/111`;
+	getQrcode(itemCode = 111){
+		let url = `qrcode/item_code/${itemCode}`;
 		// return instance.get(url)
 	}	
 }

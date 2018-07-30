@@ -55,10 +55,13 @@ export default {
   methods: {
     goToPage(type) {
       let currentPage = this.currentPage;
+
       if(type == "prev"){
         if(this.currentPage === 1)return;
         currentPage -= 1;
       }else if(type == "next"){
+        // console.log(this.currentPage)
+        // console.log(this.pagniationCount)
         if(this.currentPage == this.pagniationCount)return;
         currentPage += 1;
       }

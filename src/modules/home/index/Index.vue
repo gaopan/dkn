@@ -2,8 +2,9 @@
 	<div class="product-index" :class = "{'transition-page':bRedirection}">
 		<!-- <div class="p-wrapper"> -->
 			<p class="p-level1 padding-top10">Don’t know </p>
-			<p class="p-level1 row2">how to choose?</p>
-			<p class="p-level2">Scan the product down here and get your decision done</p>
+			<p class="p-level1 p-level1-row2">how to choose?</p>
+			<p class="p-level2">Scan the product down here</p>
+			<p class="p-level2">and get your decision done</p>
 			<i class="icon-arrow-down" @click = "redirection" :class = "{'transition-icon':bMoveIcon,'transition-icon-up':!bMoveIcon}"></i>
 		<!-- </div> -->
 	</div>
@@ -39,9 +40,7 @@
 	}
 </script>
 <style type="text/css">
-.padding-top10{
-  padding-top: 10%;
-}
+
 .transition-page{
 	transform:translate(0, -1080px);
 	transition: 0.5s ease-out transform;
@@ -52,15 +51,13 @@
     width: 38.4rem;
     background-color: #0082c3;
     width: 100%;
-    /* display: -ms-flexbox; */
     display: flex;
-    /* padding-top: 10.41%; */
     flex-direction: column;
     min-height: 100%
 }
 
 	.p-level1{
-    text-shadow: 10px 10px 0 rgba(0,72,122,.4);
+    text-shadow: 1vmin 1vmin 0 rgba(0,72,122,.4);
     font-weight: 700;
     line-height: .94;
 		font-style: italic;
@@ -73,7 +70,6 @@
 
 	  font-style: italic;
 	  font-stretch: condensed;
-	  padding:1.04% 20%;
 	  text-align: center;
 	}
 
@@ -93,43 +89,23 @@
     transition: 0.8s ease transform;		
 	}
 
-
-@media only screen and (min-width:1560px){
-	.p-level1{
-			font-size: 180px;
-	}
-	.p-level2 {
-		font-size: 100px;
-	}
-	.product-index .icon-arrow-down{
-		font-size: 96px;
-	}
-}	
-
-
-@media only screen and (min-width:1080px) and (max-width:1560px){ 
-	.p-level1{
-			font-size: 100px;
-			height: 128px;
-	}
-	.p-level2 {
-		font-size: 60px;
-	}
-	.product-index .icon-arrow-down{
-		font-size: 50px;
+	.padding-top10{
+	  padding-top: 20vmin;
 	}	
-}
-
-
-@media only screen and (min-width:480px) and (max-width:1080px){ 
 	.p-level1{
-			font-size: 80px;
+			font-size: 17.6vmin;
+	}
+
+	.p-level1-row2{
+		margin-bottom: 3vmin;
 	}
 	.p-level2 {
-		font-size: 40px;
+		font-size: 9.8vmin;
 	}
+
 	.product-index .icon-arrow-down{
-		font-size: 40px;
-	}	
-}
+		font-size: 8.6vmin;
+		padding-top: 10vmin;
+	}
+
 </style>
