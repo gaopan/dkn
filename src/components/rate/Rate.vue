@@ -27,10 +27,6 @@
 	}
 </script>
 <style type="text/css">
-	.rate-wrapper{
-		font-size: 32px;
-		margin-right:20px;
-	}
 	.high-light{
 		color:#ffb339;
 	}
@@ -39,7 +35,30 @@
 	}
 	.rate-score{
 		color:#393939;
-		font-size: 32px;
 		font-weight: bold;
 	}
+
+	@media only screen and (min-width:1600px){
+		.rate-wrapper{
+			font-size: 32px;
+			margin-right:20px;
+		}
+		.rate-score{
+			font-size: 32px;
+		}		
+	}
+	@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
+		.rate-wrapper{
+	    font-size: 25px;
+	    margin-right: 16px;		
+		}
+
+		.rate-score{
+	    font-size: 25px;		
+		}		
+
+	}
+	/* @media only screen and (min-width:480px) and (max-width:1080px){
+	  
+	} */
 </style>

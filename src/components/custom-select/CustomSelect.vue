@@ -88,13 +88,12 @@
 		margin-left: 20px;
 	}	
 	.arrow-icon{
+    font-size: 24px;
+    line-height: 66px;	
     width: 66px;
     text-align: center;
     display: inline-block;
-    font-size: 16px;
-    font-size: 24px;
     font-weight: bold;
-    line-height: 66px;	
 	}
 
 	.select-menu{
@@ -130,5 +129,37 @@
 	.select-menu-list li+li{
 		border-top:1px solid #e6e6e6;
 	}
+
+
+@media only screen and (min-width:1600px){
+	.custom-select{
+		line-height: 66px;
+	}
+	.select-label {
+    font-size: 27px;
+		margin-left: 20px;
+	}		
+	.arrow-icon{
+    font-size: 24px;
+    line-height: 66px;	
+    width: 66px;		
+	}	
+}
+@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
+	.custom-select{
+		line-height: 50px;
+	}
+	.select-label {
+    font-size: 20px;
+    margin-left: 16px;
+	}		
+
+	.arrow-icon{
+		font-size: 20px;
+    width: 50px;
+    line-height: 50px;	
+	}
+
+}
 
 </style>

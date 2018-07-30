@@ -73,7 +73,6 @@ export default {
 .carousel-pagination {
     flex: 1;
     text-align: center;
-    padding-top: 224px;
 }
 
 .carousel-page-item {
@@ -114,4 +113,22 @@ export default {
 .carousel-dot-buttonDown{
   margin-top: 24px;
 }
+@media only screen and (min-width:1600px){
+  .carousel-pagination {
+    padding-top: 224px;
+    padding-left: 10px;
+    padding-right: 10px;    
+  }
+}
+@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
+  .carousel-pagination {
+    padding-top: 110px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+}
+/* @media only screen and (min-width:480px) and (max-width:1080px){
+  
+} */
 </style>

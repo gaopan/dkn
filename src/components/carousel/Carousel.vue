@@ -318,10 +318,7 @@ export default {
 }
 
 .carousel-wrapper {
-  width: 540px;
   overflow: hidden;
-   flex: 0 0 72.38%; 
-  height: 540px;
 }
 
 
@@ -329,17 +326,22 @@ export default {
   height: 100%;
 }
 
-/* .micro-carousel-wrapper {
-    position: absolute;
-    top: .24rem;
-    left: .24rem;
+@media only screen and (min-width:1600px){
+  .carousel-wrapper {
+    width: 540px;
+    height: 540px;
+  }
 }
-.micro-carousel-wrapper .micro-carousel-inner {
-    width: .8rem;
-    height: .8rem;
-    display: inline-block;
+@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
+  .carousel-wrapper {
+    width: 380px;
+    height: 380px;
+  }
+
 }
-.micro-carousel-wrapper div + div {
-  margin-left: .12rem;
+/* @media only screen and (min-width:480px) and (max-width:1080px){
+  
 } */
+
+
 </style>

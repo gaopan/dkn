@@ -97,7 +97,7 @@
             <div class="panel-cell-wrapper" 
             		:style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
             		v-else-if = "item.label === 'PRODUCT BENEFITS'">
-		            <div class = "product-benefits-item" v-for= "(benefit,benefitIndex) in productInfoData.Benefits">
+		            <div class = "product-benefits-item" :class = "{'marginBottom0': benefitIndex == productInfoData.Benefits.length-1}"  v-for= "(benefit,benefitIndex) in productInfoData.Benefits">
 		            	<p class = "benefits-points">{{benefit.label}}</p> 
 		            	<p class = "benefits-points-content">{{benefit.text}}</p> 
 		            </div>

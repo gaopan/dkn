@@ -6,49 +6,7 @@
 @import './assets/dkn-icon/style.css';
 /*the whole page's scroll bar style*/
 
-/* ::-webkit-scrollbar {
-  width: 10px;
-}
 
-::-webkit-scrollbar-track {
-  background: #E0E0E0;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #B3B3B3;
-  border-radius: 10px;
-} */
-
-/* ::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-} */
-
-
-
-/* Common Styles for Input Placeholder */
-
-/* ::-webkit-input-placeholder {
-  Chrome/Opera/Safari
-  color: #cccccc;
-}
-
-::-moz-placeholder {
-  Firefox 19+
-  color: #cccccc;
-}
-
-:-ms-input-placeholder {
-  IE 10+
-  color: #cccccc;
-}
-
-:-moz-placeholder {
-  Firefox 18-
-  color: #cccccc;
-}
- */
  body{
   font-family: Roboto;
   /* width: 38.4rem; */   
@@ -56,8 +14,8 @@
  }
 .as-mainwrapper {
     height: 100%; 
-    /* height: 21.6rem;
     width: 100%;
+    /* height: 21.6rem;
     min-width: 30rem;
     overflow-x: auto;
     overflow-y: hidden; */

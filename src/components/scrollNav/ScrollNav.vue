@@ -103,7 +103,10 @@
                 // const panel = this.getPanels()[index].$el;
                 const panel = this.panels[index].$el;
                 const speed = animate && (window.navigator && window.navigator.userAgent || '').indexOf('MicroMessenger') < 0 ? 500 : 0;
-
+                console.clear()
+                console.log("index",index)
+                console.log("currentPosition",this.currentPosition)
+                console.log("offsetTop",panel.offsetTop)
                 scrollTop(this.scrollView, this.currentPosition, panel.offsetTop, speed, () => {
                     this.scrolling = false;
                 });
@@ -125,20 +128,29 @@
 
 <style>
     .scrollnav {
-        position: absolute;
-        top: 200px;
-        height: 844px;
+       /*  position: absolute;
+       top: 200px;
+       height: 844px;
+       width: 100%;
+       display: flex;
+       color: #898989;
+       flex-direction: column; */
+        /* position: absolute; */
+        /* top: 200px; */
+        height: 798px;
         width: 100%;
+        display: -ms-flexbox;
         display: flex;
         color: #898989;
+        -ms-flex-direction: column;
         flex-direction: column;
+        margin-top: 24px;       
     }
     .scrollnav ::-webkit-scrollbar {
       width: 0;
       height: 0;
     }
     .scrollnav-tab {
-        /* display: flex; */
         position: absolute;
         bottom: 52px;
         right: 100px;  
@@ -226,5 +238,42 @@
         -webkit-overflow-scrolling: touch;
         margin-left: 80px;
     }
+
+@media only screen and (min-width:1560px){
+    .scrollnav {
+        height: 798px;
+        margin-top: 24px;       
+    }
+
+    .scrollnav-tab {
+        bottom: 52px;
+        right: 100px;  
+        font-size: 20px;   
+    }  
+
+    .scrollnav-content {
+        margin-left: 80px;
+    }
+}
+@media only screen /* and (min-width:1080px) */ and (max-width:1560px){
+    .scrollnav {
+        height: 637px;
+        margin-top: 18px;   
+    }
+
+    .scrollnav-tab {
+        font-size: 17px;
+        bottom: 42px;
+        right: 86px;  
+    }   
+
+    .scrollnav-content {
+        margin-left: 58px;
+    }
+
+}
+/* @media only screen and (min-width:480px) and (max-width:1080px){
+  
+}     */
 
 </style>
