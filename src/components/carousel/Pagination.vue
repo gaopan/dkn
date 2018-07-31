@@ -83,11 +83,7 @@ export default {
     color: #5f5f5f;
     display: block;
     text-align: center;
-    font-size: 20px;
     font-weight:bold;
-}
-.current-page-item,
-.carousel-page-count{
 }
 
 .carousel-dot-button {
@@ -122,6 +118,16 @@ export default {
     padding-left: 10px;
     padding-right: 10px;    
   }
+
+  .carousel-dot-button{
+      width: 32px;
+      line-height: 36px;
+      height: 32px;
+      font-size: 22px; 
+  }
+  .carousel-page-item {
+      font-size: 20px;
+  }  
 }
 @media only screen /* and (min-width:1080px) */ and (max-width:1600px){
   .carousel-pagination {
@@ -129,6 +135,15 @@ export default {
     padding-left: 8px;
     padding-right: 8px;
   }
+  .carousel-dot-button{
+      width: 25px;
+      line-height: 30px;
+      height: 25px;
+      font-size: 17px;  
+  }
+  .carousel-page-item {
+      font-size: 16px;
+  }    
 
 }
 /* @media only screen and (min-width:480px) and (max-width:1080px){

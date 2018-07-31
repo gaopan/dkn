@@ -95,6 +95,9 @@ export default {
     },
     currentPage(val,oldV) {
       this.$emit("pageChange", val);
+    },
+    imageUrl(newV,oldV){
+      this.slideCount = newV.length;
     }
   },
 
@@ -281,7 +284,8 @@ export default {
     },
 
     computeCarouselHeight() {
-      this.getSlideCount();
+      // this.getSlideCount();
+      // this.slideCount = imageUrl.length;
       this.getBrowserWidth();
       this.getCarouselHeight();
     },

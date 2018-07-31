@@ -6,7 +6,7 @@
 			<div class="product-info">
 				<span class="product-code">Item code: {{productInfoByCurrentSize.itemCode}}</span>
 				<div class="product-price-container">
-					<p class="product-name">浮潜运动口鼻呼吸 物理防雾 高清大视野男女青少年全干式浮潜面罩 SUBEA EASYBREATH</p>
+					<p class="product-name">{{productInfoData.WebLabel}}</p>
 					<div class="product-price-mark">
 						<div class="product-with-discount" v-if = "productInfoByCurrentSize.price.off !== 100">
 							<span class="product-price-discount">
@@ -52,7 +52,7 @@
 			<div class="product-size-option">
 				<span class="size-label">
 					<span class="size-mark">Size</span>
-					<span class="size-access">Stock: {{productInfoByCurrentSize.stock <=0 ? "unavailable":"available"}}</span>
+					<span class="size-access">Stock: {{productStock <=0 ? "unavailable":"available"}}</span>
 				</span>
 				<div class="product-size-wrapper">
 					<div class="product-size-select">
@@ -64,11 +64,20 @@
 							> 
 						</custom-select>
 					</div>
-					<div class="product-dimensional-code" :class = "{'zIndex1': bShowQRCode}">
-						<i :class = '{"icon-QR_code":!bShowQRCode,"icon-close":bShowQRCode}' @click = "toggleQRCode"></i>
+					<div class="product-dimensional-code" :class = "{'zIndex1': bShowQRCode,'no-item-code':QRCodeSrc == null}">
+						<i :class = '{
+									"icon-QR_code":!bShowQRCode,
+									"icon-close":bShowQRCode,
+									"cursor-not-allowed":QRCodeSrc == null
+								}' 
+								@click = "toggleQRCode">
+						</i>
 						<div class="product-QR-code" v-show = "bShowQRCode">
 							<p>Scan this QR code with your phone, get product information on decathlon.com!</p>
-							<div class="QR-code-img" ref = "qrcodeContainer"></div>
+							<div class="QR-code-img" ref = "qrcodeContainer">
+								<img :src="QRCodeSrc" width="100%" height ="100%"/>
+							</div>
+
 						</div>
 						<span class="code-tip" v-show = "!bShowQRCode">Want to buy online?Click me!</span> 
 					</div>
@@ -79,7 +88,13 @@
 		</section>
 
 		<section class="product-description">
-			<p class="product-info-title">{{containerTitle}}</p>
+			<div class="product-title">
+				<p class="product-info-title">{{containerTitle}}</p>
+				<div class="page-lang">
+					<span class="page-lang-en" :class = "{borderBottom2:lang =='ZH'}" @click = "chooseLang('ZH')">中</span>
+					<span class="page-lang-zh" :class = "{borderBottom2:lang =='EN'}"  @click = "chooseLang('EN')">EN</span>
+				</div>
+			</div>
 	    <scroll-nav @activeIndexChanged = "activeNavIndexChanged">
 	        <scroll-nav-panel :label="item.label" v-for="(item, index) in list" :key="index">
             <!-- DESIGNED FOR -->
@@ -114,7 +129,7 @@
 		            			<span class = "review-created-date">{{review.published_at}}</span>
 		            			<span class = "review-created-name">{{review.firstname}}</span>
 		            		</p>
-		            		<p>On Easybreath surface snorkelling mask LIGHT BLUE</p>
+		            		<!-- <p>On Easybreath surface snorkelling mask LIGHT BLUE</p> -->
 		            	</div> 
 
 		            	<div class="review-content">

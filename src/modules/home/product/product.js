@@ -17,6 +17,7 @@ export default {
 	},
 	data(){
 		return{
+			lang: "EN",
 			navigateToPhoto:1,
 			imageUrl:[],
 			list: [
@@ -53,6 +54,8 @@ export default {
 	      	off:100
 	      }
       },
+
+      productStock:0,
       sizeSelected:{  //value for display the label of sected size
       	label:null,
       	value:null
@@ -62,126 +65,38 @@ export default {
       qrcodeEle:null,
       productInfoData:{},
       productReviews:[],
-      // productConcept:{},
       productScore:0,
+      QRCodeSrc:null
 
     }
 	},
 	created(){
 		this.containerTitle = this.list[0].label;
-		ProductApi.getProductInfo().then(res=>{
-			res.data.models.forEach((d,modelsIndex)=>{
-				// debugger
-				let videos = [],
-					  images = [],
-					  items = [],
-					  sizeOptions = [],
-					  productColorChecked = modelsIndex === 0 ? true:false;
 
-
-				if(d.Images&&d.Images.length){
-					d.Videos.forEach(d=>{
-						videos.push({type:"vedio",url:d.link});
-					})
-				}
-
-				if(d.Images&&d.Images.length){
-					d.Images.forEach(d=>{
-						images.push({type:"img",url:d.link});
-					})
-				}
-
-				if(d.items&&d.items.length){
-					d.items.forEach(d=>{
-						let original = {
-									int:"0",
-									decimal: ".00"
-								}, 
-								discount = {
-									int: "0", 
-									decimal: ".00",
-								},
-								off = 100;
-						if(!!d.prices){
-							if(!!d.prices.sale_price){
-								original.int = d.prices.sale_price.substr(0,d.prices.sale_price.indexOf("."))
-								original.decimal = d.prices.sale_price.substr(d.prices.sale_price.indexOf("."),d.prices.sale_price.length);							 	
-							}
-							if(!!d.prices.strickout_price){
-								discount.int = d.prices.strickout_price.substr(0,d.prices.strickout_price.indexOf("."))
-								discount.decimal = d.prices.strickout_price.substr(d.prices.strickout_price.indexOf("."),d.prices.strickout_price.length);
-								off = +(((+d.prices.strickout_price)*100/(+d.prices.sale_price)).toFixed(0))
-							}
-						}
-						items.push({
-							SizeValueId:d.SizeValueId,
-							SizeValueLabel:d.SizeValueLabel,
-							stock:d.Stock&&d.Stock.store?d.Stock.store:0,							
-							itemCode:d.ItemCode,							
-							prices:{
-								original,
-								discount,
-								off
-							}
-						})
-
-						sizeOptions.push({
-							label: d.SizeValueLabel,
-							value: d.SizeValueId
-						})
-					})
-				}
-
-				 let colorName = d.BusinessColors[0].label;
-				this.productAllInfoByColor.push({
-					colorName: colorName,
-					videosAndImages:[...videos,...images],
-					items:items,
-					sizeOptions:sizeOptions
-				})
-				this.productColors.push({
-					colorName: colorName,
-					imgUrl:images[0].url,
-					checked:productColorChecked
-				})
-			});
-
-			this.productInfoByCurrentColor = this.productAllInfoByColor[0];
-
-			this.imageUrl = this.productInfoByCurrentColor.videosAndImages
-			// this.imageUrl.length = 6;
-			console.log(this.productInfoByCurrentColor)
-			// console.log(this.productAllInfoByColor)
-
-			let score = 0;
-			this.productInfoData = res.data.dsm;
-			this.productReviews = res.data.reviews;
-			this.productReviews.forEach(d => {
-				d.published_at = TimeUtil.getFullDate(new Date(d.published_at),'yyyy-MM-dd')
-				score += ~~d.note
-			})
-			this.productScore = +((score/this.productReviews.length).toFixed(2));
-
-		},err=>{
-			console.log(err)
-		})
-
+		let langInLocal = localStorage.getItem("lang");
+		if(!!langInLocal){
+			this.lang = langInLocal
+		}else{
+			this.lang = "EN"
+			localStorage.setItem("lang","EN")
+		}
+		this.initPageData(this.lang);
 	},
 	methods:{
 		pageChange(args){
 			this.navigateToPhoto = args;
 		},
 		selectProductColor(color,colorIndex){
-			this.productColors.forEach(d=>{
-				d.checked = false;
-			})
+			// if(color.checked)return;
+
+			this.QRCodeSrc = null;
+			this.productColors.forEach(d=>{ d.checked = false; })
 			color.checked = true;
 
       this.productAllInfoByColor.every(d=>{
       	if(d.colorName == color.colorName){
 		      this.productInfoByCurrentColor = Object.assign({},d);
 		      this.imageUrl = this.productInfoByCurrentColor.videosAndImages;
-		      // this.imageUrl.length = 6;
 		      return false;
       	}
 		    return true;
@@ -204,10 +119,23 @@ export default {
       }
       this.sizeSelected = {label:null,value:null}
 
-      	this.navigateToPhoto = 1;
-      // setTimeout(()=>{
-      // },300)
+      this.navigateToPhoto = 1;
 
+			//init size
+			let firstSizeItem =  this.productInfoByCurrentColor.items[0];
+			this.productInfoByCurrentSize = {
+				stock:firstSizeItem.stock,
+				price:firstSizeItem.prices,
+				itemCode:firstSizeItem.itemCode
+			}		
+
+			this.sizeSelected = {
+				label:firstSizeItem.SizeValueLabel,
+				value:firstSizeItem.SizeValueId
+			}		
+
+			this.fnUpdateStock_QR_UserReview(undefined,firstSizeItem.itemCode,this.lang);
+	      
 		},
 		handleSlideClick(){
 
@@ -217,37 +145,195 @@ export default {
 			this.containerTitle = this.list[args].label;
 		},
 		selectProductSize(args){
+			this.QRCodeSrc = null;
+
 			this.sizeSelected = Object.assign({},args);
+			let itemCode = null;
 
 			this.productInfoByCurrentColor.items.forEach(d=>{
 				if(args.value == d.SizeValueId){
+					itemCode = d.itemCode;
 					this.productInfoByCurrentSize =  Object.assign({},{
 						stock:d.stock,
 						price:d.prices,
 						itemCode:d.itemCode
 					})
 				}
+			})	
+
+			this.fnUpdateStock_QR_UserReview(undefined,itemCode,this.lang)
+		},
+		fnUpdateStock_QR_UserReview(storeId,itemCode,lang){
+			ProductApi.getStock(storeId,itemCode).then((res,err)=>{
+				let stockData = JSON.parse(res.data)
+				if(stockData.stock&&stockData.stock.stock){
+					this.productStock = stockData.stock.stock;
+				}else{
+					this.productStock = 0;
+				}
+			})
+
+			ProductApi.getQrcode(itemCode).then((res,err)=>{
+				this.QRCodeSrc = res.data
+			})	
+			ProductApi.getUserReview(itemCode,lang).then((res,err)=>{
+				let obj = this.makeUserReviewData(res.data);
+				this.productReviews = obj.productReviews; 
+				this.productScore = obj.productScore;				
 			})
 		},
 		showSizeMenu(args){
 			this.bShowShadow = args;
 		},
 		toggleQRCode(){
+			if(this.QRCodeSrc == null)return;
 			this.bShowQRCode = !this.bShowQRCode;
+		},
+		chooseLang(lang){
+			if(this.lang == lang)return;
+			this.lang = lang;
+			console.log(this.lang)
+		},
+		makeUserReviewData(resData){
+			let score = 0,
+			    productScore = 0;
 
-			if(this.bShowQRCode){
-				if(!!this.qrcodeEle){
-					this.qrcodeEle.clear();
-					this.qrcodeEle.makeCode("a");					
-				}else{
-					this.qrcodeEle = new Qrcode(this.$refs.qrcodeContainer,{
-						text: 'a',
-						width:'164',
-						height:'164',
-					})
+			resData.forEach(d => {
+				d.published_at = TimeUtil.getFullDate(new Date(d.published_at),'yyyy-MM-dd')
+				score += ~~d.note
+			})
 
+			productScore = +((score/resData.length).toFixed(2));
+
+			return {
+				productReviews:resData,
+				productScore: productScore
+			}	
+
+		},
+		calculateDiscount(pricesObj){
+			let original = {
+						int:"0",
+						decimal: ".00"
+					}, 
+					discount = {
+						int: "0", 
+						decimal: ".00",
+					},
+					off = 100;
+			if(!!pricesObj){
+				let sale_price = pricesObj.sale_price+"";
+				let strickout_price = pricesObj.strickout_price+"";
+				if(!!sale_price){
+
+					let sale_priceIndex = sale_price.indexOf(".");
+					if(sale_priceIndex>=0){
+						original.int = sale_price.substr(0,sale_priceIndex)
+						original.decimal = sale_price.substr(sale_priceIndex,sale_price.length);							 	
+					}else{
+						original.int = sale_price;
+						original.decimal = ".00";							 	
+					}
 				}
-			}
+				if(!!strickout_price){
+
+					let strickout_priceIndex = sale_price.indexOf(".");
+					if(strickout_priceIndex>=0){
+						discount.int = sale_price.substr(0,strickout_priceIndex)
+						discount.decimal = sale_price.substr(strickout_priceIndex,sale_price.length);							 	
+					}else{
+						discount.int = sale_price;
+						discount.decimal = ".00";		 					 	
+					}
+					off = +(((+strickout_price)*100/(+sale_price)).toFixed(0))
+				}
+
+				return { original,discount,off }
+			}			
+		},
+		initPageData(lang){
+			ProductApi.getProductInfo(undefined,undefined,lang).then(res=>{
+				this.productAllInfoByColor = [];
+				this.productColors = [];
+				res.data.models.forEach((d,modelsIndex)=>{
+					let videos = [],
+						  images = [],
+						  items = [],
+						  sizeOptions = [],
+						  productColorChecked = modelsIndex === 0 ? true:false;
+
+
+					if(d.Images&&d.Images.length){
+						d.Videos.forEach(d=>{
+							videos.push({type:"vedio",url:d.link});
+						})
+					}
+
+					if(d.Images&&d.Images.length){
+						d.Images.forEach(d=>{
+							images.push({type:"img",url:d.link});
+						})
+					}
+
+					if(d.items&&d.items.length){
+						d.items.forEach(d=>{
+							let pricesObj = this.calculateDiscount(d.prices);
+							items.push({
+								SizeValueId:d.SizeValueId,
+								SizeValueLabel:d.SizeValueLabel,
+								stock:d.Stock&&d.Stock.store?d.Stock.store:0,							
+								itemCode:d.ItemCode,							
+								prices:pricesObj
+							})
+
+							sizeOptions.push({
+								label: d.SizeValueLabel,
+								value: d.SizeValueId
+							})
+						})
+						
+					}
+
+					let colorName = d.BusinessColors[0].label;
+					this.productAllInfoByColor.push({
+						colorName: colorName,
+						videosAndImages:[...videos,...images],
+						items:items,
+						sizeOptions:sizeOptions
+					})
+					this.productColors.push({
+						colorName: colorName,
+						imgUrl:images[0].url,
+						checked:productColorChecked
+					})
+					
+				});
+
+				this.productInfoByCurrentColor = this.productAllInfoByColor[0];
+
+				this.imageUrl = this.productInfoByCurrentColor.videosAndImages
+
+				this.productInfoData = res.data.dsm;
+
+				console.log(this.productInfoByCurrentColor)
+				//init size
+				this.productInfoByCurrentSize = {
+					stock:this.productInfoByCurrentColor.items[0].stock,
+					price:this.productInfoByCurrentColor.items[0].prices,
+					itemCode:this.productInfoByCurrentColor.items[0].itemCode
+				}		
+
+				this.sizeSelected = {
+					label:this.productInfoByCurrentColor.items[0].SizeValueLabel,
+					value:this.productInfoByCurrentColor.items[0].SizeValueId
+				}	
+
+				this.fnUpdateStock_QR_UserReview(undefined,this.productAllInfoByColor[0].this.productInfoByCurrentColor.items[0].itemCode,lang);				
+
+
+			},err=>{
+				console.log(err)
+			})		
 		}
 	},
 	components:{
@@ -257,5 +343,13 @@ export default {
 		ScrollNavPanel,
 		CustomSelect,
 		Rate
+	},
+	watch:{
+		lang(newV,oldV){
+			if(newV){		
+				localStorage.setItem("lang",newV)
+				this.initPageData(newV);
+			}
+		}
 	}
 }

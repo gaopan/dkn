@@ -7,33 +7,57 @@ let instance = axiosHelper.createAxios({
   timeout: 10000
 })
 export default{
-	getProductInfo(rfid = 345348986394,id = 1277 ){
-		let url  = `mock/rfid/${rfid}/store_id/${id}`;
-		// return instance.get(url)
-		return Promise.resolve(MockData.getProductInfo);
+	getProductInfo(itemCode = 345348986394,storeId = 1277,lang){
+		// let url  = `mock/rfid/${itemCode}/store_id/${storeId}`;
+		let LANG = null;
+		if(lang == "EN"){
+			LANG = "EN"
+		}else if(lang == "ZH"){
+			LANG = "ZH"
+		}
+
+		let url  = `productInfo/ean/${itemCode}/store_id/${storeId}/lang/${LANG}`;
+		return instance.get(url)
+		// return Promise.resolve(MockData.getProductInfo);
 	},
-	getStock(storeId = 666,itemCode = 2182810){
+	getStock(storeId = 859,itemCode){
 		let url = `stock/store_id/${storeId}/item_code/${itemCode}`
-		// return instance.get(url)
+		return instance.get(url)
 	},
-	getUserReview(itemCode = 8304664){
-		let url = `voice/item_code/${itemCode}`;
-		// return instance.get(url)
+	getUserReview(itemCode,lang){
+		let LANG = null;
+		if(lang == "EN"){
+			LANG = "en_GB"
+		}else if(lang == "ZH"){
+			LANG = "zh_CN"
+		}
+
+		// let url = `voice/item_code/${itemCode}`;
+		let url = `voice/item_code/${itemCode}/lang/${LANG}`;
+		
+		return instance.get(url)
 	},
-	getQrcode(itemCode = 111){
+	getQrcode(itemCode){
 		let url = `qrcode/item_code/${itemCode}`;
-		// return instance.get(url)
+		return instance.get(url)
 	}	
 }
 
-// //获取库存（by store & item code）
-// stock api: /stock/store_id/666/item_code/2182810
+/*
 
-// //获取产品信息（by store & item code）
-// productInfo api: /mock/rfid/345348986394/store_id/1277
+//获取库存（by store & item code）
+//@如何获取store_id
+stock/store_id/666/item_code/2182810
 
-// //获取用户评论（by item code）
-// voice api: /voice/item_code/8304664
 
-// //获取二维码（by item code）
-// qrcode api: /qrcode/item_code/111
+//@如何获取store_id
+//获取产品信息（by store & item code）
+英文： productInfo/ean/108305/store_id/666/lang/EN
+中文： productInfo/ean/108305/store_id/666/lang/ZH
+
+
+//获取用户评论（by item code）
+英文： voice/item_code/8189216/lang/en_GB
+中文： voice/item_code/8189216/lang/zh_CN
+
+*/

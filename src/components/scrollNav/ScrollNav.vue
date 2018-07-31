@@ -152,10 +152,8 @@
     }
     .scrollnav-tab {
         position: absolute;
-        bottom: 52px;
-        right: 100px;  
-        font-size: 20px;   
     }
+
     .scrollnav-tab-item {
         -webkit-overflow-scrolling: touch;
         padding: 0;
@@ -224,12 +222,7 @@
         height: 100%;
         background-color: #fafafa;
     }
-    .scrollnav-tab-item > li:first-child>span:after{
-        top: -56px;
-    }
-    .scrollnav-tab-item > li:last-child>span:after{    
-        top: 25px;
-    }
+
     
     .scrollnav-content {
         flex: 1;
@@ -250,12 +243,18 @@
         right: 100px;  
         font-size: 20px;   
     }  
-
+    
     .scrollnav-content {
         margin-left: 80px;
     }
+    .scrollnav-tab-item > li:first-child>span:after{
+        top: -55px;
+    }
+    .scrollnav-tab-item > li:last-child>span:after{    
+        top: 24px;
+    }    
 }
-@media only screen /* and (min-width:1080px) */ and (max-width:1560px){
+@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
     .scrollnav {
         height: 637px;
         margin-top: 18px;   
@@ -264,12 +263,18 @@
     .scrollnav-tab {
         font-size: 17px;
         bottom: 42px;
-        right: 86px;  
+        right: 80px;  
     }   
 
     .scrollnav-content {
         margin-left: 58px;
     }
+    .scrollnav-tab-item > li:first-child>span:after{
+        top: -50px;
+    }
+    .scrollnav-tab-item > li:last-child>span:after{    
+        top: 22px;
+    }    
 
 }
 /* @media only screen and (min-width:480px) and (max-width:1080px){

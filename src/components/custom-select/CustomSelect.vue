@@ -1,7 +1,7 @@
 <template>
 	<div class="custom-select">
 		<div class="select-label-wrapper"  @click = "showMenu">
-			<span class="select-label">{{selectLabel||"Please Select"}}</span>
+			<span class="select-label">{{selectLabel}}</span>
 			<i class= "icon-down arrow-icon"></i>
 		</div>
 		<div class="select-menu" :class = "{'select-menu-up':true,'select-menu-down':false}" v-show = "bShowMenu">
@@ -32,7 +32,15 @@
 			}
 		},
 		created(){
-			this.selectLabel = this.$props.label;
+			// this.selectLabel = this.$props.label;
+			if(!!this.$props.label){
+				this.selectLabel = this.$props.label;
+			}else{
+				this.selectLabel = "Please Select";
+			}
+			if(this.$props.options.length == 0){
+				this.selectLabel = "No Option to Select";
+			}			
 			document.addEventListener("click",this.fnBlur,false)
 		},
 		beforeDestroy(){
@@ -62,9 +70,24 @@
 			},
 			"$props.label":{
 				handler(newV,oldV){
-					this.selectLabel = newV;
+					if(!!newV){
+						this.selectLabel = newV;
+					}else{
+						this.selectLabel = "Please Select";
+					}
+					if(this.$props.options.length == 0){
+						this.selectLabel = "No Option to Select";
+					}					
 				}
-			}
+			},
+			/*"$props.options":{
+				handler(newV,oldV){
+					if(newV.length == 0){
+						this.selectLabel = "No Option to Select";
+					}
+				},
+				deep:true
+			},*/
 		}
 	}
 </script>
@@ -121,8 +144,6 @@
     font-weight: 700;
 	}
 	.select-menu-list li{
-		line-height: 68px;
-	  font-size: 27px;
 	  color: #5f5f5f;	
 	  cursor: pointer;	
 	}
@@ -144,6 +165,10 @@
     line-height: 66px;	
     width: 66px;		
 	}	
+	.select-menu-list li{
+		line-height: 68px;
+	  font-size: 27px;	  	
+	}	
 }
 @media only screen /* and (min-width:1080px) */ and (max-width:1600px){
 	.custom-select{
@@ -159,6 +184,11 @@
     width: 50px;
     line-height: 50px;	
 	}
+
+	.select-menu-list li{
+    line-height: 54px;
+    font-size: 22px;	  	
+	}	
 
 }
 
