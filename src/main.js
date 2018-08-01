@@ -3,14 +3,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
-import shared from './shared'
-// import WebSocket from './utils/web-socket'
 
-import './directives'
-import './filters'
-import VeeValidate from 'vee-validate'
-import isURL from 'validator/lib/isURL';
+// import store from './store'
+// import shared from './shared'
+// import WebSocket from './utils/web-socket'
+// import './directives'
+// import './filters'
+// import VeeValidate from 'vee-validate'
+// import isURL from 'validator/lib/isURL';
 
 
 let bootstrap = function() {
@@ -35,21 +35,22 @@ let bootstrap = function() {
     }
   };
 
-  Vue.use(VeeValidate, config);
+  // Vue.use(VeeValidate, config);
+  Vue.use(config);
 
-  // Temporary Fix for Vee-validate bug (Added 6/2/2018 - Fakhrul)
-  //Reference: https://stackoverflow.com/questions/46858242/vue-vee-validate-marking-valid-urls-as-invalid
-  const urlFixRule = (value) => {
-    return isURL(value, {
-      require_tld: false
-    });
-  };
-  VeeValidate.Validator.extend('url', urlFixRule);
+  //     Temporary Fix for Vee-validate bug (Added 6/2/2018 - Fakhrul)
+  //     Reference: https://stackoverflow.com/questions/46858242/vue-vee-validate-marking-valid-urls-as-invalid
+  // const urlFixRule = (value) => {
+  //   return isURL(value, {
+  //     require_tld: false
+  //   });
+  // };
+  // VeeValidate.Validator.extend('url', urlFixRule);
 
   /* eslint-disable no-new */
   new Vue({
     el: '#app',
-    store,
+    // store,
     router,
     template: '<App/>',
     components: { App }

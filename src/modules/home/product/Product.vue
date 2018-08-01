@@ -121,7 +121,7 @@
             <div class="panel-cell-wrapper" :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}"v-else-if = "item.label === 'USER REVIEWS'">
             		<div class="product-scorce-wrapper">
             			<rate :rate = "productScore"></rate> 
-            			<span class="user-review-count">{{productReviews.length}} reviews</span>
+            			<span class="user-review-count">{{productReviews.length}} {{productReviews.length>1?'reviews':'review'}}</span>
             		</div>
 		            <div class = "user-review-content" v-for= "(review,reviewIndex) in productReviews">
 		            	<div class = "review-created-on">

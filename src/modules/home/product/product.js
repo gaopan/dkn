@@ -17,7 +17,7 @@ export default {
 	},
 	data(){
 		return{
-			lang: "EN",
+			lang: null,
 			navigateToPhoto:1,
 			imageUrl:[],
 			list: [
@@ -80,7 +80,7 @@ export default {
 			this.lang = "EN"
 			localStorage.setItem("lang","EN")
 		}
-		this.initPageData(this.lang);
+		// this.initPageData(this.lang);
 	},
 	methods:{
 		pageChange(args){
@@ -192,7 +192,7 @@ export default {
 		chooseLang(lang){
 			if(this.lang == lang)return;
 			this.lang = lang;
-			console.log(this.lang)
+			// console.log(this.lang)
 		},
 		makeUserReviewData(resData){
 			let score = 0,
@@ -315,7 +315,6 @@ export default {
 
 				this.productInfoData = res.data.dsm;
 
-				console.log(this.productInfoByCurrentColor)
 				//init size
 				this.productInfoByCurrentSize = {
 					stock:this.productInfoByCurrentColor.items[0].stock,
@@ -329,7 +328,6 @@ export default {
 				}	
 
 				this.fnUpdateStock_QR_UserReview(undefined,this.productAllInfoByColor[0].this.productInfoByCurrentColor.items[0].itemCode,lang);				
-
 
 			},err=>{
 				console.log(err)

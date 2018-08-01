@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import {isColor, scrollTop} from './utils/tool.js';
+    import {scrollTop} from './utils/tool.js';
 
     export default {
         name: 'scrollnav',
@@ -103,10 +103,10 @@
                 // const panel = this.getPanels()[index].$el;
                 const panel = this.panels[index].$el;
                 const speed = animate && (window.navigator && window.navigator.userAgent || '').indexOf('MicroMessenger') < 0 ? 500 : 0;
-                console.clear()
-                console.log("index",index)
-                console.log("currentPosition",this.currentPosition)
-                console.log("offsetTop",panel.offsetTop)
+                // console.clear()
+                // console.log("index",index)
+                // console.log("currentPosition",this.currentPosition)
+                // console.log("offsetTop",panel.offsetTop)
                 scrollTop(this.scrollView, this.currentPosition, panel.offsetTop, speed, () => {
                     this.scrolling = false;
                 });
@@ -128,23 +128,10 @@
 
 <style>
     .scrollnav {
-       /*  position: absolute;
-       top: 200px;
-       height: 844px;
-       width: 100%;
-       display: flex;
-       color: #898989;
-       flex-direction: column; */
-        /* position: absolute; */
-        /* top: 200px; */
-        height: 798px;
         width: 100%;
-        display: -ms-flexbox;
         display: flex;
         color: #898989;
-        -ms-flex-direction: column;
         flex-direction: column;
-        margin-top: 24px;       
     }
     .scrollnav ::-webkit-scrollbar {
       width: 0;
@@ -254,7 +241,7 @@
         top: 24px;
     }    
 }
-@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
+@media only screen and (max-width:1600px){
     .scrollnav {
         height: 637px;
         margin-top: 18px;   
@@ -277,8 +264,5 @@
     }    
 
 }
-/* @media only screen and (min-width:480px) and (max-width:1080px){
-  
-}     */
 
 </style>

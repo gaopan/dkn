@@ -7,7 +7,7 @@ let instance = axiosHelper.createAxios({
   timeout: 10000
 })
 export default{
-	getProductInfo(itemCode = 345348986394,storeId = 1277,lang){
+	getProductInfo(itemCode = 345348986394,storeId = 666,lang){
 		// let url  = `mock/rfid/${itemCode}/store_id/${storeId}`;
 		let LANG = null;
 		if(lang == "EN"){
@@ -20,7 +20,7 @@ export default{
 		return instance.get(url)
 		// return Promise.resolve(MockData.getProductInfo);
 	},
-	getStock(storeId = 859,itemCode){
+	getStock(storeId = 666,itemCode){
 		let url = `stock/store_id/${storeId}/item_code/${itemCode}`
 		return instance.get(url)
 	},
