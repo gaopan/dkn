@@ -4,7 +4,7 @@ import axios from 'axios'
 import cookies from '../utils/cookies-manager.js'
 import TypeChecker from '../utils/type-checker.js'
 import router from '../router'
-import store from '../store'
+// import store from '../store'
 import StoreManager from '../utils/store-manager.js'
 import CookiesManager from '../utils/cookies-manager.js'
 // import Noty from '@/utils/noty-operation.js'
@@ -79,7 +79,8 @@ let axiosHelper = {
         }
 
         if (err.response && (err.response.status == 401 || err.response.status == 403)) {
-          // FilterServices.clear();
+          console.error("Unauthorized")
+          /*// FilterServices.clear();
           const storageKey1 = 'globalFilters-data';
           const sm = new StoreManager('session');
           sm.deleteStorage(storageKey1);
@@ -103,7 +104,7 @@ let axiosHelper = {
           store.dispatch('setProcessSelection', null);
 
           // router redirrect
-          router.replace('/passport/login');
+          router.replace('/passport/login');*/
 
         } else {
           return Promise.reject(err);
