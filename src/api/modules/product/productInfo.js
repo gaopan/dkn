@@ -1,10 +1,10 @@
 import {axiosHelper} from '@/api/api-config.js'
 import MockData from './mockData.js'
 
-let instance = axiosHelper.createAxios({ //13.229.158.94/api/productInfo/ean/108305/store_id/666/lang/ZH
-  // baseURL: 'https://13.229.158.94/api/',
+let instance = axiosHelper.createAxios({ 
+  baseURL: 'http://13.229.158.94/api/',
   // baseURL: 'https://2e8d7c00-2c94-436f-b2e1-2b6abe358b51.mock.pstmn.io/api/',
-  baseURL: 'https://38fd8d07-b7b8-40ac-83e4-c12b9236cd06.mock.pstmn.io/api/',
+  // baseURL: 'https://38fd8d07-b7b8-40ac-83e4-c12b9236cd06.mock.pstmn.io/api/',
   timeout: 300000
 })
 export default{
