@@ -18,8 +18,8 @@ export default{
 		}
 
 		let url  = `productInfo/ean/${itemCode}/store_id/${storeId}/lang/${LANG}`;
-		// return instance.get(url)
-		return Promise.resolve(MockData.getProductInfo);
+		return instance.get(url)
+		// return Promise.resolve(MockData.getProductInfo);
 	},
 	getStock(storeId = 666,itemCode){
 		let url = `stock/store_id/${storeId}/item_code/${itemCode}`

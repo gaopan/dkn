@@ -261,12 +261,6 @@
         margin-top: 18px;   
     }
 
-    .scrollnav-tab {
-        font-size: 17px;
-        bottom: 42px;
-        right: 80px;  
-    }   
-
     .scrollnav-content {
         height: 637px;
         margin-left: 58px;
@@ -280,4 +274,18 @@
 
 }
 
+@media only screen and (min-width:1080px) and (max-width:1600px){
+    .scrollnav-tab {
+        font-size: 17px;
+        bottom: 42px;
+        right: 80px;  
+    }   
+}
+@media only screen and (max-width:1080px){
+    .scrollnav-tab {
+        font-size: 17px;
+        bottom: 42px;
+        right: 64px;  
+    }   
+}
 </style>
