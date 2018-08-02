@@ -347,6 +347,7 @@ export default {
 			if(newV){		
 				localStorage.setItem("lang",newV)
 				this.initPageData(newV);
+				this.fnUpdateStock_QR_UserReview(undefined,108305,newV);
 			}
 		}
 	}
