@@ -327,7 +327,7 @@ export default {
 					value:this.productInfoByCurrentColor.items[0].SizeValueId
 				}	
 
-				this.fnUpdateStock_QR_UserReview(undefined,this.productAllInfoByColor[0].this.productInfoByCurrentColor.items[0].itemCode,lang);				
+				// this.fnUpdateStock_QR_UserReview(undefined,this.productInfoByCurrentColor.items[0].itemCode,lang);				
 
 			},err=>{
 				console.log(err)
@@ -347,7 +347,7 @@ export default {
 			if(newV){		
 				localStorage.setItem("lang",newV)
 				this.initPageData(newV);
-				this.fnUpdateStock_QR_UserReview(undefined,108305,newV);
+				// this.fnUpdateStock_QR_UserReview(undefined,108305,newV);
 			}
 		}
 	}

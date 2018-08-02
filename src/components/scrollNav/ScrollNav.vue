@@ -1,5 +1,5 @@
 <template>
-    <div class="scrollnav">
+    <div class="scrollnav" ref="scrollnavContainer">
         <div class="scrollnav-tab" ref="navbox">
             <ul class="scrollnav-tab-item" ref="nav">
                 <li 
@@ -62,10 +62,17 @@
                 this.contentOffsetTop = this.scrollView.getBoundingClientRect().top;
 
                 this.scrollView.addEventListener('scroll', this.scrollHandler);
-                // window.addEventListener('resize', this.scrollHandler);
+                window.addEventListener('resize', this.scrollHandler);
+                this.calculateWidth();
+                window.addEventListener('resize',this.calculateWidth)
 
                 //scroll to the index specified
                 if (this.index > 0)this.scrollToTargetContent(this.index, false);
+            },
+            calculateWidth(){
+                let width = this.$refs.scrollnavContainer.clientWidth;
+                if(width < 320 )return;
+                this.$refs.scrollView.style.width = width + 20  + "px";            
             },
             addItem(panel) {
                 this.navList.push(panel);
@@ -103,10 +110,7 @@
                 // const panel = this.getPanels()[index].$el;
                 const panel = this.panels[index].$el;
                 const speed = animate && (window.navigator && window.navigator.userAgent || '').indexOf('MicroMessenger') < 0 ? 500 : 0;
-                // console.clear()
-                // console.log("index",index)
-                // console.log("currentPosition",this.currentPosition)
-                // console.log("offsetTop",panel.offsetTop)
+
                 scrollTop(this.scrollView, this.currentPosition, panel.offsetTop, speed, () => {
                     this.scrolling = false;
                 });
@@ -118,9 +122,11 @@
             this.$nextTick(this.init);
             this.panels = this.getPanels();
         },
+
         beforeDestroy() {
             this.scrollView.removeEventListener('scroll', this.scrollHandler);
-            // window.removeEventListener('resize', this.scrollHandler);
+            window.removeEventListener('resize',this.scrollHandler)
+            window.removeEventListener('resize',this.calculateWidth)
             this.$off("activeIndexChanged")
         }
     }
@@ -132,13 +138,17 @@
         display: flex;
         color: #898989;
         flex-direction: column;
+        
+        position: relative;
+        overflow:hidden;
     }
-    .scrollnav ::-webkit-scrollbar {
+    /* .scrollnav ::-webkit-scrollbar {
       width: 0;
       height: 0;
-    }
+    } */
     .scrollnav-tab {
         position: absolute;
+        z-index: 1;
     }
 
     .scrollnav-tab-item {
@@ -212,11 +222,14 @@
 
     
     .scrollnav-content {
-        flex: 1;
+        /*flex: 1;*/
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
         margin-left: 80px;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 
 @media only screen and (min-width:1560px){
@@ -232,6 +245,7 @@
     }  
     
     .scrollnav-content {
+        height: 798px;
         margin-left: 80px;
     }
     .scrollnav-tab-item > li:first-child>span:after{
@@ -254,6 +268,7 @@
     }   
 
     .scrollnav-content {
+        height: 637px;
         margin-left: 58px;
     }
     .scrollnav-tab-item > li:first-child>span:after{
