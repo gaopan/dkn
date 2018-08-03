@@ -1,5 +1,5 @@
 <template>
-	<div class="product-container">
+	<div class="product-container" ref = "productContainer">
 		<!-- <span>RFID: {{rfid}}</span> -->
 		<section class="product-photo-container">
 

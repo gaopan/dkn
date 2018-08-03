@@ -21,7 +21,6 @@
 			}
 		},
 		created(){
-			console.log(this.rate)
 		},
 
 	}

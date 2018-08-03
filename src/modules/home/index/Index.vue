@@ -34,7 +34,7 @@
 				this.bMoveIcon = !this.bMoveIcon;
 			},1000);
 		},
-		beforeDestory(){
+		beforeDestroy(){
 			clearInterval(this.intervalTimer);
 		}
 	}
