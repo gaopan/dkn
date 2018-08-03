@@ -25,7 +25,7 @@
 				this.bRedirection = true;
 				let timer = setTimeout(()=>{
 					clearTimeout(timer);
-					this.$router.push("/product")
+					this.$router.push("/product/default")
 				},510)
 			}
 		},

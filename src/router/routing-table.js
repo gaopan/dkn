@@ -19,7 +19,7 @@ let routerTable = {
       }
     }, {
       path: 'product',
-      // path: 'product/:rfid',
+      path: 'product/:rfid',
       name: 'Product',
       components: {
         default: () => import('@/modules/home/product/Product.vue')
