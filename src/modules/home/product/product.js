@@ -350,7 +350,7 @@ export default {
 				this.productInfoByCurrentColor = this.productAllInfoByColor[0];
 
 				this.imageUrl = this.productInfoByCurrentColor.videosAndImages
-
+				this.imageUrl.length = 4;
 				this.productInfoData = res.data.dsm;
 
 				//init size
@@ -385,7 +385,6 @@ export default {
 			if(newV){		
 				localStorage.setItem("lang",newV)
 				this.initPageData(newV);
-				// this.fnUpdateStock_QR_UserReview(undefined,108305,newV);
 			}
 		}
 	}

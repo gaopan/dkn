@@ -1,6 +1,6 @@
 <template>
   <section class="carousel">
-    <div class="carousel-wrapper" ref="carousel-wrapper">
+    <div class="carousel-wrapper" ref="carouselWrapper">
 
       <div ref="carousel-inner" class="carousel-inner" role="listbox"
         :style="{
@@ -112,43 +112,6 @@ export default {
     }
   },
   methods: {
-    /**
-     * A mutation observer is used to detect changes to the containing node
-     * in order to keep the magnet container in sync with the height its reference node.
-     */
-    attachMutationObserver() {
-      const MutationObserver =
-        window.MutationObserver ||
-        window.WebKitMutationObserver ||
-        window.MozMutationObserver;
-
-      if (MutationObserver) {
-
-        const config = { attributes: true, data: true };
-
-        this.mutationObserver = new MutationObserver(() => {
-          this.$nextTick(() => {
-            this.computeCarouselHeight();
-          });
-        });
-
-        if (this.$parent.$el) {
-          let carouselInnerElements = this.$el.getElementsByClassName("carousel-inner");
-
-          for (let i = 0; i < carouselInnerElements.length; i++) {
-            this.mutationObserver.observe(carouselInnerElements[i], config);
-          }
-        }
-      }
-    },
-    /**
-     * Stop listening to mutation changes
-     */
-    detachMutationObserver() {
-      if (this.mutationObserver) {
-        this.mutationObserver.disconnect();
-      }
-    },
     //Get the current browser viewport width
     getBrowserWidth() {
       this.browserWidth = window.innerWidth;
@@ -163,7 +126,6 @@ export default {
           this.carouselHeight = eleClientHeight || 0;
         }
       }
-      // this.carouselHeight = this.carouselHeight;
       return this.carouselHeight;
     },
     //Filter slot contents to slide instances and return length
@@ -185,12 +147,10 @@ export default {
       }
     },
     onStart(e) {
-      if(this.currentPage + 1 == 28)e.preventDefault();
-
       let moveEvent = this.isTouch ? "touchmove" : "mousemove", 
           upEvent = this.isTouch ? "touchend" : "mouseup";
-      document.addEventListener(moveEvent,this.onDrag,true);
-      document.addEventListener(upEvent,this.onEnd,true);
+      this.$refs["carouselWrapper"].addEventListener(moveEvent,this.onDrag,true);
+      this.$refs["carouselWrapper"].addEventListener(upEvent,this.onEnd,true);
 
       this.startTime = e.timeStamp;
       this.dragging = true;
@@ -220,9 +180,17 @@ export default {
 
       // if it is a touch device, check if we are below the min swipe threshold
       // (if user scroll the page on the component)
-      if (this.isTouch && Math.abs(newOffsetY) < Math.abs(newOffsetX)) {
+      if (this.isTouch && Math.abs(newOffsetY) < Math.abs(newOffsetX))return;
+
+      //prevent to move up the first and move down the last piture
+      if((this.currentPage == this.$props.imageUrl.length && newOffsetY > 0) || (this.currentPage == 1&& newOffsetY < 0)){
+        let upEvent = this.isTouch ? "touchend" : "mouseup",
+            moveEvent = this.isTouch ? "touchmove" : "mousemove";
+        this.$refs["carouselWrapper"].removeEventListener(moveEvent,this.onDrag,true);
+        this.$refs["carouselWrapper"].removeEventListener(upEvent,this.onEnd,true);
         return;
       }
+
 
       e.stopImmediatePropagation();
 
@@ -257,8 +225,8 @@ export default {
       // clear events listeners
       let moveEvent = this.isTouch ? "touchmove" : "mousemove", 
           upEvent = this.isTouch ? "touchend" : "mouseup";
-      document.removeEventListener(upEvent,this.onEnd,true);
-      document.removeEventListener(moveEvent,this.onDrag,true);
+      this.$refs["carouselWrapper"].removeEventListener(upEvent,this.onEnd,true);
+      this.$refs["carouselWrapper"].removeEventListener(moveEvent,this.onDrag,true);
     },    
     onResize() {
       this.computeCarouselHeight();
@@ -269,9 +237,6 @@ export default {
       setTimeout( () => { this.dragging = false }, this.refreshRate );
     },
     render() {
-      // add extra slides depending on the momemtum speed
-      // this.offset += Math.round(this.dragMomentum) * this.carouselHeight;
-
       // & snap the new offset on a slide or page if scrollPerPage
       const height = this.carouselHeight;
       this.offset = height * Math.round(this.offset / height);
@@ -284,8 +249,6 @@ export default {
     },
 
     computeCarouselHeight() {
-      // this.getSlideCount();
-      // this.slideCount = imageUrl.length;
       this.getBrowserWidth();
       this.getCarouselHeight();
     },
@@ -294,13 +257,12 @@ export default {
   mounted() {
     window.addEventListener("resize",debounce(this.onResize, this.refreshRate));
 
-    // this.attachMutationObserver();
     this.$nextTick(() => {
       this.computeCarouselHeight();
     });
     // setup the start event only if touch device or mousedrag activated
     let event  = this.isTouch ? "touchstart" : "mousedown";
-    this.$refs["carousel-wrapper"].addEventListener(event,this.onStart);
+    this.$refs["carouselWrapper"].addEventListener(event,this.onStart);
 
     this.transitionStyle =  `0.4s ease transform`;
     if(typeof this.$props.navigateTo == "number"){
@@ -312,7 +274,7 @@ export default {
   beforeDestroy() {
     window.removeEventListener("resize", this.getBrowserWidth);
     let event = this.isTouch ? "touchstart" : "mousedown";
-    this.$refs["carousel-wrapper"].removeEventListener(event,this.onStart);    
+    this.$refs["carouselWrapper"].removeEventListener(event,this.onStart);    
   }
 };
 </script>
@@ -336,16 +298,13 @@ export default {
     height: 540px;
   }
 }
-@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
+@media only screen and (max-width:1600px){
   .carousel-wrapper {
     width: 380px;
     height: 380px;
   }
 
 }
-/* @media only screen and (min-width:480px) and (max-width:1080px){
-  
-} */
 
 
 </style>
