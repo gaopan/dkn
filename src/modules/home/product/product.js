@@ -178,6 +178,7 @@ export default {
 			})	
 			ProductApi.getUserReview(itemCode,lang).then((res,err)=>{
 				let obj = this.makeUserReviewData(res.data);
+				console.log(obj)
 				this.productReviews = obj.productReviews; 
 				this.productScore = obj.productScore;				
 			})
@@ -198,17 +199,25 @@ export default {
 			let score = 0,
 			    productScore = 0;
 
-			resData.forEach(d => {
-				d.published_at = TimeUtil.getFullDate(new Date(d.published_at),'yyyy-MM-dd')
-				score += ~~d.note
-			})
+			if(!!resData.length){
+				resData.forEach(d => {
+					d.published_at = TimeUtil.getFullDate(new Date(d.published_at),'yyyy-MM-dd')
+					score += ~~d.note
+				})
 
-			productScore = +((score/resData.length).toFixed(2));
+				productScore = +((score/resData.length).toFixed(2));
+	
+				return {
+					productReviews:resData,
+					productScore: productScore
+				}	
+			}else{
+				return {
+					productReviews:[],
+					productScore: 0
+				}					
+			}
 
-			return {
-				productReviews:resData,
-				productScore: productScore
-			}	
 
 		},
 		calculateDiscount(pricesObj){
@@ -327,7 +336,7 @@ export default {
 					value:this.productInfoByCurrentColor.items[0].SizeValueId
 				}	
 
-				// this.fnUpdateStock_QR_UserReview(undefined,this.productInfoByCurrentColor.items[0].itemCode,lang);				
+				this.fnUpdateStock_QR_UserReview(undefined,this.productInfoByCurrentColor.items[0].itemCode,lang);				
 
 			},err=>{
 				console.log(err)
