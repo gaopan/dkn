@@ -17,6 +17,7 @@ export default {
 	},
 	data(){
 		return{
+			monitorCount:0,
 			lang: null,
 			navigateToPhoto:1,
 			imageUrl:[],
@@ -80,14 +81,43 @@ export default {
 			this.lang = "EN"
 			localStorage.setItem("lang","EN")
 		}
-		// this.initPageData(this.lang);
+
+		this.intervalTimer = setInterval(this.checkTime,1000);
+		this.$nextTick(()=>{
+			window.addEventListener("resize",this.monitorUserAction)
+			this.$refs.productContainer.addEventListener("mousemove",this.monitorUserAction)
+			this.$refs.productContainer.addEventListener("click",this.monitorUserAction)
+			this.$refs.productContainer.addEventListener("mousewheel",this.monitorUserAction)
+		})
+
+	},
+	mounted(){
+	},
+	beforeDestroy(){
+		window.removeEventListener("resize",this.monitorUserAction)
+		this.$refs.productContainer.removeEventListener("mousemove",this.monitorUserAction)
+		this.$refs.productContainer.removeEventListener("click",this.monitorUserAction)
+		this.$refs.productContainer.removeEventListener("mousewheel",this.monitorUserAction)
+		clearInterval(this.intervalTimer);
 	},
 	methods:{
+		monitorUserAction(){
+			this.monitorCount = 0;
+		},
+		checkTime(){
+	    if(this.monitorCount === 3*60 - 1){
+        clearInterval(this.intervalTimer);
+        this.$router.push("/index")
+	    }else{
+	      this.monitorCount += 1;
+	    }
+		},
+
 		pageChange(args){
 			this.navigateToPhoto = args;
 		},
 		selectProductColor(color,colorIndex){
-			// if(color.checked)return;
+			if(color.checked)return;
 
 			this.QRCodeSrc = null;
 			this.productColors.forEach(d=>{ d.checked = false; })
@@ -198,17 +228,25 @@ export default {
 			let score = 0,
 			    productScore = 0;
 
-			resData.forEach(d => {
-				d.published_at = TimeUtil.getFullDate(new Date(d.published_at),'yyyy-MM-dd')
-				score += ~~d.note
-			})
+			if(!!resData.length){
+				resData.forEach(d => {
+					d.published_at = TimeUtil.getFullDate(new Date(d.published_at),'yyyy-MM-dd')
+					score += ~~d.note
+				})
 
-			productScore = +((score/resData.length).toFixed(2));
+				productScore = +((score/resData.length).toFixed(2));
+	
+				return {
+					productReviews:resData,
+					productScore: productScore
+				}	
+			}else{
+				return {
+					productReviews:[],
+					productScore: 0
+				}					
+			}
 
-			return {
-				productReviews:resData,
-				productScore: productScore
-			}	
 
 		},
 		calculateDiscount(pricesObj){
@@ -327,7 +365,7 @@ export default {
 					value:this.productInfoByCurrentColor.items[0].SizeValueId
 				}	
 
-				// this.fnUpdateStock_QR_UserReview(undefined,this.productInfoByCurrentColor.items[0].itemCode,lang);				
+				this.fnUpdateStock_QR_UserReview(undefined,this.productInfoByCurrentColor.items[0].itemCode,lang);				
 
 			},err=>{
 				console.log(err)
