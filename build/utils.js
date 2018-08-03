@@ -57,13 +57,7 @@ exports.cssLoaders = function (options) {
     postcss: generateLoaders(),
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass',undefined,[{
-                                              loader: 'sass-resources-loader',
-                                              options: { resources: [
-                                                './src/assets/styles/scss/variables.scss',
-                                                './src/assets/styles/scss/mixins.scss'
-                                              ]}  
-                                            }]),
+    scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   }
