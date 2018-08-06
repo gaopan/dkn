@@ -15,7 +15,11 @@
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  background: url('../../../assets/img/index-bg.svg') #0082c3 no-repeat center center fixed;
+  background-image:url('../../../assets/img/index-bg.svg');
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-attachment:fixed;
+ 
 }
 
 .p-level1 {
