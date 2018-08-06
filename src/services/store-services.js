@@ -2,7 +2,7 @@
 import TypeChecker from '@/utils/type-checker.js'
 import shared from '@/shared.js'
 
-const storageKey = 'storeId';
+const storageKey = 'store-id';
 
 let _storeId = null;
 
