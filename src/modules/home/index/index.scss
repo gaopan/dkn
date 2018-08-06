@@ -1,5 +1,9 @@
-.transition-page {
-  transform: translate(0, -1080px);
+.transition-page-en {
+  transform: translate(0, -100%);
+  transition: 0.5s ease-out transform;
+}
+.transition-page-zh {
+  transform: translate(-100%,0);
   transition: 0.5s ease-out transform;
 }
 
@@ -25,47 +29,76 @@
 .p-level2 {
   font-weight: 400;
   line-height: 1.1;
-
   font-style: italic;
   font-stretch: condensed;
+}
+
+.p-level1-en{
+  font-size: 17.6vmin;
+  
+}
+.p-level2-en{
   text-align: center;
+  font-size: 9.8vmin;
 }
 
-.product-index .icon-arrow-down {
-  text-shadow: 7px 5px 0 rgba(0, 72, 122, 0.4);
-  display: inline-block;
-  font-size: 96px;
-  font-weight: bold;
-  cursor: pointer;
+.p-level1-zh{
+  font-size: 13.6vmin;
 }
 
-.transition-icon {
-  transform: translate(0, 10px);
+.p-level2-zh{
+  font-size: 8vmin;
+  text-align: right;
+  margin-right: 27vmin; 
+  margin-top: 10vmin;
+}
+
+
+.transition-icon{
+  cursor:pointer;
+}
+.transition-icon-down{
   transition: 0.8s ease transform;
+  transform: translate(0, 10px);
 }
 
 .transition-icon-up {
-  transform: translate(0, 0);
   transition: 0.8s ease transform;
+  transform: translate(0, 0);
 }
 
-.padding-top10 {
+.transition-icon-right{
+  transition: 0.8s ease transform;
+  transform: translate(10px, 0);
+}
+
+.transition-icon-left {
+  transition: 0.8s ease transform;
+  transform: translate(0, 0);
+}
+
+.padding-top1 {
   padding-top: 20vmin;
 }
 
-.p-level1 {
-  font-size: 17.6vmin;
+.padding-top2 {
+  padding-top: 36vmin;
 }
 
 .p-level1-row2 {
   margin-bottom: 3vmin;
 }
 
-.p-level2 {
-  font-size: 9.8vmin;
-}
-
-.product-index .icon-arrow-down {
+.product-index i {
+  text-shadow: 7px 5px 0 rgba(0, 72, 122, 0.4);
+  display: inline-block;
   font-size: 8.6vmin;
+  font-weight: bold;
+  cursor: pointer;  
+}
+.p-level2-zh i{
+  padding-left:6vmin
+}
+.p-level2-en i{
   padding-top: 10vmin;
 }

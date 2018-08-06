@@ -128,17 +128,6 @@ export default {
       }
       return this.carouselHeight;
     },
-    //Filter slot contents to slide instances and return length
-    getSlideCount() {
-      setTimeout(()=>{
-        let slots = this.$slots;
-        if(slots && slots.default){
-          this.slideCount = slots.default.filter(slot => slot.tag && slot.tag.indexOf("slide") > -1 ).length;
-        }else{
-          this.slideCount = 0;
-        }
-      },0)
-    },
 
     goToPage(page) {
       if (page >= 1 && page <= this.slideCount) {

@@ -4,45 +4,11 @@
     {
       "icon": {
         "paths": [
-          "M190.772 449.567l321.228 321.227 321.226-321.227 62.229 62.228-383.455 383.456-383.455-383.456zM512 128.748v0zM467.998 128.748h88.004v704.274h-88.004v-704.274z"
-        ],
-        "attrs": [
-          {}
-        ],
-        "isMulticolor": false,
-        "isMulticolor2": false,
-        "grid": 0,
-        "tags": [
-          "arrow-down"
-        ],
-        "colorPermutations": {
-          "81818119595951": [
-            {}
-          ]
-        }
-      },
-      "attrs": [
-        {}
-      ],
-      "properties": {
-        "order": 71,
-        "id": 24,
-        "name": "arrow-down",
-        "prevSize": 32,
-        "code": 59648
-      },
-      "setIdx": 2,
-      "setId": 3,
-      "iconIdx": 0
-    },
-    {
-      "icon": {
-        "paths": [
           "M887.904 298.208c-12.864-12.064-33.152-11.488-45.216 1.408l-426.752 454.368-233.12-229.696c-12.608-12.416-32.864-12.288-45.28 0.32-12.416 12.576-12.256 32.864 0.352 45.248l256.48 252.672c0.096 0.096 0.224 0.128 0.32 0.224s0.128 0.224 0.224 0.32c2.016 1.92 4.448 3.008 6.784 4.288 1.152 0.672 2.144 1.664 3.36 2.144 3.776 1.472 7.776 2.24 11.744 2.24 4.192 0 8.384-0.832 12.288-2.496 1.312-0.544 2.336-1.664 3.552-2.368 2.4-1.408 4.896-2.592 6.944-4.672 0.096-0.096 0.128-0.256 0.224-0.352 0.064-0.096 0.192-0.128 0.288-0.224l449.184-478.208c12.16-12.832 11.488-33.088-1.376-45.216z"
         ],
         "attrs": [
           {
-            "fill": "rgb(95, 95, 95)"
+            "fill": "rgb(255, 255, 255)"
           }
         ],
         "isMulticolor": false,
@@ -50,35 +16,23 @@
         "grid": 0,
         "tags": [
           "check"
-        ],
-        "colorPermutations": {
-          "191191191123023023018181811": [
-            {
-              "f": 0
-            }
-          ],
-          "81818119595951": [
-            {
-              "f": 1
-            }
-          ]
-        }
+        ]
       },
       "attrs": [
         {
-          "fill": "rgb(95, 95, 95)"
+          "fill": "rgb(255, 255, 255)"
         }
       ],
       "properties": {
-        "order": 64,
-        "id": 23,
+        "order": 2,
+        "id": 8,
         "name": "check",
         "prevSize": 32,
-        "code": 59649
+        "code": 59648
       },
-      "setIdx": 2,
-      "setId": 3,
-      "iconIdx": 1
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 0
     },
     {
       "icon": {
@@ -88,10 +42,10 @@
         ],
         "attrs": [
           {
-            "fill": "rgb(95, 95, 95)"
+            "fill": "rgb(255, 255, 255)"
           },
           {
-            "fill": "rgb(95, 95, 95)"
+            "fill": "rgb(255, 255, 255)"
           }
         ],
         "isMulticolor": false,
@@ -99,43 +53,58 @@
         "grid": 0,
         "tags": [
           "close"
-        ],
-        "colorPermutations": {
-          "191191191123023023018181811": [
-            {
-              "f": 0
-            },
-            {
-              "f": 0
-            }
-          ],
-          "81818119595951": [
-            {
-              "f": 1
-            },
-            {
-              "f": 1
-            }
-          ]
-        }
+        ]
       },
       "attrs": [
         {
-          "fill": "rgb(95, 95, 95)"
+          "fill": "rgb(255, 255, 255)"
         },
         {
-          "fill": "rgb(95, 95, 95)"
+          "fill": "rgb(255, 255, 255)"
         }
       ],
       "properties": {
-        "order": 65,
-        "id": 22,
+        "order": 3,
+        "id": 7,
         "name": "close",
+        "prevSize": 32,
+        "code": 59649
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 1
+    },
+    {
+      "icon": {
+        "paths": [
+          "M190.772 449.567l321.228 321.227 321.226-321.227 62.229 62.228-383.455 383.456-383.455-383.456zM512 128.748v0zM467.998 128.748h88.004v704.274h-88.004v-704.274z"
+        ],
+        "attrs": [
+          {
+            "fill": "rgb(255, 255, 255)"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "down"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "rgb(255, 255, 255)"
+        }
+      ],
+      "properties": {
+        "order": 4,
+        "id": 6,
+        "name": "arrow-down",
         "prevSize": 32,
         "code": 59650
       },
-      "setIdx": 2,
-      "setId": 3,
+      "setIdx": 0,
+      "setId": 0,
       "iconIdx": 2
     },
     {
@@ -145,42 +114,30 @@
         ],
         "attrs": [
           {
-            "fill": "rgb(95, 95, 95)"
+            "fill": "rgb(255, 255, 255)"
           }
         ],
         "isMulticolor": false,
         "isMulticolor2": false,
         "grid": 0,
         "tags": [
-          "down"
-        ],
-        "colorPermutations": {
-          "191191191123023023018181811": [
-            {
-              "f": 0
-            }
-          ],
-          "81818119595951": [
-            {
-              "f": 1
-            }
-          ]
-        }
+          "down_1"
+        ]
       },
       "attrs": [
         {
-          "fill": "rgb(95, 95, 95)"
+          "fill": "rgb(255, 255, 255)"
         }
       ],
       "properties": {
-        "order": 66,
-        "id": 21,
+        "order": 5,
+        "id": 5,
         "name": "down",
         "prevSize": 32,
         "code": 59651
       },
-      "setIdx": 2,
-      "setId": 3,
+      "setIdx": 0,
+      "setId": 0,
       "iconIdx": 3
     },
     {
@@ -190,7 +147,7 @@
         ],
         "attrs": [
           {
-            "fill": "rgb(95, 95, 95)"
+            "fill": "rgb(255, 255, 255)"
           }
         ],
         "isMulticolor": false,
@@ -198,34 +155,22 @@
         "grid": 0,
         "tags": [
           "QR_code"
-        ],
-        "colorPermutations": {
-          "191191191123023023018181811": [
-            {
-              "f": 0
-            }
-          ],
-          "81818119595951": [
-            {
-              "f": 1
-            }
-          ]
-        }
+        ]
       },
       "attrs": [
         {
-          "fill": "rgb(95, 95, 95)"
+          "fill": "rgb(255, 255, 255)"
         }
       ],
       "properties": {
-        "order": 67,
-        "id": 20,
+        "order": 6,
+        "id": 4,
         "name": "QR_code",
         "prevSize": 32,
         "code": 59652
       },
-      "setIdx": 2,
-      "setId": 3,
+      "setIdx": 0,
+      "setId": 0,
       "iconIdx": 4
     },
     {
@@ -235,7 +180,7 @@
         ],
         "attrs": [
           {
-            "fill": "rgb(95, 95, 95)"
+            "fill": "rgb(255, 255, 255)"
           }
         ],
         "isMulticolor": false,
@@ -243,35 +188,56 @@
         "grid": 0,
         "tags": [
           "right"
-        ],
-        "colorPermutations": {
-          "191191191123023023018181811": [
-            {
-              "f": 0
-            }
-          ],
-          "81818119595951": [
-            {
-              "f": 1
-            }
-          ]
-        }
+        ]
       },
       "attrs": [
         {
-          "fill": "rgb(95, 95, 95)"
+          "fill": "rgb(255, 255, 255)"
         }
       ],
       "properties": {
-        "order": 68,
-        "id": 19,
+        "order": 7,
+        "id": 3,
         "name": "right",
         "prevSize": 32,
         "code": 59653
       },
-      "setIdx": 2,
-      "setId": 3,
+      "setIdx": 0,
+      "setId": 0,
       "iconIdx": 5
+    },
+    {
+      "icon": {
+        "paths": [
+          "M521.333 97.333l-61.333 61.333 310.667 310.667h-685.333v85.333h685.333l-310.667 310.667 61.333 61.333 384-384 29.333-30.667-29.333-30.667-384-384z"
+        ],
+        "attrs": [
+          {
+            "fill": "rgb(255, 255, 255)"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "right_1"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "rgb(255, 255, 255)"
+        }
+      ],
+      "properties": {
+        "order": 8,
+        "id": 2,
+        "name": "arrow-right",
+        "prevSize": 32,
+        "code": 59654
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 6
     },
     {
       "icon": {
@@ -280,7 +246,7 @@
         ],
         "attrs": [
           {
-            "fill": "rgb(95, 95, 95)"
+            "fill": "rgb(255, 255, 255)"
           }
         ],
         "isMulticolor": false,
@@ -288,35 +254,23 @@
         "grid": 0,
         "tags": [
           "starton"
-        ],
-        "colorPermutations": {
-          "191191191123023023018181811": [
-            {
-              "f": 0
-            }
-          ],
-          "81818119595951": [
-            {
-              "f": 1
-            }
-          ]
-        }
+        ]
       },
       "attrs": [
         {
-          "fill": "rgb(95, 95, 95)"
+          "fill": "rgb(255, 255, 255)"
         }
       ],
       "properties": {
-        "order": 69,
-        "id": 18,
+        "order": 9,
+        "id": 1,
         "name": "star",
         "prevSize": 32,
-        "code": 59654
+        "code": 59655
       },
-      "setIdx": 2,
-      "setId": 3,
-      "iconIdx": 6
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 7
     },
     {
       "icon": {
@@ -325,7 +279,7 @@
         ],
         "attrs": [
           {
-            "fill": "rgb(95, 95, 95)"
+            "fill": "rgb(255, 255, 255)"
           }
         ],
         "isMulticolor": false,
@@ -333,35 +287,23 @@
         "grid": 0,
         "tags": [
           "up"
-        ],
-        "colorPermutations": {
-          "191191191123023023018181811": [
-            {
-              "f": 0
-            }
-          ],
-          "81818119595951": [
-            {
-              "f": 1
-            }
-          ]
-        }
+        ]
       },
       "attrs": [
         {
-          "fill": "rgb(95, 95, 95)"
+          "fill": "rgb(255, 255, 255)"
         }
       ],
       "properties": {
-        "order": 70,
-        "id": 17,
+        "order": 10,
+        "id": 0,
         "name": "up",
         "prevSize": 32,
-        "code": 59655
+        "code": 59656
       },
-      "setIdx": 2,
-      "setId": 3,
-      "iconIdx": 7
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 8
     }
   ],
   "height": 1024,
@@ -370,6 +312,7 @@
   },
   "preferences": {
     "showGlyphs": true,
+    "showCodes": true,
     "showQuickUse": true,
     "showQuickUse2": true,
     "showSVGs": true,
@@ -385,18 +328,7 @@
         "baseline": 6.25,
         "whitespace": 50
       },
-      "embed": false,
-      "showSelector": true,
-      "showMetrics": true,
-      "showMetadata": true,
-      "selector": "i",
-      "classSelector": ".icon",
-      "cssVars": false,
-      "cssVarsFormat": "scss",
-      "showVersion": false,
-      "noie8": true,
-      "ie7": false,
-      "includeMetadata": false
+      "embed": false
     },
     "imagePref": {
       "prefix": "icon-",
@@ -404,17 +336,9 @@
       "useClassSelector": true,
       "color": 0,
       "bgColor": 16777215,
-      "classSelector": ".icon",
-      "autoHost": true,
-      "height": 32,
-      "columns": 16,
-      "margin": 16
+      "name": "icomoon",
+      "classSelector": ".icon"
     },
-    "historySize": 50,
-    "showCodes": true,
-    "gridSize": 16,
-    "quickUsageToken": {
-      "UntitledProject": "Y2ViNjhjNzNjZjE0YTFjNTFjZjRiNTU2MjdlNTE4ZmEjMSMxNDk5MzA1MTE1IyMj"
-    }
+    "historySize": 50
   }
 }
