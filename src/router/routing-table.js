@@ -10,15 +10,19 @@ let routerTable = {
       default: () =>
         import ('@/modules/home/Home.vue')
     },
-    redirect: '/index',
     children: [{
+      path: 'init',
+      name: 'Home Init',
+      components: {
+        default: () => import('@/modules/home/init/Init.vue')
+      }
+    }, {
       path: 'index',
       name: 'Home Index',
       components: {
         default: () => import('@/modules/home/index/Index.vue')
       }
     }, {
-      path: 'product',
       path: 'product/:rfid',
       name: 'Product',
       components: {

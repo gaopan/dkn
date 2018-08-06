@@ -5,8 +5,9 @@ let instance = axiosHelper.createAxios({
   baseURL: 'http://13.229.158.94/api/',
   timeout: 300000
 })
+let storeIdKey = 'store-id'
 export default{
-	getProductInfo(itemCode = 3608459729250/*108305*/,storeId = 666,lang){
+	getProductInfo(itemCode = 3608459729250/*108305*/,storeId = localStorage.getItem(storeIdKey),lang){
 		let LANG = null;
 		if(lang == "EN"){
 			LANG = "EN"
@@ -18,7 +19,7 @@ export default{
 		return instance.get(url)
 		// return Promise.resolve(MockData.getProductInfo);
 	},
-	getStock(storeId = 666,modelCode){
+	getStock(storeId = localStorage.getItem(storeIdKey),modelCode){
 		let url = `stock/store_id/${storeId}/model_code/${modelCode}`
 		return instance.get(url)
 	},
