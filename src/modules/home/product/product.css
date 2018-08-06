@@ -691,4 +691,10 @@
     .product-QR-code p{
         display: none
     }
+    
+    .product-QR-code {
+        width: 148px;
+        height: 148px;
+        padding:0;
+    }
 }

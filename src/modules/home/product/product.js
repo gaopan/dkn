@@ -74,6 +74,7 @@ export default {
 	created(){
 		this.containerTitle = this.list[0].label;
 
+		// make sure language
 		let langInLocal = localStorage.getItem("lang");
 		if(!!langInLocal){
 			this.lang = langInLocal
@@ -82,6 +83,7 @@ export default {
 			localStorage.setItem("lang","EN")
 		}
 
+		//monitor user's action on the page
 		this.intervalTimer = setInterval(this.checkTime,1000);
 		this.$nextTick(()=>{
 			window.addEventListener("resize",this.monitorUserAction)
@@ -119,7 +121,6 @@ export default {
 		selectProductColor(color,colorIndex){
 			if(color.checked)return;
 
-			this.QRCodeSrc = null;
 			this.productColors.forEach(d=>{ d.checked = false; })
 			color.checked = true;
 
@@ -175,7 +176,6 @@ export default {
 			this.containerTitle = this.list[args].label;
 		},
 		selectProductSize(args){
-			this.QRCodeSrc = null;
 
 			this.sizeSelected = Object.assign({},args);
 			let itemCode = null;
@@ -193,7 +193,7 @@ export default {
 
 			this.fnUpdateStock_QR_UserReview(undefined,itemCode,this.lang)
 		},
-		fnUpdateStock_QR_UserReview(storeId,itemCode,lang){
+		fnUpdateStock_QR_UserReview(storeId,itemCode,modelCode,lang){
 			ProductApi.getStock(storeId,itemCode).then((res,err)=>{
 				let stockData = JSON.parse(res.data)
 				if(stockData.stock&&stockData.stock.stock){
@@ -203,9 +203,6 @@ export default {
 				}
 			})
 
-			ProductApi.getQrcode(itemCode).then((res,err)=>{
-				this.QRCodeSrc = res.data
-			})	
 			ProductApi.getUserReview(itemCode,lang).then((res,err)=>{
 				let obj = this.makeUserReviewData(res.data);
 				this.productReviews = obj.productReviews; 
@@ -385,6 +382,12 @@ export default {
 			if(newV){		
 				localStorage.setItem("lang",newV)
 				this.initPageData(newV);
+		
+				//get QR code
+				let country = newV == "EN"?"Malaysia":"tw"
+				ProductApi.getQrcode(country).then((res,err)=>{
+					this.QRCodeSrc = res.data
+				})					
 			}
 		}
 	}
