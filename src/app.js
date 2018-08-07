@@ -9,7 +9,6 @@ export default {
     var vm = this;
 
     window.rfidFromJava = function(rfid){
-    	alert("RFID: " + rfid);
     	vm.$router.push('/product/' + rfid);
     };
   }

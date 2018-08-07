@@ -11,11 +11,6 @@ import TimeUtil from "@/utils/datetime-utils.js"
 
 export default {
   name: 'product',
-  props: {
-    rfid: {
-      // required: true
-    }
-  },
   data() {
     return {
       monitorCount: 0,
@@ -74,6 +69,7 @@ export default {
   },
   created() {
     this.containerTitle = this.list[0].label;
+    this.rfid = this.$router.currentRoute.params.rfid;
 
     // make sure language
     let langInLocal = localStorage.getItem("lang");
@@ -288,7 +284,7 @@ export default {
       }
     },
     initPageData(lang) {
-      ProductApi.getProductInfo(undefined, undefined, lang).then(res => {
+      ProductApi.getProductInfo(this.rfid, undefined, lang).then(res => {
         this.productAllInfoByColor = [];
         this.productColors = [];
         res.data.models.forEach((d, modelsIndex) => {
