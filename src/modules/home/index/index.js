@@ -16,7 +16,7 @@ export default {
       this.bRedirection = true;
       let timer = setTimeout(() => {
         clearTimeout(timer);
-        this.$router.push("/product/default")
+        this.$router.push("/product/ean")
       }, 510)
     }
   },
