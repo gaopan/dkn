@@ -2,6 +2,7 @@ import { Carousel,Slide } from "@/components/carousel"
 import {ScrollNav, ScrollNavPanel} from "@/components/scrollNav"
 import CustomSelect from "@/components/custom-select"
 import Rate from "@/components/rate/Rate.vue"
+import StoreService from '@/services/store-services.js'
 
 import ProductApi from "@/api/modules/product/productInfo.js"
 import Qrcode from "qrcodejs2"
@@ -79,8 +80,9 @@ export default {
 		if(!!langInLocal){
 			this.lang = langInLocal
 		}else{
-			this.lang = "EN"
-			localStorage.setItem("lang","EN")
+			let defaultLang = StoreService.getLang();
+			this.lang = defaultLang;
+			localStorage.setItem("lang", defaultLang)
 		}
 
 		//monitor user's action on the page

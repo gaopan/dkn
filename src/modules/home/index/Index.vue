@@ -16,42 +16,5 @@
 		</div>
 	</div>
 </template>
-<script>
-	export default{
-		name:"product-index",
-		data(){
-			return {
-				bRedirection: false,
-				bMoveIcon:false,
-				intervalTimer:null,
-				lang:null
-			}
-		},
-		methods:{
-			redirection(){
-
-				this.bRedirection = true;
-				let timer = setTimeout(()=>{
-					clearTimeout(timer);
-					this.$router.push("/product/default")
-				},510)
-			}
-		},
-		created(){
-			this.intervalTimer = setInterval(()=>{
-				this.bMoveIcon = !this.bMoveIcon;
-			},1000);
-
-			let langInLocal = localStorage.getItem("lang");
-			if(!!langInLocal){
-				this.lang = langInLocal
-			}else{
-				this.lang = "EN"
-			}
-		},
-		beforeDestroy(){
-			clearInterval(this.intervalTimer);
-		}
-	}
-</script>
+<script src='./index.js'></script>
 <style lang="scss" src="./index.scss"></style>
