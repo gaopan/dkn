@@ -195,7 +195,7 @@ export default {
 
 			this.fnUpdateStock_QR_UserReview(undefined,itemCode,this.lang)
 		},
-		fnUpdateStock_QR_UserReview(storeId,itemCode,modelCode,lang){
+		fnUpdateStock_QR_UserReview(storeId,itemCode,lang){
 			ProductApi.getStock(storeId,itemCode).then((res,err)=>{
 				let stockData = JSON.parse(res.data)
 				if(stockData.stock&&stockData.stock.stock){
