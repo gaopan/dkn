@@ -4,9 +4,10 @@ import CustomSelect from "@/components/custom-select"
 import Rate from "@/components/rate/Rate.vue"
 
 import ProductApi from "@/api/modules/product/productInfo.js"
-import Qrcode from "qrcodejs2"
 
 import TimeUtil from "@/utils/datetime-utils.js"
+import TypeChecker from "@/utils/type-checker.js"
+import debounce from "@/utils/debounce"
 
 export default {
 	name: 'product',
@@ -17,16 +18,21 @@ export default {
 	},
 	data(){
 		return{
+			area:null,
+			areaOfField:null,
+			fieldRef:{},
 			monitorCount:0,
+			monitorTime:null,
+			// cursorField:null,
 			lang: null,
 			navigateToPhoto:1,
 			imageUrl:[],
-			list: [
-        {label: 'DESIGNED FOR'},
-        {label: 'PRODUCT BENEFITS'},
-        {label: 'USER REVIEWS'},
-        {label: 'TPRODUCT CONCEPT & TECHNOLOGY'},
-        {label: 'TECHNICAL INFORMATION'},
+			navTabList: [
+        {label: 'DESIGNED FOR',id:"DesignFor"},
+        {label: 'PRODUCT BENEFITS',id:"ProductBenefit"},
+        {label: 'USER REVIEWS',id:"UserReviews"},
+        {label: 'TPRODUCT CONCEPT & TECHNOLOGY',id:"ProdConceptTech"},
+        {label: 'TECHNICAL INFORMATION',id:"TechInfo"},
       ],
       containerTitle:null,
       activeNavIndex:0,
@@ -67,12 +73,13 @@ export default {
       productInfoData:{},
       productReviews:[],
       productScore:0,
-      QRCodeSrc:null
-
+      QRCodeSrc:null,
+      debounceActionMonitor:debounce(this.actionMonitor,500,100),
+      fieldELeQueried:{}
     }
 	},
 	created(){
-		this.containerTitle = this.list[0].label;
+		this.containerTitle = this.navTabList[0].label;
 
 		// make sure language
 		let langInLocal = localStorage.getItem("lang");
@@ -86,28 +93,142 @@ export default {
 		//monitor user's action on the page
 		this.intervalTimer = setInterval(this.checkTime,1000);
 		this.$nextTick(()=>{
+			let doc = document;
 			window.addEventListener("resize",this.monitorUserAction)
-			this.$refs.productContainer.addEventListener("mousemove",this.monitorUserAction)
-			this.$refs.productContainer.addEventListener("click",this.monitorUserAction)
-			this.$refs.productContainer.addEventListener("mousewheel",this.monitorUserAction)
-		})
 
+			doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitor);
+			doc.querySelector("#carouselPagination").addEventListener("click",this.pageMonitor);
+			this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
+			this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
+			this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
+			this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
+			this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
+
+		})
+		
 	},
 	mounted(){
 	},
 	beforeDestroy(){
-		window.removeEventListener("resize",this.monitorUserAction)
-		this.$refs.productContainer.removeEventListener("mousemove",this.monitorUserAction)
-		this.$refs.productContainer.removeEventListener("click",this.monitorUserAction)
-		this.$refs.productContainer.removeEventListener("mousewheel",this.monitorUserAction)
+		window.removeEventListener("resize",this.monitorUserAction);
+
+		let doc = document;
+		doc.querySelector("#scrollnavTab").removeEventListener("click",this.navMonitor);
+		doc.querySelector("#carouselPagination").removeEventListener("click",this.pageMonitor);		
 		clearInterval(this.intervalTimer);
 	},
 	methods:{
-		monitorUserAction(){
+		navMonitor(event){
+			event = event || window.event;
+			let target = event.target, 
+					field,
+					fieldEle = this.fieldELeQueried;
+			if(target == fieldEle.DesignFor)field = "DesignFor";
+			if(target == fieldEle.ProductBenefit)field = "ProductBenefit";
+			if(target == fieldEle.UserReviews)field = "UserReviews";
+			if(target == fieldEle.ProdConceptTech)field = "ProdConceptTech";
+			if(target == fieldEle.TechInfo)field = "TechInfo";
+
+			let data = {
+				itemCode:this.productInfoByCurrentSize.itemCode,
+				itemName:null,
+				area: "ContentZone",
+				field: field,
+				event: 1,
+			}		
+			this.areaOfField = field;	
+			ProductApi.postTracking(data).then(res=>{
+				console.log(res.data);
+			})
+		},
+		pageMonitor(event){
+			event = event || window.event;
+			if(event.target == document.querySelector("#iconDown") || event.target == document.querySelector("#iconUp")){
+				let data = {
+					itemCode:this.productInfoByCurrentSize.itemCode,
+					itemName:null,
+					area: "ConversionZone",
+					field: "Moreviews",
+					event: 1,
+				}		
+
+				ProductApi.postTracking(data).then(res=>{
+					console.log(res.data);
+				})
+			}
+
+		},
+		monitorClick(field){
+			let data = {
+				itemCode:this.productInfoByCurrentSize.itemCode,
+				itemName:null,
+				area: "ConversionZone",
+				field: field,
+				event: 1,
+			}
+			// this.fieldRef.field = true;
+			this.areaOfField = field;
+			ProductApi.postTracking(data).then(res=>{
+				console.log(res.data);
+			})
+		},
+
+
+		actionMonitor(event,type){
+			this.fieldRef = {};
+			event = event||window.event;
+			for(let ref in this.$refs){
+				if(this.$refs.hasOwnProperty(ref)){
+					if(TypeChecker.isArray(this.$refs[ref])){
+						if(this.$refs[ref][0].contains(event.target)){
+							this.fieldRef[ref] = true;
+						}						
+					}else{
+						if(this.$refs[ref].contains(event.target)){
+							this.fieldRef[ref] = true;
+						}
+					}
+				}
+			}
+			let itemCode = this.productInfoByCurrentSize.itemCode;
+			this.dispatchTracking(null,itemCode,this.fieldRef)
+		},
+
+		dispatchTracking(itemCode,itemName,fieldRef){
+			// debugger
+			let area, field, stayTime, allWrapperErea = ["ConversionZone","ContentZone","WholePage"],
+			    durationArea = ["DesignForBlock","ProdBenefitBlock","UserReviewsBlock","ConceptTechBlock","TechInfoBlock","MainPicBlock"];
+			//field
+			for(let i in fieldRef){
+				if(fieldRef.hasOwnProperty(i)){
+					if((!allWrapperErea.includes(i))&&fieldRef[i]){
+						// field = i;
+						 this.areaOfField = i;
+					}
+				}
+			}
+
+			//area
+			if(fieldRef.ConversionZone){
+				area = "ConversionZone";
+			}else if(fieldRef.ContentZone){
+				area = "ContentZone";
+			}else{
+				area = "WholePage";
+			}
+
+			if(!allWrapperErea.includes(area))return;
+			if(!durationArea.includes(this.areaOfField))return;
+			this.area = area;
+	
+		},
+		monitorUserAction(event){
+			event = event||window.event;
 			this.monitorCount = 0;
 		},
 		checkTime(){
 	    if(this.monitorCount === 3*60 - 1){
+	    	console.log("redirect")
         clearInterval(this.intervalTimer);
         this.$router.push("/index")
 	    }else{
@@ -173,7 +294,7 @@ export default {
 		},
 		activeNavIndexChanged(args){
 			this.activeNavIndex = args;
-			this.containerTitle = this.list[args].label;
+			this.containerTitle = this.navTabList[args].label;
 		},
 		selectProductSize(args){
 
@@ -388,6 +509,31 @@ export default {
 				ProductApi.getQrcode(country).then((res,err)=>{
 					this.QRCodeSrc = res.data
 				})					
+			}
+		},
+		areaOfField(newV,oldV){
+			if(newV){
+
+				let stayTime  = +((Date.now() - this.monitorTime)/1000).toFixed(2);
+
+				if(!!oldV){
+					console.log("area:", this.area, "field:", oldV, "stayTime:", stayTime)		
+					let data = {
+						itemCode:this.productInfoByCurrentSize.itemCode,
+						itemName:null,
+						area: this.area,
+						field: oldV,
+						event: 2,
+						stay_time:stayTime
+					}	
+					ProductApi.postTracking(data).then(res=>{
+						console.log(res.data);
+					})					
+				}
+
+				//if area changed,clear the start time
+				this.monitorTime = Date.now();
+				
 			}
 		}
 	}

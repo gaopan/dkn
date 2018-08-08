@@ -8,10 +8,11 @@
     export default {
         name: 'scrollnav-panel',
         props: {
-            label: String
+            label: String,
+            idCus:String
         },
         mounted() {
-            this.$parent.addItem({label: this.label, _uid: this._uid});
+            this.$parent.addItem({label: this.label, id:this.idCus, _uid: this._uid});
         }
     }
 </script>

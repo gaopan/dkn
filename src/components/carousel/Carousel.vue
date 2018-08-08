@@ -12,12 +12,13 @@
       </div> 
     </div>
     
-    <pagination v-if="slideCount > 0" @paginationclick="goToPage" :activetPage = "navigateTo"/>
+    <!-- <pagination v-if="slideCount > 0" @paginationclick="goToPage" :activetPage = "navigateTo"/> -->
+    <pagination @paginationclick="goToPage" :activetPage = "navigateTo"/>
 
   </section>
 </template>
 <script>
-import debounce from "./utils/debounce";
+import debounce from "@/utils/debounce";
 import Pagination from "./Pagination.vue";
 import Slide from "./Slide.vue";
 
@@ -44,7 +45,7 @@ export default {
       dragStartX: 0,
       isTouch: typeof window !== "undefined" && "ontouchstart" in window,
       offset: 0,
-      refreshRate: 16,
+      refreshRate: 100,
       slideCount: 0,
       transitionstart: "transitionstart",
       transitionend: "transitionend"
@@ -172,25 +173,30 @@ export default {
       if (this.isTouch && Math.abs(newOffsetY) < Math.abs(newOffsetX))return;
 
       //prevent to move up the first and move down the last piture
-      if((this.currentPage == this.$props.imageUrl.length && newOffsetY > 0) || (this.currentPage == 1&& newOffsetY < 0)){
-        let upEvent = this.isTouch ? "touchend" : "mouseup",
-            moveEvent = this.isTouch ? "touchmove" : "mousemove";
-        this.$refs["carouselWrapper"].removeEventListener(moveEvent,this.onDrag,true);
-        this.$refs["carouselWrapper"].removeEventListener(upEvent,this.onEnd,true);
+      let imageUrlLen = this.$props.imageUrl.length;
+      if(imageUrlLen > 0){
+        if((this.currentPage == imageUrlLen && newOffsetY > 0) || (this.currentPage == 1&& newOffsetY < 0)){
+          let upEvent = this.isTouch ? "touchend" : "mouseup",
+              moveEvent = this.isTouch ? "touchmove" : "mousemove";
+          this.$refs["carouselWrapper"].removeEventListener(moveEvent,this.onDrag,true);
+          this.$refs["carouselWrapper"].removeEventListener(upEvent,this.onEnd,true);
+          return;
+        }
+
+        e.stopImmediatePropagation();
+
+        this.dragOffset = newOffsetY;
+        const nextOffset = this.offset + newOffsetY;
+
+        if (nextOffset < 0) {
+          this.dragOffset = -Math.sqrt(-this.resistanceCoef * this.dragOffset);
+        } else if (nextOffset > this.maxOffset) {
+          this.dragOffset = Math.sqrt(this.resistanceCoef * this.dragOffset);
+        }        
+      }else{
         return;
       }
 
-
-      e.stopImmediatePropagation();
-
-      this.dragOffset = newOffsetY;
-      const nextOffset = this.offset + newOffsetY;
-
-      if (nextOffset < 0) {
-        this.dragOffset = -Math.sqrt(-this.resistanceCoef * this.dragOffset);
-      } else if (nextOffset > this.maxOffset) {
-        this.dragOffset = Math.sqrt(this.resistanceCoef * this.dragOffset);
-      }
     },
 
     onEnd(e) {
@@ -244,7 +250,7 @@ export default {
 
   },
   mounted() {
-    window.addEventListener("resize",debounce(this.onResize, this.refreshRate));
+    window.addEventListener("resize",debounce(this.onResize, this.refreshRate,200));
 
     this.$nextTick(() => {
       this.computeCarouselHeight();

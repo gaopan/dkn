@@ -1,10 +1,10 @@
 <template>
-  <div class="carousel-pagination">
+  <div class="carousel-pagination" id = "carouselPagination">
     <span class="carousel-dot-button carousel-dot-buttonUp" :class="{'page-disabled':currentPage === 1}">
       <i
         role="button"
-        class="icon-up"
-        
+        class="icon-up" 
+        id = "iconUp"       
         v-on:click="goToPage('prev')"
       ></i>  
     </span>
@@ -15,6 +15,7 @@
       <i
         role="button"
         class="icon-down"
+        id = "iconDown"
         v-on:click="goToPage('next')"
       ></i> 
     </span>      

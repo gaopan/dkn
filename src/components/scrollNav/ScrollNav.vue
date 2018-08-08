@@ -1,16 +1,16 @@
 <template>
     <div class="scrollnav" ref="scrollnavContainer">
         <div class="scrollnav-tab" ref="navbox">
-            <ul class="scrollnav-tab-item" ref="nav">
+            <ul class="scrollnav-tab-item" ref="nav" id = "scrollnavTab">
                 <li 
                     v-for="(item, i) in navList" 
                     :key="i"
                     class="tab-item-li" 
                     :class="activeIndex === i  ? 'scrollnav-current' : ''"
                     :ref="'navitem_' + i"
-                    @click.stop="scrollToTargetContent(i)"
+                    @click="scrollToTargetContent(i)"
                 >
-                    <span :class = "{'active-tab-item':activeIndex === i}">{{item.label}}</span>
+                    <span :id = "item.id" :class = "{'active-tab-item':activeIndex === i}">{{item.label}}</span>
                 </li>
             </ul>
         </div>
