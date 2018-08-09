@@ -478,7 +478,7 @@
     }
 
     .review-created-on {
-        height: 58px;
+        /* height: 58px; */
         font-size: 20px;
         margin-bottom: 20px;  
     }    
@@ -665,7 +665,7 @@
         font-size: 25px;
     }   
     .review-created-on {
-        height: 47px;
+        /* height: 47px; */
         font-size: 16px;
         margin-bottom: 16px;    
     }

@@ -41,23 +41,23 @@
 				this.selectLabel = this.$props.label;
 			}
 		
-			document.addEventListener("click",this.fnBlur,false)
+			// document.addEventListener("click",this.fnBlur,false)
 		},
 		beforeDestroy(){
-			document.removeEventListener("click",this.fnBlur,false)
+			// document.removeEventListener("click",this.fnBlur,false)
 			this.$off("selectOption")
 			this.$off("menuShow")
 		},
 		methods:{
-			fnBlur(){
-				if(this.$el&&!this.$el.contains(event.target)){
-					this.bShowMenu = false;
-				}			
-			},
+			// fnBlur(){
+			// 	if(this.$el&&!this.$el.contains(event.target)){
+			// 		this.bShowMenu = false;
+			// 	}			
+			// },
 			selectItem(item,itemIndex){
 				// this.selectLabel = item.label;
-				this.$emit("selectOption",item)
 				this.bShowMenu = false;
+				this.$emit("selectOption",item)
 			},
 			showMenu(){
 				if(this.$props.options.length===0)return;
@@ -66,7 +66,6 @@
 		},
 		watch:{
 			bShowMenu(newV,olcV){
-				console.log(this.bShowMenu)
 				this.$emit("menuShow",newV)
 			},
 			"$props.label":{

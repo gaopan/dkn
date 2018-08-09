@@ -146,13 +146,13 @@
             			<span class="user-review-count" v-if = "lang=='EN'">{{productReviews[lang].length}} {{productReviews[lang].length>1?'reviews':'review'}}</span>
             			<span class="user-review-count" v-else-if = "lang=='ZH'">{{productReviews[lang].length}} 回饋</span>
             		</div>
-		            <div class = "user-review-content" v-for= "(review,reviewIndex) in productReviews[lang]">
+		            <div class = "user-review-content" v-show = "productReviews[lang].length" v-for= "(review,reviewIndex) in productReviews[lang]">
 		            	<div class = "review-created-on">
 		            		<p>
 		            			<span class = "review-created-date">{{review.published_at}}</span>
 		            			<span class = "review-created-name">{{review.firstname}}</span>
 		            		</p>
-		            		<!-- <p>On Easybreath surface snorkelling mask LIGHT BLUE</p> -->
+		            		<p>{{productInfoData[lang].WebLabel}} {{productInfoByCurrentColor.colorName}}</p>
 		            	</div> 
 
 		            	<div class="review-content">

@@ -92,7 +92,7 @@ export default {
   },
   created() {
     this.rfid = this.$router.currentRoute.params.rfid;		
-
+		this.containerTitle = this.navTabList[0].label[this.lang];
     //language
     let langInLocal = localStorage.getItem("lang");
     if (!!langInLocal) {
@@ -334,7 +334,7 @@ export default {
         }
       })
 
-      ProductApi.getStock(storeId, itemCode, lang).then((res, err) => {
+      ProductApi.getStock(undefined, itemCode).then((res, err) => {
         let stockData = res.data;
         if (stockData.stock && stockData.stock.stock) {
           this.productStock = stockData.stock.stock;
@@ -371,7 +371,7 @@ export default {
         this.productScore[lang] = obj.productScore;
       })
 
-      let country = lang == "EN"? "Malaysia":"tw";
+      let country = lang == "EN"? "my":"tw";
       ProductApi.getQrcode(modelCode,country).then((res,err)=>{
 				this.QRCodeSrc[lang] = res.data
 			})	    
@@ -387,10 +387,10 @@ export default {
     chooseLang(lang) {
       if (this.lang == lang) return;
       this.lang = lang;
-			
+			this.navigateToPhoto = 1;
 			this.containerTitle = this.navTabList[this.activeNavIndex].label[lang];
 
-			this.makeProductPageInfoData(this.productModels[lang]);
+			this.makeProductPageInfoData(this.productModels[lang],false);
       
       //get user review
       if(this.productReviews[lang].length == 0){
@@ -403,7 +403,7 @@ export default {
 
       //get QR_code
       if(!this.QRCodeSrc[lang]){
-	      let country = lang == "EN"? "Malaysia":"tw";
+	      let country = lang == "EN"? "my":"tw";
 	      ProductApi.getQrcode(this.productInfoByCurrentColor.modelCode,country).then((res,err)=>{
 					this.QRCodeSrc[lang] = res.data
 				})		      
@@ -534,7 +534,7 @@ export default {
 				productColors
       }
     },
-    makeProductPageInfoData(productModels){
+    makeProductPageInfoData(productModels,refresh){
       if(productModels.length){
 
       	let model = this.makeProductInfoDataByColor(productModels);
@@ -560,7 +560,7 @@ export default {
 	          value: this.productInfoByCurrentColor.sizeItems[0].SizeValueId
 	        }
 
-	        this.fnUpdateStock_Qr_UserReview(undefined, this.productInfoByCurrentColor.modelCode, this.productInfoByCurrentColor.sizeItems[0].itemCode, this.lang);
+	        if(refresh)this.fnUpdateStock_Qr_UserReview(undefined, this.productInfoByCurrentColor.modelCode, this.productInfoByCurrentColor.sizeItems[0].itemCode, this.lang);
 
 				}
       }
@@ -570,6 +570,7 @@ export default {
       let getProductInfoPromise_ZH = ProductApi.getProductInfo(this.rfid, undefined, "ZH").then(res => {
         if(res.data&&res.data.dsm)this.productInfoData["ZH"] = res.data.dsm;
         if(res.data&&res.data.models)this.productModels["ZH"] = res.data.models;
+        if(this.lang == "ZH")this.makeProductPageInfoData(this.productModels[lang],true);
       },err=>{
       	console.log(err)
       })
@@ -577,14 +578,10 @@ export default {
       let getProductInfoPromise_EN = ProductApi.getProductInfo(this.rfid, undefined, "EN").then(res => {
         if(res.data&&res.data.dsm)this.productInfoData["EN"] = res.data.dsm;
         if(res.data&&res.data.models)this.productModels["EN"] = res.data.models;
+        if(this.lang == "EN")this.makeProductPageInfoData(this.productModels[lang],true);
       }, err => {
         console.log(err)
-      })
-
-      Promise.all([getProductInfoPromise_ZH,getProductInfoPromise_EN]).then(()=>{
-      	console.log(this.productModels[lang])
-      	this.makeProductPageInfoData(this.productModels[lang]);
-      })					
+      })				
     }
   },
   components: {
