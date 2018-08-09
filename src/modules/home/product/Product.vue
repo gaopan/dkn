@@ -4,8 +4,7 @@
 		<section class="product-photo-container" ref = "ConversionZone">
 
 			<div class="product-info">
-				<span class="product-code" v-if = "lang == 'EN'">Item code: {{productInfoByCurrentSize.itemCode}}</span>
-				<span class="product-code" v-else-if = "lang == 'ZH'">貨號: {{productInfoByCurrentSize.itemCode}}</span>
+				<span class="product-code">{{pageInfoLabel.itemCode[lang]}}: {{productInfoByCurrentSize.itemCode}}</span>
 				<div class="product-price-container">
 					<p class="product-name">{{productInfoData[lang].WebLabel}}</p>
 					<div class="product-price-mark">
@@ -30,11 +29,8 @@
 			</div>
 			<!-- select different colors of product  -->
 			<div class="product-color-option">
-				<span class="product-color-selected" v-if = "lang == 'EN'">
-					Color option: <span>{{productInfoByCurrentColor.colorName}}</span>
-				</span>
-				<span class="product-color-selected" v-else-if = "lang == 'ZH'">
-					顏色選項: <span>{{productInfoByCurrentColor.colorName}}</span>
+				<span class="product-color-selected">
+					{{pageInfoLabel.colorOption[lang]}}: <span>{{productInfoByCurrentColor.colorName}}</span>
 				</span>
 				<ul class="product-color-list" ref = "ColorOption" @click = "monitorClick_Color_QR_Select('ColorOption')">
 					<li class="product-color-item" :class="{'selected':color.checked}" v-for = "(color,colorIndex) in productColors" @click = "selectProductColor(color,colorIndex)">
@@ -46,7 +42,7 @@
 			<!-- carousel for display the photos-->
 			<div class="product-photo-carousel" ref = "MainPicBlock" @mousemove = "debounceActionMonitor($event,2)">
 				<carousel :per-page="1" :imageUrl = "imageUrl" :navigateTo = "navigateToPhoto" @pageChange = "pageChange">
-			    <slide @slideClick="handleSlideClick" v-for = "(img,imgIndex) in imageUrl">
+			    <slide v-for = "(img,imgIndex) in imageUrl">
 			      <img :src="img.url" width= "100%" height="100%" v-if = "img.type == 'img'"/>
 			      <iframe :src="img.url" width= "100%" height="100%" v-if = "img.type == 'vedio'"></iframe>
 			    </slide>
@@ -54,14 +50,11 @@
 			</div>
 
 			<div class="product-size-option">
-				<span class="size-label" v-if = "lang == 'EN'">
-					<span class="size-mark">Size: </span>
-					<span class="size-access">{{productStock <=0 ? "Out of Stock":"In Stock"}}</span>
+				<span class="size-label">
+					<span class="size-mark">{{pageInfoLabel.size[lang]}}: </span>
+					<span class="size-access">{{productStock <=0 ? pageInfoLabel.inStock[lang]:pageInfoLabel.outOfStock[lang]}}</span>
 				</span>
-				<span class="size-label" v-else-if = "lang == 'ZH'">
-					<span class="size-mark">尺寸: </span>
-					<span class="size-access">{{productStock <=0 ? "無庫存":"尚有庫存"}}</span>
-				</span>
+
 				<div class="product-size-wrapper">
 					<div class="product-size-select" ref = "SizeOption" @click = "monitorClick_Color_QR_Select('SizeOption')">
 						<custom-select 
@@ -94,8 +87,7 @@
 
 						</div>
 						<span class="code-tip" v-show = "!bShowQRCode">
-							<span  v-if = "lang == 'EN'">Want to buy online?Click me!</span>
-							<span  v-else-if = "lang == 'ZH'">線上購買？點擊我！</span>
+							{{pageInfoLabel.QRCode[lang]}}
 						</span> 
 					</div>
 				</div>
@@ -143,8 +135,12 @@
             <div class="panel-cell-wrapper product-scorce" :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}"v-else-if = "item.id === 'UserReviews'" ref = "UserReviewsBlock">
             		<div class="product-scorce-wrapper">
             			<rate :rate = "productScore[lang]"></rate> 
-            			<span class="user-review-count" v-if = "lang=='EN'">{{productReviews[lang].length}} {{productReviews[lang].length>1?'reviews':'review'}}</span>
-            			<span class="user-review-count" v-else-if = "lang=='ZH'">{{productReviews[lang].length}} 回饋</span>
+            			<span class="user-review-count" v-if = "lang=='EN'">
+            				{{productReviews[lang].length}} {{productReviews[lang].length>1?'reviews':'review'}}
+            			</span>
+            			<span class="user-review-count" v-else-if = "lang=='ZH'">
+	            			{{productReviews[lang].length}} 回饋
+	            		</span>
             		</div>
 		            <div class = "user-review-content" v-show = "productReviews[lang].length" v-for= "(review,reviewIndex) in productReviews[lang]">
 		            	<div class = "review-created-on">
@@ -167,15 +163,15 @@
             		 v-else-if = "item.id === 'ProdConceptTech'"
             		 ref = "ConceptTechBlock">
 		            <div class = "information-wrapper">
-		            	<p class = "information-queation">MAINTENANCE ADVICE</p> 
+		            	<p class = "information-queation">{{pageInfoLabel.maintenanceAdv[lang]}}</p> 
 		            	<p class = "information-answer">{{productInfoData[lang].MaintenanceAdv}}</p> 
 		            </div>
 		            <div class = "information-wrapper">
-		            	<p class = "information-queation">STORAGE ADVICE</p> 
+		            	<p class = "information-queation">{{pageInfoLabel.storageAdv[lang]}}</p> 
 		            	<p class = "information-answer">{{productInfoData[lang].StorageAdv}}</p> 
 		            </div>
 		            <div class = "information-wrapper">
-		            	<p class = "information-queation">USE RESTRICTIONS</p> 
+		            	<p class = "information-queation">{{pageInfoLabel.uesRes[lang]}}</p> 
 		            	<p class = "information-answer">{{productInfoData[lang].UsageRestriction}}</p> 
 		            </div>
 	          </div>

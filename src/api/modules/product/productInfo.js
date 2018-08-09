@@ -11,8 +11,12 @@ export default {
   getProductInfo(rfid, storeId = localStorage.getItem(storeIdKey), lang) {
 
     let url = `productInfo/ean/${rfid}/store_id/${storeId}/lang/${lang}`;
-    return instance.get(url)
-    // return Promise.resolve(MockData.getProductInfo);
+    // return instance.get(url)
+    if(lang == "ZH"){
+      return Promise.resolve(MockData.getProductInfo.ZH);
+    }else{
+      return Promise.resolve(MockData.getProductInfo.EN);
+    }
   },
 
   getStock(storeId = localStorage.getItem(storeIdKey), itemCode) {

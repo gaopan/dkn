@@ -1,3 +1,7 @@
+/**
+ * realse  default item code
+ * realse  default model code
+**/
 import { Carousel, Slide } from "@/components/carousel"
 import { ScrollNav, ScrollNavPanel } from "@/components/scrollNav"
 import CustomSelect from "@/components/custom-select"
@@ -35,6 +39,44 @@ export default {
         {label: {EN:'TPRODUCT CONCEPT & TECHNOLOGY',ZH:"产品概念与技术"},id:"ProdConceptTech"},
         {label: {EN:'TECHNICAL INFORMATION',ZH:"產品性能"},id:"TechInfo"},
       ],
+      pageInfoLabel:{
+				itemCode:{
+					ZH:"貨號",
+					EN:"Item code"
+				},
+				colorOption:{
+					ZH:"顏色選項",
+					EN:"Color option"	
+				},
+				size:{
+					EN:"Size",
+					ZH:"尺寸"
+				},
+				inStock:{
+					EN:"In Stock",
+					ZH:"尚有庫存"
+				},
+				outOfStock:{
+					EN:"Out of Stock",
+					ZH:"無庫存"
+				},
+				QRCode:{
+					EN:"Want to buy online?Click me!",
+					ZH:"線上購買？點擊我！",
+				},
+				maintenanceAdv:{
+					EN:"MAINTENANCE ADVICE",
+					ZH:"维修建议"
+				},
+				storageAdv:{
+					EN:"STORAGE ADVICE",
+					ZH:"存储建议"
+				},
+				uesRes:{
+					EN:"USE RESTRICTIONS",
+					ZH:"使用限制"
+				}
+			},
       containerTitle: null,
       activeNavIndex: 0,
       productName: null,
@@ -86,13 +128,22 @@ export default {
       QRCodeSrc: {
       	EN:null, ZH:null
       },
+			defaultIndex:{
+				ZH:{
+					defaultColorIndex:null,
+					defaultSizeIndex:null,
+				},
+				EN:{
+					defaultColorIndex:null,
+					defaultSizeIndex:null
+				}
+			},
       debounceActionMonitor:debounce(this.actionMonitor,500,100),
       fieldELeQueried:{}      
     }
   },
   created() {
     this.rfid = this.$router.currentRoute.params.rfid;		
-		this.containerTitle = this.navTabList[0].label[this.lang];
     //language
     let langInLocal = localStorage.getItem("lang");
     if (!!langInLocal) {
@@ -101,7 +152,8 @@ export default {
       let defaultLang = StoreService.getLang();		
     	this.lang = defaultLang;
     }
-		this.initPageData_QR(this.lang);  
+		this.containerTitle = this.navTabList[0].label[this.lang];
+		this.initPageData(this.lang);  
 
 		//monitor user's action on the page
 		// this.intervalTimer = setInterval(this.checkTime,1000);
@@ -182,7 +234,6 @@ export default {
 					// console.log(res.data);
 				})
 			}
-
 		},
 
 		monitorClick_Color_QR_Select(field){
@@ -261,9 +312,6 @@ export default {
       }
     },
 
-    pageChange(args) {
-      this.navigateToPhoto = args;
-    },
     selectProductColor(color, colorIndex) {
       if (color.checked) return;
 
@@ -294,6 +342,18 @@ export default {
           off: 100
         }
       }
+
+      this.productReviews = { 
+      	EN:[], ZH:[]
+      }
+
+      this.productScore = {
+      	EN:0, ZH:0
+      } 
+      this.QRCodeSrc = {
+      	EN:null, ZH:null
+      }  
+
       this.sizeSelected = { label: null, value: null }
 
       this.navigateToPhoto = 1;
@@ -310,19 +370,20 @@ export default {
         label: firstSizeItem.SizeValueLabel,
         value: firstSizeItem.SizeValueId
       }
-
+      //update QR code and userview by the first size
       this.fnUpdateStock_Qr_UserReview(undefined, this.productInfoByCurrentColor.modelCode, firstSizeItem.itemCode, this.lang);
     },
-    handleSlideClick() {},
-    activeNavIndexChanged(args) {
-      this.activeNavIndex = args;
-      this.containerTitle = this.navTabList[args].label[this.lang];
+
+    pageChange(args) {
+      this.navigateToPhoto = args;
     },
+
     selectProductSize(args) {
+    	if(args.value == this.sizeSelected.value)return;
 
       this.sizeSelected = Object.assign({}, args);
       let itemCode = null;
-
+      //get the price of selected size
       this.productInfoByCurrentColor.sizeItems.forEach(d => {
         if (args.value == d.SizeValueId) {
           itemCode = d.itemCode;
@@ -333,7 +394,7 @@ export default {
           })
         }
       })
-
+      //get the Stock of selected size
       ProductApi.getStock(undefined, itemCode).then((res, err) => {
         let stockData = res.data;
         if (stockData.stock && stockData.stock.stock) {
@@ -344,17 +405,34 @@ export default {
       })
 
     },
-    fnUpdateStock_Qr_UserReview(storeId, modelCode, itemCode, lang) {
-      this.productReviews = { 
-      	EN:[], ZH:[]
-      }
 
-      this.productScore = {
-      	EN:0, ZH:0
-      } 
-      this.QRCodeSrc = {
-      	EN:null, ZH:null
-      }  
+    toggleQRCode() {
+      if (this.QRCodeSrc.EN == null && this.QRCodeSrc.ZH == null) return;
+      this.bShowQRCode = !this.bShowQRCode;
+    },
+
+    chooseLang(lang) {
+      if (this.lang == lang) return;
+      this.lang = lang;
+			this.navigateToPhoto = 1;
+			this.containerTitle = this.navTabList[this.activeNavIndex].label[lang];
+
+			this.makeProductPageInfoData(this.productModels[lang],this.defaultIndex[lang]);     
+    },
+
+    activeNavIndexChanged(args) {
+      this.activeNavIndex = args;
+      this.containerTitle = this.navTabList[args].label[this.lang];
+    },
+
+    /**
+		 *fnUpdateStock_Qr_UserReview is used when user choose another color , default color is got and language is changed
+		 @storeId -- undefined
+		 @modelCode -- color selected
+		 @itemCode -- size selected
+		 @lang -- language selected
+    **/
+    fnUpdateStock_Qr_UserReview(storeId, modelCode, itemCode, lang) {
 
       ProductApi.getStock(storeId, itemCode, lang).then((res, err) => {
         let stockData = res.data;
@@ -365,33 +443,6 @@ export default {
         }
       })
 
-      ProductApi.getUserReview(modelCode, lang).then((res, err) => {
-        let obj = this.makeUserReviewData(res.data);
-        this.productReviews[lang] = obj.productReviews;
-        this.productScore[lang] = obj.productScore;
-      })
-
-      let country = lang == "EN"? "my":"tw";
-      ProductApi.getQrcode(modelCode,country).then((res,err)=>{
-				this.QRCodeSrc[lang] = res.data
-			})	    
-
-    },
-    showSizeMenu(args) {
-      this.bShowShadow = args;
-    },
-    toggleQRCode() {
-      if (this.QRCodeSrc.EN == null && this.QRCodeSrc.ZH == null) return;
-      this.bShowQRCode = !this.bShowQRCode;
-    },
-    chooseLang(lang) {
-      if (this.lang == lang) return;
-      this.lang = lang;
-			this.navigateToPhoto = 1;
-			this.containerTitle = this.navTabList[this.activeNavIndex].label[lang];
-
-			this.makeProductPageInfoData(this.productModels[lang],false);
-      
       //get user review
       if(this.productReviews[lang].length == 0){
 	      ProductApi.getUserReview(this.productInfoByCurrentColor.modelCode, lang).then((res, err) => {
@@ -409,6 +460,169 @@ export default {
 				})		      
       }
     },
+    showSizeMenu(args) {
+      this.bShowShadow = args;
+    },
+
+    /**
+			*@productModels product's size and color information
+			*@defaultIndex the index of default model_code and item_code in api data.
+			makeProductPageInfoData is used to generate the product's bascial information
+    **/
+    makeProductPageInfoData(productModels,defaultIndex){
+			// debugger
+      if(productModels.length){
+      	let model = this.makeProductInfoDataByColor(productModels,defaultIndex);
+
+      	this.productAllInfoByColor = model.productAllInfoByColor;
+				this.productColors = model.productColors;
+
+				if(this.productAllInfoByColor.length){
+					// let defaultIndex = defaultIndex[this.lang];
+	        this.productInfoByCurrentColor = this.productAllInfoByColor[defaultIndex.defaultColorIndex];
+
+	        this.imageUrl = this.productInfoByCurrentColor.videosAndImages
+	        
+	        //init size
+	        this.productInfoByCurrentSize = {
+	          stock: this.productInfoByCurrentColor.sizeItems[defaultIndex.defaultSizeIndex].stock,
+	          price: this.productInfoByCurrentColor.sizeItems[defaultIndex.defaultSizeIndex].prices,
+	          itemCode: this.productInfoByCurrentColor.sizeItems[defaultIndex.defaultSizeIndex].itemCode
+	        }
+
+	        this.sizeSelected = {
+	          label: this.productInfoByCurrentColor.sizeItems[defaultIndex.defaultSizeIndex].SizeValueLabel,
+	          value: this.productInfoByCurrentColor.sizeItems[defaultIndex.defaultSizeIndex].SizeValueId
+	        }
+
+	       this.fnUpdateStock_Qr_UserReview(undefined, 
+																	       	this.productInfoByCurrentColor.modelCode, 
+																	       	this.productInfoByCurrentColor.sizeItems[defaultIndex.defaultSizeIndex].itemCode, 
+																	       	this.lang
+																	       );
+
+				}
+      }
+    },
+    initPageData(lang) {
+
+      ProductApi.getProductInfo(this.rfid, undefined, "ZH").then(res => {
+				// debugger
+        if(res.data&&res.data.dsm)this.productInfoData["ZH"] = res.data.dsm;
+        if(res.data&&res.data.models)this.productModels["ZH"] = res.data.models;
+       
+        //get default model_code and itemCode
+        // let defaultData = getDefaultCode(this.productModels["ZH"],res.data.default_model_code,272636/*res.data.default_item_code*/)
+        let defaultData = getDefaultCode(this.productModels["ZH"],8315702,328449/*res.data.default_item_code*/)
+				this.defaultIndex.ZH.defaultColorIndex = defaultData.defaultColorIndex
+				this.defaultIndex.ZH.defaultSizeIndex = defaultData.defaultSizeIndex   
+
+        if(lang == "ZH"){
+        	this.makeProductPageInfoData(this.productModels[lang],this.defaultIndex[lang]);
+        }
+      },err=>{
+      	console.log(err)
+      })
+
+      ProductApi.getProductInfo(this.rfid, undefined, "EN").then(res => {
+        
+        if(res.data&&res.data.dsm)this.productInfoData["EN"] = res.data.dsm;
+        if(res.data&&res.data.models)this.productModels["EN"] = res.data.models;
+        
+
+        let defaultData = getDefaultCode(this.productModels["EN"],res.data.default_model_code,272636/*res.data.default_item_code*/)
+				this.defaultIndex.EN.defaultColorIndex = defaultData.defaultColorIndex
+				this.defaultIndex.EN.defaultSizeIndex = defaultData.defaultSizeIndex
+
+        if(lang == "EN"){
+        	this.makeProductPageInfoData(this.productModels[lang],this.defaultIndex[lang]);
+        }
+      }, err => {
+        console.log(err)
+      })	
+
+      function getDefaultCode(model,model_code,item_code){
+        //get default model_code and itemCode
+        let defaultColorIndex = null,defaultSizeIndex = null;
+        if(model.length){
+	        model.forEach((d,i)=>{
+	        	if(d.ModelCode == model_code){
+	        		defaultColorIndex = i;
+	        		d.items.every((d_,i_)=>{
+	        			if(d_.ItemCode == item_code){
+	        				defaultSizeIndex = i_;
+	        				return false;
+	        			}
+	        			return true;
+	        		}) 
+	        	}
+	        })      	
+        }
+        return {defaultColorIndex,defaultSizeIndex}
+      }			
+    },
+    makeProductInfoDataByColor(data,defaultIndex){
+    	let productAllInfoByColor = [],
+					productColors = [];
+
+      data.forEach((d, modelsIndex) => {
+        let videos = [],
+          images = [],
+          sizeItems = [],
+          sizeOptions = [],
+          productColorChecked = modelsIndex === defaultIndex.defaultColorIndex ? true : false;
+
+        if (d.Videos && d.Videos.length) {
+          d.Videos.forEach(d => {
+            videos.push({ type: "vedio", url: d.link });
+          })
+        }
+
+        if (d.Images && d.Images.length) {
+          d.Images.forEach(d => {
+            images.push({ type: "img", url: d.link });
+          })
+        }
+
+        if (d.items && d.items.length) {
+          d.items.forEach(d => {
+            let pricesObj = this.calculateDiscount(d.prices);
+
+            sizeItems.push({
+              SizeValueId: d.SizeValueId,
+              SizeValueLabel: d.SizeValueLabel,
+              stock: d.Stock && d.Stock.store ? d.Stock.store : 0,
+              itemCode: d.ItemCode,
+              prices: pricesObj
+            })
+
+            sizeOptions.push({
+              label: d.SizeValueLabel,
+              value: d.SizeValueId
+            })
+          })
+        }
+
+        let colorName = d.BusinessColors[0].label;
+        productAllInfoByColor.push({
+          colorName: colorName,
+          modelCode: d.ModelCode,
+          videosAndImages: [...videos, ...images],
+          sizeItems: sizeItems,
+          sizeOptions: sizeOptions
+        })
+        productColors.push({
+          colorName: colorName,
+          imgUrl: images[0].url,
+          checked: productColorChecked
+        })
+      });
+
+      return{
+				productAllInfoByColor,
+				productColors
+      }
+    }, 
     makeUserReviewData(resData) {
       let score = 0,
         productScore = 0;
@@ -472,117 +686,7 @@ export default {
         return { original, discount, off }
       }
     },
-    makeProductInfoDataByColor(data){
-    	let productAllInfoByColor = [],
-					productColors = [];
 
-      data.forEach((d, modelsIndex) => {
-        let videos = [],
-          images = [],
-          sizeItems = [],
-          sizeOptions = [],
-          productColorChecked = modelsIndex === 0 ? true : false;
-
-        if (d.Videos && d.Videos.length) {
-          d.Videos.forEach(d => {
-            videos.push({ type: "vedio", url: d.link });
-          })
-        }
-
-        if (d.Images && d.Images.length) {
-          d.Images.forEach(d => {
-            images.push({ type: "img", url: d.link });
-          })
-        }
-
-        if (d.items && d.items.length) {
-          d.items.forEach(d => {
-            let pricesObj = this.calculateDiscount(d.prices);
-
-            sizeItems.push({
-              SizeValueId: d.SizeValueId,
-              SizeValueLabel: d.SizeValueLabel,
-              stock: d.Stock && d.Stock.store ? d.Stock.store : 0,
-              itemCode: d.ItemCode,
-              prices: pricesObj
-            })
-
-            sizeOptions.push({
-              label: d.SizeValueLabel,
-              value: d.SizeValueId
-            })
-          })
-        }
-
-        let colorName = d.BusinessColors[0].label;
-        productAllInfoByColor.push({
-          colorName: colorName,
-          modelCode: d.ModelCode,
-          videosAndImages: [...videos, ...images],
-          sizeItems: sizeItems,
-          sizeOptions: sizeOptions
-        })
-        productColors.push({
-          colorName: colorName,
-          imgUrl: images[0].url,
-          checked: productColorChecked
-        })
-      });
-
-      return{
-				productAllInfoByColor,
-				productColors
-      }
-    },
-    makeProductPageInfoData(productModels,refresh){
-      if(productModels.length){
-
-      	let model = this.makeProductInfoDataByColor(productModels);
-
-      	this.productAllInfoByColor = model.productAllInfoByColor;
-				this.productColors = model.productColors;
-
-				if(this.productAllInfoByColor.length){
-
-	        this.productInfoByCurrentColor = this.productAllInfoByColor[0];
-
-	        this.imageUrl = this.productInfoByCurrentColor.videosAndImages
-	        
-	        //init size
-	        this.productInfoByCurrentSize = {
-	          stock: this.productInfoByCurrentColor.sizeItems[0].stock,
-	          price: this.productInfoByCurrentColor.sizeItems[0].prices,
-	          itemCode: this.productInfoByCurrentColor.sizeItems[0].itemCode
-	        }
-
-	        this.sizeSelected = {
-	          label: this.productInfoByCurrentColor.sizeItems[0].SizeValueLabel,
-	          value: this.productInfoByCurrentColor.sizeItems[0].SizeValueId
-	        }
-
-	        if(refresh)this.fnUpdateStock_Qr_UserReview(undefined, this.productInfoByCurrentColor.modelCode, this.productInfoByCurrentColor.sizeItems[0].itemCode, this.lang);
-
-				}
-      }
-    },
-    initPageData_QR(lang) {
-
-      let getProductInfoPromise_ZH = ProductApi.getProductInfo(this.rfid, undefined, "ZH").then(res => {
-        if(res.data&&res.data.dsm)this.productInfoData["ZH"] = res.data.dsm;
-        if(res.data&&res.data.models)this.productModels["ZH"] = res.data.models;
-        if(this.lang == "ZH")this.makeProductPageInfoData(this.productModels[lang],true);
-      },err=>{
-      	console.log(err)
-      })
-
-      let getProductInfoPromise_EN = ProductApi.getProductInfo(this.rfid, undefined, "EN").then(res => {
-        if(res.data&&res.data.dsm)this.productInfoData["EN"] = res.data.dsm;
-        if(res.data&&res.data.models)this.productModels["EN"] = res.data.models;
-        if(this.lang == "EN")this.makeProductPageInfoData(this.productModels[lang],true);
-      }, err => {
-        console.log(err)
-      })				
-    }
   },
   components: {
     Carousel,
