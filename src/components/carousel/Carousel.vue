@@ -12,8 +12,8 @@
       </div> 
     </div>
     
-    <!-- <pagination v-if="slideCount > 0" @paginationclick="goToPage" :activetPage = "navigateTo"/> -->
-    <pagination @paginationclick="goToPage" :activetPage = "navigateTo"/>
+    <pagination v-if="slideCount > 0" @paginationclick="goToPage" :activetPage = "navigateTo"/>
+    <!-- <pagination @paginationclick="goToPage" :activetPage = "navigateTo"/> -->
 
   </section>
 </template>

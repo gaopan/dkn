@@ -10,7 +10,7 @@
                     :ref="'navitem_' + i"
                     @click="scrollToTargetContent(i)"
                 >
-                    <span :id = "item.id" :class = "{'active-tab-item':activeIndex === i}">{{item.label}}</span>
+                    <span :id = "item.id" :class = "{'active-tab-item':activeIndex === i}">{{item.label[lang]}}</span>
                 </li>
             </ul>
         </div>
@@ -27,6 +27,7 @@
         name: 'scrollnav',
         data() {
             return {
+                lang:null,
                 activeIndex: this.index,
                 navList: [],
                 currentOffset: 0,
@@ -220,7 +221,12 @@
         background-color: #fafafa;
     }
 
-    
+    .scrollnav-tab-item > li:last-child>span:after{
+        height: 100%;
+    }
+    .scrollnav-tab-item>li:first-child>span:after{
+        height: 8px;
+    }    
     .scrollnav-content {
         /*flex: 1;*/
         overflow-y: auto;
@@ -249,7 +255,8 @@
         margin-left: 80px;
     }
     .scrollnav-tab-item > li:first-child>span:after{
-        top: -55px;
+        /* top: -55px; */
+        top: 0;
     }
     .scrollnav-tab-item > li:last-child>span:after{    
         top: 24px;
@@ -266,7 +273,8 @@
         margin-left: 58px;
     }
     .scrollnav-tab-item > li:first-child>span:after{
-        top: -50px;
+        top:-2px;
+        /* top: -50px; */
     }
     .scrollnav-tab-item > li:last-child>span:after{    
         top: 22px;
@@ -276,14 +284,14 @@
 
 @media only screen and (min-width:1080px) and (max-width:1600px){
     .scrollnav-tab {
-        font-size: 17px;
+        font-size: 14px;
         bottom: 42px;
         right: 80px;  
     }   
 }
 @media only screen and (max-width:1080px){
     .scrollnav-tab {
-        font-size: 17px;
+        font-size: 14px;
         bottom: 42px;
         right: 64px;  
     }   

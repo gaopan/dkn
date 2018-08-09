@@ -4,9 +4,10 @@
 		<section class="product-photo-container" ref = "ConversionZone">
 
 			<div class="product-info">
-				<span class="product-code">Item code: {{productInfoByCurrentSize.itemCode}}</span>
+				<span class="product-code" v-if = "lang == 'EN'">Item code: {{productInfoByCurrentSize.itemCode}}</span>
+				<span class="product-code" v-else-if = "lang == 'ZH'">貨號: {{productInfoByCurrentSize.itemCode}}</span>
 				<div class="product-price-container">
-					<p class="product-name">{{productInfoData.WebLabel}}</p>
+					<p class="product-name">{{productInfoData[lang].WebLabel}}</p>
 					<div class="product-price-mark">
 						<div class="product-with-discount" v-if = "productInfoByCurrentSize.price.off !== 100">
 							<span class="product-price-discount">
@@ -29,10 +30,13 @@
 			</div>
 			<!-- select different colors of product  -->
 			<div class="product-color-option">
-				<span class="product-color-selected">
+				<span class="product-color-selected" v-if = "lang == 'EN'">
 					Color option: <span>{{productInfoByCurrentColor.colorName}}</span>
 				</span>
-				<ul class="product-color-list" ref = "ColorOption" @click = "monitorClick('ColorOption')">
+				<span class="product-color-selected" v-else-if = "lang == 'ZH'">
+					顏色選項: <span>{{productInfoByCurrentColor.colorName}}</span>
+				</span>
+				<ul class="product-color-list" ref = "ColorOption" @click = "monitorClick_Color_QR_Select('ColorOption')">
 					<li class="product-color-item" :class="{'selected':color.checked}" v-for = "(color,colorIndex) in productColors" @click = "selectProductColor(color,colorIndex)">
 						<img :src="color.imgUrl"/>
 						<i :class="{'icon-check':color.checked,'icon-unSelected':!color.checked}"/>
@@ -50,14 +54,19 @@
 			</div>
 
 			<div class="product-size-option">
-				<span class="size-label">
-					<span class="size-mark">Size</span>
-					<span class="size-access">Stock: {{productStock <=0 ? "unavailable":"available"}}</span>
+				<span class="size-label" v-if = "lang == 'EN'">
+					<span class="size-mark">Size: </span>
+					<span class="size-access">{{productStock <=0 ? "Out of Stock":"In Stock"}}</span>
+				</span>
+				<span class="size-label" v-else-if = "lang == 'ZH'">
+					<span class="size-mark">尺寸: </span>
+					<span class="size-access">{{productStock <=0 ? "無庫存":"尚有庫存"}}</span>
 				</span>
 				<div class="product-size-wrapper">
-					<div class="product-size-select" ref = "SizeOption" @click = "monitorClick('SizeOption')">
+					<div class="product-size-select" ref = "SizeOption" @click = "monitorClick_Color_QR_Select('SizeOption')">
 						<custom-select 
 							:label = "sizeSelected.label"
+							:lang = "lang"
 							:options = "productInfoByCurrentColor.sizeOptions" 
 							@selectOption = "selectProductSize" 
 							@menuShow = "showSizeMenu"
@@ -66,25 +75,28 @@
 					</div>
 					<div 
 						class="product-dimensional-code" 
-						:class = "{'zIndex1': bShowQRCode,'no-item-code':QRCodeSrc == null}"
+						:class = "{'zIndex1': bShowQRCode,'no-item-code':QRCodeSrc[lang] == null}"
 						ref = "QRcode"
-						@click = "monitorClick('QRcode')"
+						@click = "monitorClick_Color_QR_Select('QRcode')"
 					>
 						<i :class = '{
 									"icon-QR_code":!bShowQRCode,
 									"icon-close":bShowQRCode,
-									"cursor-not-allowed":QRCodeSrc == null
+									"cursor-not-allowed":QRCodeSrc[lang] == null
 								}' 
 								@click = "toggleQRCode">
 						</i>
 						<div class="product-QR-code" v-show = "bShowQRCode">
 							<p>Scan this QR code with your phone, get product information on decathlon.com!</p>
 							<div class="QR-code-img">
-								<img :src="QRCodeSrc" width="100%" height ="100%"/>
+								<img :src="QRCodeSrc[lang]" width="100%" height ="100%"/>
 							</div>
 
 						</div>
-						<span class="code-tip" v-show = "!bShowQRCode">Want to buy online?Click me!</span> 
+						<span class="code-tip" v-show = "!bShowQRCode">
+							<span  v-if = "lang == 'EN'">Want to buy online?Click me!</span>
+							<span  v-else-if = "lang == 'ZH'">線上購買？點擊我！</span>
+						</span> 
 					</div>
 				</div>
 			</div>
@@ -101,37 +113,40 @@
 				</div>
 			</div>
 	    <scroll-nav @activeIndexChanged = "activeNavIndexChanged">
-	        <scroll-nav-panel :label="item.label" :idCus = "item.id" v-for="(item, index) in navTabList" :key="index">
+	        <scroll-nav-panel :lang = "lang" :label="item.label" :idCus = "item.id" v-for="(item, index) in navTabList" :key="index">
+            
             <!-- DESIGNED FOR -->
             <div 
           		class="panel-cell-wrapper " 
-          		:class="{'panel-designed-for':item.label === 'DESIGNED FOR'}" 
+          		:class="{'panel-designed-for':item.id === 'DesignFor'}" 
           		:style = "{ visibility:activeNavIndex == index ? 'visible':'hidden' }"
-          		v-if = "item.label === 'DESIGNED FOR'"
+          		v-if = "item.id === 'DesignFor'"
           		ref = "DesignForBlock">
 
-	            <p>{{productInfoData.DesignedFor}}</p> 
-	            <p>{{productInfoData.Catchline}}</p> 
+	            <p>{{productInfoData[lang].DesignedFor}}</p> 
+	            <p>{{productInfoData[lang].Catchline}}</p> 
 
             </div>
+						
 						<!-- PRODUCT BENEFITS -->
             <div 
             	class="panel-cell-wrapper product-benefits" 
           		:style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
-          		v-else-if = "item.label === 'PRODUCT BENEFITS'"
+          		v-else-if = "item.id === 'ProductBenefit'"
           		ref = "ProdBenefitBlock">
-		            <div class = "product-benefits-item" :class = "{'marginBottom0': benefitIndex == productInfoData.Benefits.length-1}"  v-for= "(benefit,benefitIndex) in productInfoData.Benefits">
+		            <div class = "product-benefits-item" :class = "{'marginBottom0': benefitIndex == productInfoData[lang].Benefits.length-1}"  v-for= "(benefit,benefitIndex) in productInfoData[lang].Benefits">
 		            	<p class = "benefits-points">{{benefit.label}}</p> 
 		            	<p class = "benefits-points-content">{{benefit.text}}</p> 
 		            </div>
 	          </div>
 						<!-- USER REVIEWS -->
-            <div class="panel-cell-wrapper product-scorce" :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}"v-else-if = "item.label === 'USER REVIEWS'" ref = "UserReviewsBlock">
+            <div class="panel-cell-wrapper product-scorce" :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}"v-else-if = "item.id === 'UserReviews'" ref = "UserReviewsBlock">
             		<div class="product-scorce-wrapper">
-            			<rate :rate = "productScore"></rate> 
-            			<span class="user-review-count">{{productReviews.length}} {{productReviews.length>1?'reviews':'review'}}</span>
+            			<rate :rate = "productScore[lang]"></rate> 
+            			<span class="user-review-count" v-if = "lang=='EN'">{{productReviews[lang].length}} {{productReviews[lang].length>1?'reviews':'review'}}</span>
+            			<span class="user-review-count" v-else-if = "lang=='ZH'">{{productReviews[lang].length}} 回饋</span>
             		</div>
-		            <div class = "user-review-content" v-for= "(review,reviewIndex) in productReviews">
+		            <div class = "user-review-content" v-for= "(review,reviewIndex) in productReviews[lang]">
 		            	<div class = "review-created-on">
 		            		<p>
 		            			<span class = "review-created-date">{{review.published_at}}</span>
@@ -149,27 +164,27 @@
 						<!-- PRODUCT CONCEPT & TECHNOLOGY -->
             <div class="panel-cell-wrapper product-tech" 
             		 :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
-            		 v-else-if = "item.label === 'TPRODUCT CONCEPT & TECHNOLOGY'"
+            		 v-else-if = "item.id === 'ProdConceptTech'"
             		 ref = "ConceptTechBlock">
 		            <div class = "information-wrapper">
 		            	<p class = "information-queation">MAINTENANCE ADVICE</p> 
-		            	<p class = "information-answer">{{productInfoData.MaintenanceAdv}}</p> 
+		            	<p class = "information-answer">{{productInfoData[lang].MaintenanceAdv}}</p> 
 		            </div>
 		            <div class = "information-wrapper">
 		            	<p class = "information-queation">STORAGE ADVICE</p> 
-		            	<p class = "information-answer">{{productInfoData.StorageAdv}}</p> 
+		            	<p class = "information-answer">{{productInfoData[lang].StorageAdv}}</p> 
 		            </div>
 		            <div class = "information-wrapper">
 		            	<p class = "information-queation">USE RESTRICTIONS</p> 
-		            	<p class = "information-answer">{{productInfoData.UsageRestriction}}</p> 
+		            	<p class = "information-answer">{{productInfoData[lang].UsageRestriction}}</p> 
 		            </div>
 	          </div>
 						<!-- TECHNICAL INFORMATION -->
             <div class="panel-cell-wrapper tech-information" 
             		 :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
-            		 v-else-if = "item.label === 'TECHNICAL INFORMATION'"
+            		 v-else-if = "item.id === 'TechInfo'"
             		 ref = "TechInfoBlock">
-		            <div class = "information-wrapper" v-for= "(Functionality,FunctionalityIndex) in productInfoData.Functionalities">
+		            <div class = "information-wrapper" v-for= "(Functionality,FunctionalityIndex) in productInfoData[lang].Functionalities">
 		            	<p class = "information-queation">{{Functionality.label}}</p> 
 		            	<p class = "information-answer">{{Functionality.text}}</p> 
 		            </div>

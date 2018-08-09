@@ -230,12 +230,12 @@
 }
 .scroll-nav-panel {
     height: 100%;
+    padding-bottom: 100px;
 }
 .panel-cell-wrapper {
     margin-bottom: 20px;
     color: #393939;
     line-height: 1.5;
-    margin-right: 220px;
     min-width: 350px;  
     height: 100%;
         
@@ -263,14 +263,12 @@
   font-weight: bold;
   line-height: 1;
   color: #0082c3;
-
 }
 
 .benefits-points-content{
   line-height: 1.25;
   color: #393939;
   margin-top: 20px;
-  font-size: 24px;
 }
 
 /*USER REVIEW*/
@@ -415,15 +413,11 @@
         font-size: 48px;
     }
     .product-QR-code{
-        /* width: 578px; */
         height: 204px;
-        /* padding: 58px 24px 58px 30px; */
     }
 
     .product-QR-code p{
-        /* width: 360px; */
         height: 168px;
-        /* margin-right: 24px; */
         font-size: 32px;
     }    
     .product-title{
@@ -449,6 +443,9 @@
         margin-top: 20px;
     } 
 
+    .panel-cell-wrapper{
+        margin-right: 300px;
+    }
     .panel-cell-wrapper p{
         margin-right: 50px;
     }
@@ -460,7 +457,13 @@
         margin-top: 20px;
         width:80px;
     }  
+    .benefits-points{
+        font-size: 40px;
+    }
+    .benefits-points-content{
 
+        font-size: 24px;
+    }
     .product-benefits-item {
         margin-right: 42px;
         margin-bottom: 80px;
@@ -483,7 +486,7 @@
         font-size: 40px;
     } 
     .information-wrapper {
-        margin-bottom: 90px;
+        margin-bottom:70px;
     }
 
     .information-queation{
@@ -502,7 +505,7 @@
         font-size: 24px;
     }
 }
-@media only screen /* and (min-width:1080px) */and (max-width:1600px){ 
+@media only screen and (max-width:1600px){ 
     .panel-cell-wrapper{
         padding-top: 80px;
     }    
@@ -607,10 +610,6 @@
         height: 146px;
 
     }
-    /*     .product-QR-code p{
-        height: 168px;      
-        font-size: 24px;
-    } */
     .product-info-title{
         font-size: 28px;
         height: 32px;
@@ -633,19 +632,31 @@
         margin-right: 24px;
     }    
     .panel-designed-for{
+        /* font-size: 32px; */
+        padding-top: 160px;
         font-size: 32px;
-        padding-top: 160px;        
+        margin-right: 240px;
     }  
 
 
     /* right */
+    .panel-cell-wrapper{
+        padding-top: 80px;
+        margin-right: 260px;
+    }      
     .panel-cell-wrapper p{
         margin-right: 40px;
     }    
     .product-benefits-item {
         margin-right: 32px;
         margin-bottom: 64px;
-    }  
+    } 
+    .benefits-points{
+        font-size: 32px;
+    }
+    .benefits-points-content{
+        font-size: 20px;
+    }
     .product-scorce-wrapper .rate{
         margin-right: 32px;  
     }
@@ -663,16 +674,16 @@
     }
 
     .information-wrapper {
-        margin-bottom: 72px;
+        margin-bottom: 56px;
     }  
 
     .information-queation{
-        font-size: 25px;
+        font-size: 26px;
         margin-bottom: 16px;
     }
 
     .information-answer{
-        font-size: 20px;
+        font-size: 19px;
     }    
 }
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="custom-select">
-		<div class="select-label-wrapper"  @click = "showMenu">
+		<div class="select-label-wrapper" :class = "{'disabled':options.length == 0}" @click = "showMenu">
 			<span class="select-label">{{selectLabel}}</span>
 			<i class= "icon-down arrow-icon"></i>
 		</div>
@@ -23,24 +23,24 @@
 			},
 			options:{	
 				type:Array
+			},
+			lang:{
+				type:String
 			}
 		},
 		data(){
 			return{
 				bShowMenu:false,
-				menuOption:[]
+				menuOption:[],
+				selectLabel:null
 			}
 		},
 		created(){
 			// this.selectLabel = this.$props.label;
 			if(!!this.$props.label){
 				this.selectLabel = this.$props.label;
-			}else{
-				this.selectLabel = "Please Select";
 			}
-			if(this.$props.options.length == 0){
-				this.selectLabel = "No Option to Select";
-			}			
+		
 			document.addEventListener("click",this.fnBlur,false)
 		},
 		beforeDestroy(){
@@ -66,28 +66,17 @@
 		},
 		watch:{
 			bShowMenu(newV,olcV){
+				console.log(this.bShowMenu)
 				this.$emit("menuShow",newV)
 			},
 			"$props.label":{
 				handler(newV,oldV){
 					if(!!newV){
 						this.selectLabel = newV;
-					}else{
-						this.selectLabel = "Please Select";
-					}
-					if(this.$props.options.length == 0){
-						this.selectLabel = "No Option to Select";
-					}					
+					}				
 				}
-			},
-			/*"$props.options":{
-				handler(newV,oldV){
-					if(newV.length == 0){
-						this.selectLabel = "No Option to Select";
-					}
-				},
-				deep:true
-			},*/
+			}
+
 		}
 	}
 </script>
@@ -151,6 +140,10 @@
 		border-top:1px solid #e6e6e6;
 	}
 
+	.select-label-wrapper.disabled{
+		cursor: not-allowed;
+		background-color: #c8c8c8;
+	}
 
 @media only screen and (min-width:1600px){
 	.custom-select{
