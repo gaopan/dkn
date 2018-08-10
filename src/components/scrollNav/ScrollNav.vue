@@ -62,9 +62,9 @@
 
                 this.contentOffsetTop = this.scrollView.getBoundingClientRect().top;
 
+                this.calculateWidth();
                 this.scrollView.addEventListener('scroll', this.scrollHandler);
                 window.addEventListener('resize', this.scrollHandler);
-                this.calculateWidth();
                 window.addEventListener('resize',this.calculateWidth)
 
                 //scroll to the index specified
@@ -85,10 +85,11 @@
                 });
             },
             scrollHandler() {
-                
                 if (this.scrolling) return;
 
-                const panels = this.panels;
+                // const panels = this.panels;
+                const panels = this.getPanels();
+                // const panels = this.panels;
                 const scrollBox = this.scrollView;
 
                 //prevent to scroll out of scroll content
@@ -97,8 +98,9 @@
                     return;
                 }
 
+                let activeIndex = null;
                 panels.forEach((panel, index) => {
-                    if (panel.$el.getBoundingClientRect().top <= 100 + this.contentOffsetTop) {
+                    if (panel.$el.getBoundingClientRect().top <= /*(scrollBox.offsetHeight)/2*/50 + this.contentOffsetTop) {
                         this.activeIndex = index;
                     }
                 });
@@ -117,6 +119,10 @@
                 });
 
                 this.currentPosition = panel.offsetTop;
+                // let timer = setTimeout(()=>{
+                //     // this.activeIndex = activeIndex;
+                //     timer = null;
+                // },11000)
             }
         },
         mounted() {
@@ -269,7 +275,7 @@
     }
 
     .scrollnav-content {
-        height: 637px;
+        height: 610px;
         margin-left: 58px;
     }
     .scrollnav-tab-item > li:first-child>span:after{

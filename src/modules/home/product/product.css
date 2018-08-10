@@ -229,7 +229,7 @@
     padding-bottom: 4px;
 }
 .scroll-nav-panel {
-    height: 100%;
+    /* height: 100%; */
     padding-bottom: 100px;
 }
 .panel-cell-wrapper {
@@ -394,10 +394,16 @@
     .code-tip{
         top: -52px;
         right: 0px;
-        width: 230px;
         font-size: 20px;
         line-height: 36px;
         padding: 0 10px;
+    }
+    .code-tip-en{
+        width: 230px;
+    }
+    
+    .code-tip-zh{
+        width: 188px;
     }
     .QR-code-img{
         width: 164px;
@@ -586,11 +592,16 @@
     }    
     .code-tip{
         font-size: 16px;
-        width: 183px;
         line-height: 30px;
         padding: 0 7px;
         top: -43px;
         right: -6px;     
+    }
+    .code-tip-en{
+        width: 183px;
+    }    
+    .code-tip-zh{
+        width: 150px;
     }
     .QR-code-img{
         width: 120px;
@@ -633,9 +644,9 @@
     }    
     .panel-designed-for{
         /* font-size: 32px; */
-        padding-top: 160px;
+        /* padding-top: 160px; */
         font-size: 32px;
-        margin-right: 240px;
+        /* margin-right: 240px; */
     }  
 
 

@@ -41,19 +41,19 @@
 				this.selectLabel = this.$props.label;
 			}
 		
-			// document.addEventListener("click",this.fnBlur,false)
+			document.addEventListener("click",this.fnBlur,false)
 		},
 		beforeDestroy(){
-			// document.removeEventListener("click",this.fnBlur,false)
+			document.removeEventListener("click",this.fnBlur,false)
 			this.$off("selectOption")
 			this.$off("menuShow")
 		},
 		methods:{
-			// fnBlur(){
-			// 	if(this.$el&&!this.$el.contains(event.target)){
-			// 		this.bShowMenu = false;
-			// 	}			
-			// },
+			fnBlur(){
+				if(this.$el&&!this.$el.contains(event.target)){
+					this.bShowMenu = false;
+				}			
+			},
 			selectItem(item,itemIndex){
 				// this.selectLabel = item.label;
 				this.bShowMenu = false;
@@ -162,7 +162,7 @@
 	  font-size: 27px;	  	
 	}	
 }
-@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
+@media only screen  and (max-width:1600px){
 	.custom-select{
 		line-height: 50px;
 	}

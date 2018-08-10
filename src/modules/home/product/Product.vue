@@ -86,7 +86,7 @@
 							</div>
 
 						</div>
-						<span class="code-tip" v-show = "!bShowQRCode">
+						<span class="code-tip" :class = "{'code-tip-en':lang == 'EN','code-tip-zh':lang == 'ZH'}" v-show = "!bShowQRCode">
 							{{pageInfoLabel.QRCode[lang]}}
 						</span> 
 					</div>
@@ -139,7 +139,7 @@
             				{{productReviews[lang].length}} {{productReviews[lang].length>1?'reviews':'review'}}
             			</span>
             			<span class="user-review-count" v-else-if = "lang=='ZH'">
-	            			{{productReviews[lang].length}} 回饋
+	            			{{productReviews[lang].length}} 評價
 	            		</span>
             		</div>
 		            <div class = "user-review-content" v-show = "productReviews[lang].length" v-for= "(review,reviewIndex) in productReviews[lang]">
