@@ -1,7 +1,5 @@
 /**
- * realse  default item code
- * realse  default model code
- * realse  monitoring user's action on the page
+
 **/
 import { Carousel, Slide } from "@/components/carousel"
 import { ScrollNav, ScrollNavPanel } from "@/components/scrollNav"
@@ -139,7 +137,7 @@ export default {
 		this.initPageData(this.lang);  
 
 		//monitor user's action on the page
-		// this.intervalTimer = setInterval(this.checkTime,1000);
+		this.intervalTimer = setInterval(this.checkTime,1000);
 
 		this.$nextTick(()=>{
 			let doc = document;
@@ -480,8 +478,8 @@ export default {
         if(res.data&&res.data.models)this.productModels["ZH"] = res.data.models;
        
         //get default model_code and itemCode
-        // let defaultData = getDefaultCodeIndex(this.productModels["ZH"],res.data.default_model_code,272636/*res.data.default_item_code*/)
-        let defaultData = getDefaultCodeIndex(this.productModels["ZH"],8315702,328449/*res.data.default_item_code*/)
+        let defaultData = getDefaultCodeIndex(this.productModels["ZH"],res.data.default_model_code,res.data.default_item_code)
+        // let defaultData = getDefaultCodeIndex(this.productModels["ZH"],8315702,328449/*res.data.default_item_code*/)
 				this.defaultIndex.ZH.defaultColorIndex = defaultData.defaultColorIndex
 				this.defaultIndex.ZH.defaultSizeIndex = defaultData.defaultSizeIndex   
 
@@ -498,8 +496,8 @@ export default {
         if(res.data&&res.data.models)this.productModels["EN"] = res.data.models;
         
 
-        // let defaultData = getDefaultCodeIndex(this.productModels["EN"],res.data.default_model_code,272636/*res.data.default_item_code*/)
-        let defaultData = getDefaultCodeIndex(this.productModels["EN"],8315702,328449/*res.data.default_item_code*/)
+        let defaultData = getDefaultCodeIndex(this.productModels["EN"],res.data.default_model_code,res.data.default_item_code)
+        // let defaultData = getDefaultCodeIndex(this.productModels["EN"],8315702,328449/*res.data.default_item_code*/)
 				this.defaultIndex.EN.defaultColorIndex = defaultData.defaultColorIndex
 				this.defaultIndex.EN.defaultSizeIndex = defaultData.defaultSizeIndex
 

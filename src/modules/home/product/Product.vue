@@ -132,7 +132,10 @@
 		            </div>
 	          </div>
 						<!-- USER REVIEWS -->
-            <div class="panel-cell-wrapper product-scorce" :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}"v-else-if = "item.id === 'UserReviews'" ref = "UserReviewsBlock">
+            <div class="panel-cell-wrapper product-scorce" 
+		            :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}"
+		            v-else-if = "item.id === 'UserReviews'" 
+		            ref = "UserReviewsBlock">
             		<div class="product-scorce-wrapper">
             			<rate :rate = "productScore[lang]"></rate> 
             			<span class="user-review-count" v-if = "lang=='EN'">
