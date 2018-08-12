@@ -24,7 +24,10 @@ export default {
 		return{
 			rfid:null,
 
-			area:null,
+			area:{
+        to:null,
+        from:null,
+      },
 			areaOfField:null,
 			fieldRef:{},
 
@@ -279,7 +282,8 @@ export default {
 			}else{
 				area = "WholePage";
 			}
-			this.area = area;
+      this.area.from = this.area.to;
+			this.area.to = area;
 	
 		},
 		monitorUserAction(event){
@@ -672,6 +676,7 @@ export default {
         off = 100;
       if (!!pricesObj) {
         let sale_price = pricesObj.sale_price + "";
+        // let strickout_price = parseInt(Math.random()*800)+"";
         let strickout_price = pricesObj.strickout_price + "";
         if (!!sale_price) {
 
@@ -686,17 +691,17 @@ export default {
         }
         if (!!strickout_price) {
 
-          let strickout_priceIndex = sale_price.indexOf(".");
+          let strickout_priceIndex = strickout_price.indexOf(".");
           if (strickout_priceIndex >= 0) {
-            discount.int = sale_price.substr(0, strickout_priceIndex)
-            discount.decimal = sale_price.substr(strickout_priceIndex, sale_price.length);
+            discount.int = strickout_price.substr(0, strickout_priceIndex)
+            discount.decimal = strickout_price.substr(strickout_priceIndex, strickout_price.length);
           } else {
-            discount.int = sale_price;
+            discount.int = strickout_price;
             discount.decimal = ".00";
           }
           off = +(((+strickout_price) * 100 / (+sale_price)).toFixed(0))
         }
-
+        // console.log({ original, discount, off })
         return { original, discount, off }
       }
     },
@@ -726,11 +731,11 @@ export default {
 
 				if(!!oldV&&durationArea.includes(oldV)&&stayTime>1.5){
 
-					console.log("area:", this.area, "field:", oldV, "stayTime:", stayTime)		
+					// console.log("area:", this.area, "field:", oldV, "stayTime:", stayTime)		
 					let data = {
 						itemCode:this.productInfoByCurrentSize.itemCode,
 						itemName:this.itemName,
-						area: this.area,
+						area: this.area.from,
 						field: oldV,
 						event: 2,
 						stay_time:stayTime
