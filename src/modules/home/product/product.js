@@ -478,8 +478,8 @@ export default {
         if(res.data&&res.data.models)this.productModels["ZH"] = res.data.models;
        
         //get default model_code and itemCode
-        // let defaultData = getDefaultCodeIndex(this.productModels["ZH"],res.data.default_model_code,res.data.default_item_code)
-        let defaultData = getDefaultCodeIndex(this.productModels["ZH"],8315702,328449/*res.data.default_item_code*/)
+        let defaultData = getDefaultCodeIndex(this.productModels["ZH"],res.data.default_model_code,res.data.default_item_code)
+        // let defaultData = getDefaultCodeIndex(this.productModels["ZH"],8315702,328449/*res.data.default_item_code*/)
 				this.defaultIndex.ZH.defaultColorIndex = defaultData.defaultColorIndex
 				this.defaultIndex.ZH.defaultSizeIndex = defaultData.defaultSizeIndex   
 
@@ -496,8 +496,8 @@ export default {
         if(res.data&&res.data.models)this.productModels["EN"] = res.data.models;
         
 
-        // let defaultData = getDefaultCodeIndex(this.productModels["EN"],res.data.default_model_code,res.data.default_item_code)
-        let defaultData = getDefaultCodeIndex(this.productModels["EN"],8315702,328449/*res.data.default_item_code*/)
+        let defaultData = getDefaultCodeIndex(this.productModels["EN"],res.data.default_model_code,res.data.default_item_code)
+        // let defaultData = getDefaultCodeIndex(this.productModels["EN"],8315702,328449/*res.data.default_item_code*/)
 				this.defaultIndex.EN.defaultColorIndex = defaultData.defaultColorIndex
 				this.defaultIndex.EN.defaultSizeIndex = defaultData.defaultSizeIndex
 
@@ -542,7 +542,6 @@ export default {
 				this.productColors = model.productColors;
 
 				if(this.productAllInfoByColor.length){
-					// let defaultIndex = defaultIndex[this.lang];
 	        this.productInfoByCurrentColor = this.productAllInfoByColor[defaultIndex.defaultColorIndex];
 
 	        this.imageUrl = this.productInfoByCurrentColor.videosAndImages

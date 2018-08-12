@@ -34,6 +34,7 @@ export default {
 
     let url = `voice/model_code/${modelCode}/lang/${LANG}`;
 
+    // return Promise.resolve(MockData.getUserReview);
     return instance.get(url)
   },
 

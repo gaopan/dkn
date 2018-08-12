@@ -32,7 +32,8 @@
                 navList: [],
                 currentOffset: 0,
                 currentPosition: 0,
-                scrolling: false
+                scrolling: false,
+                // panelsHeightCount: []
             }
         },
         props: {
@@ -47,10 +48,11 @@
             }
         },
         watch: {
-            activeIndex(val) {       
-                this.scrollToTargetContent(this.activeIndex,false);     
-                this.$emit("activeIndexChanged",this.activeIndex);
-            },
+            // activeIndex(val) {  
+
+                // this.scrollToTargetContent(this.activeIndex,false);     
+                // this.$emit("activeIndexChanged",this.activeIndex);
+            // },
             index(index) {
                 this.activeIndex = index;
                 this.scrollToTargetContent(index);
@@ -87,30 +89,30 @@
             scrollHandler() {
                 if (this.scrolling) return;
 
-                // const panels = this.panels;
-                const panels = this.getPanels();
-                // const panels = this.panels;
-                const scrollBox = this.scrollView;
-
-                //prevent to scroll out of scroll content
-                if (scrollBox.scrollTop >= panels[0].$el.offsetHeight * panels.length - scrollBox.offsetHeight) {
-                    this.activeIndex = panels.length - 1;
-                    return;
-                }
+                const panels = this.panels;
+                let scrollBoxHeight = this.scrollView.offsetHeight;
 
                 let activeIndex = null;
                 panels.forEach((panel, index) => {
-                    if (panel.$el.getBoundingClientRect().top <= /*(scrollBox.offsetHeight)/2*/50 + this.contentOffsetTop) {
-                        this.activeIndex = index;
+                    if (panel.$el.getBoundingClientRect().top <= scrollBoxHeight/2 + this.contentOffsetTop) {
+                           activeIndex = index;
                     }
                 });
+
+                if(activeIndex != this.activeIndex){
+                    this.activeIndex  = activeIndex;
+                   this.scrollToTargetContent(this.activeIndex,false); 
+                   this.$emit("activeIndexChanged",this.activeIndex);
+
+                }
+
             },
             scrollToTargetContent(index, animate = true) {
                 // debugger
                 this.activeIndex = index;
+                this.$emit("activeIndexChanged",this.activeIndex);
                 this.scrolling = true;
 
-                // const panel = this.getPanels()[index].$el;
                 const panel = this.panels[index].$el;
                 const speed = animate && (window.navigator && window.navigator.userAgent || '').indexOf('MicroMessenger') < 0 ? 500 : 0;
 
@@ -119,15 +121,35 @@
                 });
 
                 this.currentPosition = panel.offsetTop;
-                // let timer = setTimeout(()=>{
-                //     // this.activeIndex = activeIndex;
-                //     timer = null;
-                // },11000)
-            }
+
+            },
+            // getPanelsHeightCount(panels){
+            //     let panelsHeight = [];
+            //     let panelsHeightCount = [];
+            //     panels.forEach((panel, index) => {
+            //         panelsHeight.push(panel.$el.offsetHeight);
+            //     });
+            //     panelsHeight.forEach((d,i)=>{
+            //         // if(i>0){
+            //             let count = 0;
+            //             panelsHeight.forEach((d_,i_)=>{
+            //                 if(i_<=i){
+            //                     count+=d_;
+            //                 }
+            //             })
+            //             panelsHeightCount.push(count);
+            //         // }
+            //     })
+            //     console.log(panelsHeightCount)                
+            //     return panelsHeightCount;
+            // }
         },
         mounted() {
-            this.$nextTick(this.init);
-            this.panels = this.getPanels();
+            this.$nextTick(()=>{
+                this.init();
+                this.panels = this.getPanels();
+                // this.panelsHeightCount = this.getPanelsHeightCount(this.panels)
+            });
         },
 
         beforeDestroy() {
@@ -270,7 +292,7 @@
 }
 @media only screen and (max-width:1600px){
     .scrollnav {
-        height: 637px;
+        height: 614px;;
         margin-top: 18px;   
     }
 

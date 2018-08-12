@@ -52,7 +52,7 @@
 			<div class="product-size-option">
 				<span class="size-label">
 					<span class="size-mark">{{pageInfoLabel.size[lang]}}: </span>
-					<span class="size-access">{{productStock <=0 ? pageInfoLabel.inStock[lang]:pageInfoLabel.outOfStock[lang]}}</span>
+					<span class="size-access">{{productStock <= 0 ? pageInfoLabel.outOfStock[lang]:pageInfoLabel.inStock[lang]}}</span>
 				</span>
 
 				<div class="product-size-wrapper">
