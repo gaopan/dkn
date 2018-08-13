@@ -181,11 +181,8 @@ export default {
       this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
       this.$refs.WholePage.addEventListener("mousewheel", this.monitorUserAction)
       
-      setTimeout(()=>{
-        doc.querySelector("#carouselPagination").addEventListener("click",this.paginationMonitorClick);
-        doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitorClick);
-        
-      },100)
+      doc.querySelector("#carouselPagination").addEventListener("click",this.paginationMonitorClick);
+      doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitorClick);
 
       this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
       this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
