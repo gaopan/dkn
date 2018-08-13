@@ -27,30 +27,30 @@ export default {
         to: null,
         from: null,
       },
-			areaOfField:null,
-			fieldRef:{},
+      areaOfField: null,
+      fieldRef: {},
 
-			monitorCount:0,
-			monitorTime:null,
+      monitorCount: 0,
+      monitorTime: null,
 
-      monitorMousemove:{
-        carouselClicked:false,
-        carouselTime:0,
-        scrollNavMousewheel:false,
-        scrollTarget:null,
-        scrollNavTime:0,
+      monitorMousemove: {
+        carouselClicked: false,
+        carouselTime: 0,
+        scrollNavMousewheel: false,
+        scrollTarget: null,
+        scrollNavTime: 0,
       },
 
-      
-			lang: null,
-			navigateToPhoto:1,
-			imageUrl:[],
-			navTabList: [
-        {label:{EN:'DESIGNED FOR',ZH:"適合在"},id:"DesignFor"},
-        {label: {EN:'PRODUCT BENEFITS',ZH:"產品優點"},id:"ProductBenefit"},
-        {label: {EN:'USER REVIEWS',ZH:"使用者回饋"},id:"UserReviews"},
-        {label: {EN:'TPRODUCT CONCEPT & TECHNOLOGY',ZH:"產品細節"},id:"ProdConceptTech"},
-        {label: {EN:'TECHNICAL INFORMATION',ZH:"產品性能"},id:"TechInfo"},
+
+      lang: null,
+      navigateToPhoto: 1,
+      imageUrl: [],
+      navTabList: [
+        { label: { EN: 'DESIGNED FOR', ZH: "適合在" }, id: "DesignFor" },
+        { label: { EN: 'PRODUCT BENEFITS', ZH: "產品優點" }, id: "ProductBenefit" },
+        { label: { EN: 'USER REVIEWS', ZH: "使用者回饋" }, id: "UserReviews" },
+        { label: { EN: 'TPRODUCT CONCEPT & TECHNOLOGY', ZH: "產品細節" }, id: "ProdConceptTech" },
+        { label: { EN: 'TECHNICAL INFORMATION', ZH: "產品性能" }, id: "TechInfo" },
       ],
       pageInfoLabel: {
         itemCode: { EN: "Item code", ZH: "貨號" },
@@ -132,21 +132,21 @@ export default {
           defaultSizeIndex: null
         }
       },
-			defaultIndex:{
-				ZH:{
-					defaultColorIndex:null,
-					defaultSizeIndex:null,
-				},
-				EN:{
-					defaultColorIndex:null,
-					defaultSizeIndex:null
-				},
-				other:{
-					defaultColorIndex:null,
-					defaultSizeIndex:null
-				}
-			},
-      fieldELeQueried:{}      
+      defaultIndex: {
+        ZH: {
+          defaultColorIndex: null,
+          defaultSizeIndex: null,
+        },
+        EN: {
+          defaultColorIndex: null,
+          defaultSizeIndex: null
+        },
+        other: {
+          defaultColorIndex: null,
+          defaultSizeIndex: null
+        }
+      },
+      fieldELeQueried: {}
     }
   },
   created() {
@@ -171,18 +171,18 @@ export default {
 
   },
 
-  mounted(){
-    this.$nextTick(()=>{
+  mounted() {
+    this.$nextTick(() => {
       let doc = document;
-      window.addEventListener("resize",this.monitorUserAction)
+      window.addEventListener("resize", this.monitorUserAction)
 
 
       this.$refs.WholePage.addEventListener("mousemove", this.monitorUserAction)
       this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
       this.$refs.WholePage.addEventListener("mousewheel", this.monitorUserAction)
-      
-      doc.querySelector("#carouselPagination").addEventListener("click",this.paginationMonitorClick);
-      doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitorClick);
+
+      doc.querySelector("#carouselPagination").addEventListener("click", this.paginationMonitorClick);
+      doc.querySelector("#scrollnavTab").addEventListener("click", this.navMonitorClick);
 
       this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
       this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
@@ -193,12 +193,12 @@ export default {
       this.fieldELeQueried.CarouselWrapper = doc.querySelector("#CarouselWrapper");
       this.fieldELeQueried.ScrollnavContent = doc.querySelector("#ScrollnavContent");
 
-      this.fieldELeQueried.CarouselWrapper.addEventListener("mousedown",this.carouselMonitorMousedown);
-      this.fieldELeQueried.CarouselWrapper.addEventListener("mouseleave",this.carouselMonitorMouseout);
+      this.fieldELeQueried.CarouselWrapper.addEventListener("mousedown", this.carouselMonitorMousedown);
+      this.fieldELeQueried.CarouselWrapper.addEventListener("mouseleave", this.carouselMonitorMouseout);
 
-      this.fieldELeQueried.ScrollnavContent.addEventListener("mousewheel",this.scrollMonitorMousewheel);
-      this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave",this.scrollMonitorMouseleave);
-    })        
+      this.fieldELeQueried.ScrollnavContent.addEventListener("mousewheel", this.scrollMonitorMousewheel);
+      this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave", this.scrollMonitorMouseleave);
+    })
   },
   beforeDestroy() {
     let doc = document,
@@ -213,172 +213,176 @@ export default {
     this.$refs.WholePage.removeEventListener("click", this.monitorUserAction)
     this.$refs.WholePage.removeEventListener("mousewheel", this.monitorUserAction)
 
-    this.fieldELeQueried.CarouselWrapper.removeEventListener("mousedown",this.carouselMonitorMousedown);
-    this.fieldELeQueried.CarouselWrapper.removeEventListener("mouseleave",this.carouselMonitorMouseout);
+    this.fieldELeQueried.CarouselWrapper.removeEventListener("mousedown", this.carouselMonitorMousedown);
+    this.fieldELeQueried.CarouselWrapper.removeEventListener("mouseleave", this.carouselMonitorMouseout);
 
-    this.fieldELeQueried.ScrollnavContent.removeEventListener("mousewheel",this.scrollMonitorMousewheel);
-    this.fieldELeQueried.ScrollnavContent.removeEventListener("mouseleave",this.scrollMonitorMouseleave);    
+    this.fieldELeQueried.ScrollnavContent.removeEventListener("mousewheel", this.scrollMonitorMousewheel);
+    this.fieldELeQueried.ScrollnavContent.removeEventListener("mouseleave", this.scrollMonitorMouseleave);
     clearInterval(this.intervalTimer);
   },
-	methods:{
-    carouselMonitorMousedown(){
-      if(!this.monitorMousemove.carouselClicked){
+  methods: {
+    carouselMonitorMousedown() {
+      if (!this.monitorMousemove.carouselClicked) {
         this.monitorMousemove.carouselClicked = true;
         this.monitorMousemove.carouselTime = Date.now();
       }
     },
-    carouselMonitorMouseout(){
-      if(this.monitorMousemove.carouselClicked){
+    carouselMonitorMouseout() {
+      if (this.monitorMousemove.carouselClicked) {
         this.monitorMousemove.carouselClicked = false;
-        let stayTime = +((Date.now() - this.monitorMousemove.carouselTime)/1000).toFixed(2);
-        
+        let stayTime = +((Date.now() - this.monitorMousemove.carouselTime) / 1000).toFixed(2);
+
         let data = {
-          item_code:this.productInfoByCurrentSize.itemCode,
-          item_name:this.itemName,
+          item_code: this.productInfoByCurrentSize.itemCode,
+          item_name: this.itemName,
           area: "ConversionZone",
           field: "MainPicBlock",
           event: 2,
-          stay_time:stayTime
-        } 
+          stay_time: stayTime
+        }
 
-        console.log("carousel mouse out",data)
-        ProductApi.postTracking(data).then(res=>{
+        console.log("carousel mouse out", data)
+        ProductApi.postTracking(data).then(res => {
           // console.log(res.data);
-        }) 
-        this.monitorMousemove.carouselTime = Date.now();        
-        
+        })
+        this.monitorMousemove.carouselTime = Date.now();
+
       }
 
     },
-		navMonitorClick(event){
-			event = event || window.event;
-			let target = event.target, 
-					field,
-					fieldEle = this.fieldELeQueried;
-			if(target == fieldEle.DesignFor)field = "DesignFor";
-			if(target == fieldEle.ProductBenefit)field = "ProductBenefit";
-			if(target == fieldEle.UserReviews)field = "UserReviews";
-			if(target == fieldEle.ProdConceptTech)field = "ProdConceptTech";
-			if(target == fieldEle.TechInfo)field = "TechInfo";
+    navMonitorClick(event) {
+      event = event || window.event;
+      let target = event.target,
+        field,
+        fieldEle = this.fieldELeQueried;
+      if (target == fieldEle.DesignFor) field = "DesignFor";
+      if (target == fieldEle.ProductBenefit) field = "ProductBenefit";
+      if (target == fieldEle.UserReviews) field = "UserReviews";
+      if (target == fieldEle.ProdConceptTech) field = "ProdConceptTech";
+      if (target == fieldEle.TechInfo) field = "TechInfo";
 
-			let data = {
-				item_code:this.productInfoByCurrentSize.itemCode,
-				item_name:this.itemName,
-				area: "ContentZone",
-				field: field,
-				event: 1,
-			}		
-			this.areaOfField = field;	
+      let data = {
+        item_code: this.productInfoByCurrentSize.itemCode,
+        item_name: this.itemName,
+        area: "ContentZone",
+        field: field,
+        event: 1,
+        stay_time: 0
+      }
+      this.areaOfField = field;
 
-			ProductApi.postTracking(data).then(res=>{
-				// console.log(res.data);
-			})			
-		},
-		paginationMonitorClick(event){
-			event = event || window.event;
+      ProductApi.postTracking(data).then(res => {
+        // console.log(res.data);
+      })
+    },
+    paginationMonitorClick(event) {
+      event = event || window.event;
 
-			let doc = document;
-			if(event.target == doc.querySelector("#iconDown") || event.target == doc.querySelector("#iconUp")){
-				let data = {
-					item_code:this.productInfoByCurrentSize.itemCode,
-					item_name:this.itemName,
-					area: "ConversionZone",
-					field: "Moreviews",
-					event: 1,
-				}		
+      let doc = document;
+      if (event.target == doc.querySelector("#iconDown") || event.target == doc.querySelector("#iconUp")) {
+        let data = {
+          item_code: this.productInfoByCurrentSize.itemCode,
+          item_name: this.itemName,
+          area: "ConversionZone",
+          field: "Moreviews",
+          event: 1,
+          stay_time: 0
+        }
 
-				ProductApi.postTracking(data).then(res=>{
-					// console.log(res.data);
-				})
-			}
-		},
+        ProductApi.postTracking(data).then(res => {
+          // console.log(res.data);
+        })
+      }
+    },
 
-		monitorClick_Color_QR_Select(field){
-			let data = {
-				item_code:this.productInfoByCurrentSize.itemCode,
-				item_name:this.itemName,
-				area: "ConversionZone",
-				field: field,
-				event: 1,
-			}
-			this.areaOfField = field;
+    monitorClick_Color_QR_Select(field) {
+      let data = {
+        item_code: this.productInfoByCurrentSize.itemCode,
+        item_name: this.itemName,
+        area: "ConversionZone",
+        field: field,
+        event: 1,
+        stay_time: 0
+      }
+      this.areaOfField = field;
 
-			ProductApi.postTracking(data).then(res=>{
-				// console.log(res.data);
-			})				
-		},
-    scrollMonitorMousewheel(event){
-      event = event||event.target;
-      if(!this.monitorMousemove.scrollNavMousewheel){
-        this.monitorMousemove.scrollNavTime = Date.now();        
+      ProductApi.postTracking(data).then(res => {
+        // console.log(res.data);
+      })
+    },
+    scrollMonitorMousewheel(event) {
+      event = event || event.target;
+      if (!this.monitorMousemove.scrollNavMousewheel) {
+        this.monitorMousemove.scrollNavTime = Date.now();
       }
 
       this.monitorMousemove.scrollNavMousewheel = true;
-      let target = null,eventTarget = event.target;
-      if(this.$refs.DesignForBlock[0].contains(eventTarget)){
+      let target = null,
+        eventTarget = event.target;
+      if (this.$refs.DesignForBlock[0].contains(eventTarget)) {
         target = "DesignForBlock";
       }
-      if(this.$refs.ProdBenefitBlock[0].contains(eventTarget)){
+      if (this.$refs.ProdBenefitBlock[0].contains(eventTarget)) {
         target = "ProdBenefitBlock";
       }
-       if(this.$refs.UserReviewsBlock[0].contains(eventTarget)){
+      if (this.$refs.UserReviewsBlock[0].contains(eventTarget)) {
         target = "UserReviewsBlock";
       }
-      if(this.$refs.TechInfoBlock[0].contains(eventTarget)){
+      if (this.$refs.TechInfoBlock[0].contains(eventTarget)) {
         target = "TechInfoBlock";
       }
-      if(this.$refs.ConceptTechBlock[0].contains(eventTarget)){
+      if (this.$refs.ConceptTechBlock[0].contains(eventTarget)) {
         target = "ConceptTechBlock";
       }
-      if(this.monitorMousemove.scrollTarget&&this.monitorMousemove.scrollTarget != target){
+      if (this.monitorMousemove.scrollTarget && this.monitorMousemove.scrollTarget != target) {
         // debugger
         // console.log(target);
-        let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime)/1000).toFixed(2);
+        let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime) / 1000).toFixed(2);
         let data = {
-          item_code:this.productInfoByCurrentSize.itemCode,
-          item_name:this.itemName,
+          item_code: this.productInfoByCurrentSize.itemCode,
+          item_name: this.itemName,
           area: "ContentZone",
           field: this.monitorMousemove.scrollTarget,
           event: 2,
-          stay_time:stayTime
-        }  
+          stay_time: stayTime
+        }
         // console.log(data)
-        ProductApi.postTracking(data).then(res=>{
+        ProductApi.postTracking(data).then(res => {
           // console.log(res.data);
-        }) 
+        })
 
-        this.monitorMousemove.scrollNavTime = Date.now();       
+        this.monitorMousemove.scrollNavTime = Date.now();
       }
 
       this.monitorMousemove.scrollTarget = target;
 
     },
-    scrollMonitorMouseleave(event){
-      if(this.monitorMousemove.scrollNavMousewheel){
+    scrollMonitorMouseleave(event) {
+      if (this.monitorMousemove.scrollNavMousewheel) {
 
-        let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime)/1000).toFixed(2);
+        let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime) / 1000).toFixed(2);
         let data = {
-          item_code:this.productInfoByCurrentSize.itemCode,
-          item_name:this.itemName,
+          item_code: this.productInfoByCurrentSize.itemCode,
+          item_name: this.itemName,
           area: "ContentZone",
           field: this.monitorMousemove.scrollTarget,
           event: 2,
-          stay_time:stayTime
-        }  
-        ProductApi.postTracking(data).then(res=>{
+          stay_time: stayTime
+        }
+        ProductApi.postTracking(data).then(res => {
           // console.log(res.data);
-        }) 
+        })
         this.monitorMousemove.scrollNavTime = 0;
-        this.monitorMousemove.scrollTarget = null;  
-        this.monitorMousemove.scrollNavMousewheel = false;          
+        this.monitorMousemove.scrollTarget = null;
+        this.monitorMousemove.scrollNavMousewheel = false;
       }
     },
-		monitorUserAction(event){
-			event = event||window.event;
-			this.monitorCount = 0;
-		},
-		checkTime(){
-	    if(this.monitorCount === 3*60 - 1){
+    monitorUserAction(event) {
+      event = event || window.event;
+      this.monitorCount = 0;
+    },
+    checkTime() {
+      if (this.monitorCount === 3 * 60 - 1) {
         clearInterval(this.intervalTimer);
         this.$router.push("/index")
       } else {
@@ -809,10 +813,10 @@ export default {
     CustomSelect,
     Rate
   },
-  computed:{
-  	itemName(){
-  		return this.productInfoData[this.lang].WebLabel;
-  	}
+  computed: {
+    itemName() {
+      return this.productInfoData[this.lang].WebLabel;
+    }
   }
 
 }
