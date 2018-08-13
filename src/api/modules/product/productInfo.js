@@ -1,4 +1,4 @@
-import { axiosHelper } from '@/api/api-config.js'
+import { axios, axiosHelper } from '@/api/api-config.js'
 import MockData from './mockData.js'
 
 let instance = axiosHelper.createAxios({
@@ -47,7 +47,21 @@ export default {
   // item_code\item_name\area\field\event\stay_time
   postTracking(data){
     let url = `tracking/save`;
-    return instance.post(url,data)
+    let form = new FormData();
+
+    for(let key in data) {
+      if(data.hasOwnProperty(key)) {
+        form.set(key, data[key]);
+      }
+    }
+
+    return axios({
+      method: 'post',
+      url: url,
+      data: form,
+      config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+    });
+    // return instance.post(url,data)
     // return Promise.resolve()
   }
 }
