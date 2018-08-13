@@ -14,7 +14,7 @@
                 </li>
             </ul>
         </div>
-        <div class="scrollnav-content" ref="scrollView">
+        <div class="scrollnav-content" id = "ScrollnavContent" ref="scrollView">
             <slot></slot>
         </div>
     </div>

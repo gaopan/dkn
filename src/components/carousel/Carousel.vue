@@ -1,6 +1,6 @@
 <template>
   <section class="carousel">
-    <div class="carousel-wrapper" ref="carouselWrapper">
+    <div class="carousel-wrapper" id = "CarouselWrapper" ref="carouselWrapper">
 
       <div ref="carousel-inner" class="carousel-inner" role="listbox"
         :style="{

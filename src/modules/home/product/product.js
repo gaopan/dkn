@@ -34,6 +34,15 @@ export default {
 			monitorCount:0,
 			monitorTime:null,
 
+      monitorMousemove:{
+        carouselClicked:false,
+        carouselTime:0,
+        scrollNavMousewheel:false,
+        scrollTarget:null,
+        scrollNavTime:0,
+      },
+
+      
 			lang: null,
 			navigateToPhoto:1,
 			imageUrl:[],
@@ -152,13 +161,21 @@ export default {
 			
 			let pageELe = doc.querySelector("#carouselPagination");
 			if(!!pageELe)pageELe.addEventListener("click",this.paginationMonitorClick);
-			doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitorClick);
+      doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitorClick);
 
-			this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
-			this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
-			this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
-			this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
-			this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
+      this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
+      this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
+      this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
+      this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
+      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
+      this.fieldELeQueried.CarouselWrapper = doc.querySelector("#CarouselWrapper");
+      this.fieldELeQueried.ScrollnavContent = doc.querySelector("#ScrollnavContent");
+
+      this.fieldELeQueried.CarouselWrapper.addEventListener("mousedown",this.carouselMonitorMousedown);
+      this.fieldELeQueried.CarouselWrapper.addEventListener("mouseleave",this.carouselMonitorMouseout);
+
+      this.fieldELeQueried.ScrollnavContent.addEventListener("mousewheel",this.scrollMonitorMousewheel);
+			this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave",this.scrollMonitorMouseleave);
 
 		})    
 
@@ -175,10 +192,43 @@ export default {
     this.$refs.WholePage.removeEventListener("mousemove", this.monitorUserAction)
     this.$refs.WholePage.removeEventListener("click", this.monitorUserAction)
     this.$refs.WholePage.removeEventListener("mousewheel", this.monitorUserAction)
-    
+    this.fieldELeQueried.CarouselWrapper.removeEventListener("mousedown",this.carouselMonitorMousedown);
+    this.fieldELeQueried.CarouselWrapper.removeEventListener("mouseleave",this.carouselMonitorMouseout);
+
+    this.fieldELeQueried.ScrollnavContent.removeEventListener("mousewheel",this.scrollMonitorMousewheel);
+    this.fieldELeQueried.ScrollnavContent.removeEventListener("mouseleave",this.scrollMonitorMouseleave);    
     clearInterval(this.intervalTimer);
   },
 	methods:{
+    carouselMonitorMousedown(){
+      if(!this.monitorMousemove.carouselClicked){
+        this.monitorMousemove.carouselClicked = true;
+        this.monitorMousemove.carouselTime = Date.now();
+      }
+    },
+    carouselMonitorMouseout(){
+      if(this.monitorMousemove.carouselClicked){
+        this.monitorMousemove.carouselClicked = false;
+        let stayTime = +((Date.now() - this.monitorMousemove.carouselTime)/1000).toFixed(2);
+        
+        let data = {
+          itemCode:this.productInfoByCurrentSize.itemCode,
+          itemName:this.itemName,
+          area: "ConversionZone",
+          field: "MainPicBlock",
+          event: 2,
+          stay_time:stayTime
+        } 
+
+        console.log("carousel mouse out",data)
+        ProductApi.postTracking(data).then(res=>{
+          // console.log(res.data);
+        }) 
+        this.monitorMousemove.carouselTime = Date.now();        
+        
+      }
+
+    },
 		navMonitorClick(event){
 			event = event || window.event;
 			let target = event.target, 
@@ -236,56 +286,120 @@ export default {
 				// console.log(res.data);
 			})				
 		},
+    scrollMonitorMousewheel(event){
 
-		actionMonitor(event,type){
-			this.fieldRef = {};
-			event = event||window.event;
-			for(let ref in this.$refs){
-				if(this.$refs.hasOwnProperty(ref)){
+      if(!this.monitorMousemove.scrollNavMousewheel){
+        this.monitorMousemove.scrollNavTime = Date.now();        
+      }
 
-					if(TypeChecker.isArray(this.$refs[ref])){
-						if(this.$refs[ref][0].contains(event.target)){
-							this.fieldRef[ref] = true;
-						}						
-					}else{
-						if(this.$refs[ref].contains(event.target)){
-							this.fieldRef[ref] = true;
-						}
-					}
+      this.monitorMousemove.scrollNavMousewheel = true;
+      let target = null;
+      if(this.$refs.DesignForBlock[0].contains(event.target)){
+        target = "DesignForBlock";
+      }
+      if(this.$refs.ProdBenefitBlock[0].contains(event.target)){
+        target = "ProdBenefitBlock";
+      }
+       if(this.$refs.UserReviewsBlock[0].contains(event.target)){
+        target = "UserReviewsBlock";
+      }
+      if(this.$refs.TechInfoBlock[0].contains(event.target)){
+        target = "TechInfoBlock";
+      }
+      if(this.$refs.ConceptTechBlock[0].contains(event.target)){
+        target = "ConceptTechBlock";
+      }
+      if(this.monitorMousemove.scrollTarget&&this.monitorMousemove.scrollTarget != target){
+        // debugger
+        console.log(target);
+        let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime)/1000).toFixed(2);
+        let data = {
+          itemCode:this.productInfoByCurrentSize.itemCode,
+          itemName:this.itemName,
+          area: "ContentZone",
+          field: this.monitorMousemove.scrollTarget,
+          event: 2,
+          stay_time:stayTime
+        }  
+        console.log(data)
+        ProductApi.postTracking(data).then(res=>{
+          // console.log(res.data);
+        }) 
 
-				}
-			}
+        this.monitorMousemove.scrollNavTime = Date.now();       
+      }
 
-			let itemCode = this.productInfoByCurrentSize.itemCode;
-			this.area_field_Tracking(null,itemCode,this.fieldRef)
-		},
+      this.monitorMousemove.scrollTarget = target;
 
-		area_field_Tracking(itemCode,itemName,fieldRef){
+    },
+    scrollMonitorMouseleave(event){
+      if(this.monitorMousemove.scrollNavMousewheel){
 
-			let area,
-					allWrapperErea = ["ConversionZone","ContentZone","WholePage"],
-			    durationArea = ["DesignForBlock","ProdBenefitBlock","UserReviewsBlock","ConceptTechBlock","TechInfoBlock","MainPicBlock"];
+        let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime)/1000).toFixed(2);
+        let data = {
+          itemCode:this.productInfoByCurrentSize.itemCode,
+          itemName:this.itemName,
+          area: "ContentZone",
+          field: this.monitorMousemove.scrollTarget,
+          event: 2,
+          stay_time:stayTime
+        }  
+        ProductApi.postTracking(data).then(res=>{
+          // console.log(res.data);
+        }) 
+        this.monitorMousemove.scrollNavTime = 0;
+        this.monitorMousemove.scrollTarget = null;  
+        this.monitorMousemove.scrollNavMousewheel = false;          
+      }
+    },
+		// actionMonitor(event,type){
+		// 	this.fieldRef = {};
+		// 	event = event||window.event;
+		// 	for(let ref in this.$refs){
+		// 		if(this.$refs.hasOwnProperty(ref)){
 
-			for(let i in fieldRef){
-				if(fieldRef.hasOwnProperty(i)){
-					if((!allWrapperErea.includes(i))&&fieldRef[i]){
-						 this.areaOfField = i;
-					}
-				}
-			}
+		// 			if(TypeChecker.isArray(this.$refs[ref])){
+		// 				if(this.$refs[ref][0].contains(event.target)){
+		// 					this.fieldRef[ref] = true;
+		// 				}						
+		// 			}else{
+		// 				if(this.$refs[ref].contains(event.target)){
+		// 					this.fieldRef[ref] = true;
+		// 				}
+		// 			}
 
-			//area
-			if(fieldRef.ConversionZone){
-				area = "ConversionZone";
-			}else if(fieldRef.ContentZone){
-				area = "ContentZone";
-			}else{
-				area = "WholePage";
-			}
-      this.area.from = this.area.to;
-			this.area.to = area;
+		// 		}
+		// 	}
+
+		// 	let itemCode = this.productInfoByCurrentSize.itemCode;
+		// 	this.area_field_Tracking(null,itemCode,this.fieldRef)
+		// },
+
+		// area_field_Tracking(itemCode,itemName,fieldRef){
+
+		// 	let area,
+		// 			allWrapperErea = ["ConversionZone","ContentZone","WholePage"];
+
+		// 	for(let i in fieldRef){
+		// 		if(fieldRef.hasOwnProperty(i)){
+		// 			if((!allWrapperErea.includes(i))&&fieldRef[i]){
+		// 				 this.areaOfField = i;
+		// 			}
+		// 		}
+		// 	}
+
+		// 	//area
+		// 	if(fieldRef.ConversionZone){
+		// 		area = "ConversionZone";
+		// 	}else if(fieldRef.ContentZone){
+		// 		area = "ContentZone";
+		// 	}else{
+		// 		area = "WholePage";
+		// 	}
+  //     this.area.from = this.area.to;
+		// 	this.area.to = area;
 	
-		},
+		// },
 		monitorUserAction(event){
 			event = event||window.event;
 			this.monitorCount = 0;
@@ -717,38 +831,36 @@ export default {
   },
   computed:{
   	itemName(){
-  		return this.productInfoData[this.lang].WebLabel 
-  						+ this.productInfoByCurrentColor.modelCode 
-  						+ this.productInfoByCurrentSize.itemCode;
+  		return this.productInfoData[this.lang].WebLabel;
   	}
   },
 	watch:{
 
-		areaOfField(newV,oldV){
-			if(newV){
-				let durationArea = ["DesignForBlock","ProdBenefitBlock","UserReviewsBlock","ConceptTechBlock","TechInfoBlock","MainPicBlock"],
-						stayTime  = +((Date.now() - this.monitorTime)/1000).toFixed(2);
+		// areaOfField(newV,oldV){
+		// 	if(newV){
+		// 		let durationArea = ["DesignForBlock","ProdBenefitBlock","UserReviewsBlock","ConceptTechBlock","TechInfoBlock"],
+		// 				stayTime  = +((Date.now() - this.monitorTime)/1000).toFixed(2);
 
-				if(!!oldV&&durationArea.includes(oldV)&&stayTime>1.5){
+		// 		if(!!oldV&&durationArea.includes(oldV)&&stayTime>1.5){
 
-					// console.log("area:", this.area, "field:", oldV, "stayTime:", stayTime)		
-					let data = {
-						itemCode:this.productInfoByCurrentSize.itemCode,
-						itemName:this.itemName,
-						area: this.area.from,
-						field: oldV,
-						event: 2,
-						stay_time:stayTime
-					}	
-					ProductApi.postTracking(data).then(res=>{
-						// console.log(res.data);
-					})					
-				}
+		// 			console.log("area:", this.area.from, "field:", oldV, "stayTime:", stayTime)		
+		// 			let data = {
+		// 				itemCode:this.productInfoByCurrentSize.itemCode,
+		// 				itemName:this.itemName,
+		// 				area: this.area.from,
+		// 				field: oldV,
+		// 				event: 2,
+		// 				stay_time:stayTime
+		// 			}	
+		// 			ProductApi.postTracking(data).then(res=>{
+		// 				// console.log(res.data);
+		// 			})					
+		// 		}
 
-				//if area changed,clear the start time
-				this.monitorTime = Date.now();
+		// 		//if area changed,clear the start time
+		// 		this.monitorTime = Date.now();
 				
-			}
-		}
+		// 	}
+		// }
 	}
 }
