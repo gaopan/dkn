@@ -233,8 +233,8 @@ export default {
         let stayTime = +((Date.now() - this.monitorMousemove.carouselTime)/1000).toFixed(2);
         
         let data = {
-          itemCode:this.productInfoByCurrentSize.itemCode,
-          itemName:this.itemName,
+          item_code:this.productInfoByCurrentSize.itemCode,
+          item_name:this.itemName,
           area: "ConversionZone",
           field: "MainPicBlock",
           event: 2,
@@ -262,8 +262,8 @@ export default {
 			if(target == fieldEle.TechInfo)field = "TechInfo";
 
 			let data = {
-				itemCode:this.productInfoByCurrentSize.itemCode,
-				itemName:this.itemName,
+				item_code:this.productInfoByCurrentSize.itemCode,
+				item_name:this.itemName,
 				area: "ContentZone",
 				field: field,
 				event: 1,
@@ -280,8 +280,8 @@ export default {
 			let doc = document;
 			if(event.target == doc.querySelector("#iconDown") || event.target == doc.querySelector("#iconUp")){
 				let data = {
-					itemCode:this.productInfoByCurrentSize.itemCode,
-					itemName:this.itemName,
+					item_code:this.productInfoByCurrentSize.itemCode,
+					item_name:this.itemName,
 					area: "ConversionZone",
 					field: "Moreviews",
 					event: 1,
@@ -295,8 +295,8 @@ export default {
 
 		monitorClick_Color_QR_Select(field){
 			let data = {
-				itemCode:this.productInfoByCurrentSize.itemCode,
-				itemName:this.itemName,
+				item_code:this.productInfoByCurrentSize.itemCode,
+				item_name:this.itemName,
 				area: "ConversionZone",
 				field: field,
 				event: 1,
@@ -335,8 +335,8 @@ export default {
         // console.log(target);
         let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime)/1000).toFixed(2);
         let data = {
-          itemCode:this.productInfoByCurrentSize.itemCode,
-          itemName:this.itemName,
+          item_code:this.productInfoByCurrentSize.itemCode,
+          item_name:this.itemName,
           area: "ContentZone",
           field: this.monitorMousemove.scrollTarget,
           event: 2,
@@ -358,8 +358,8 @@ export default {
 
         let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime)/1000).toFixed(2);
         let data = {
-          itemCode:this.productInfoByCurrentSize.itemCode,
-          itemName:this.itemName,
+          item_code:this.productInfoByCurrentSize.itemCode,
+          item_name:this.itemName,
           area: "ContentZone",
           field: this.monitorMousemove.scrollTarget,
           event: 2,
