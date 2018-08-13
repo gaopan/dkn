@@ -308,31 +308,31 @@ export default {
 			})				
 		},
     scrollMonitorMousewheel(event){
-
+      event = event||event.target;
       if(!this.monitorMousemove.scrollNavMousewheel){
         this.monitorMousemove.scrollNavTime = Date.now();        
       }
 
       this.monitorMousemove.scrollNavMousewheel = true;
-      let target = null;
-      if(this.$refs.DesignForBlock[0].contains(event.target)){
+      let target = null,eventTarget = event.target;
+      if(this.$refs.DesignForBlock[0].contains(eventTarget)){
         target = "DesignForBlock";
       }
-      if(this.$refs.ProdBenefitBlock[0].contains(event.target)){
+      if(this.$refs.ProdBenefitBlock[0].contains(eventTarget)){
         target = "ProdBenefitBlock";
       }
-       if(this.$refs.UserReviewsBlock[0].contains(event.target)){
+       if(this.$refs.UserReviewsBlock[0].contains(eventTarget)){
         target = "UserReviewsBlock";
       }
-      if(this.$refs.TechInfoBlock[0].contains(event.target)){
+      if(this.$refs.TechInfoBlock[0].contains(eventTarget)){
         target = "TechInfoBlock";
       }
-      if(this.$refs.ConceptTechBlock[0].contains(event.target)){
+      if(this.$refs.ConceptTechBlock[0].contains(eventTarget)){
         target = "ConceptTechBlock";
       }
       if(this.monitorMousemove.scrollTarget&&this.monitorMousemove.scrollTarget != target){
         // debugger
-        console.log(target);
+        // console.log(target);
         let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime)/1000).toFixed(2);
         let data = {
           itemCode:this.productInfoByCurrentSize.itemCode,
@@ -342,7 +342,7 @@ export default {
           event: 2,
           stay_time:stayTime
         }  
-        console.log(data)
+        // console.log(data)
         ProductApi.postTracking(data).then(res=>{
           // console.log(res.data);
         }) 
