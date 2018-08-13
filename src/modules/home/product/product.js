@@ -11,7 +11,6 @@ import ProductApi from "@/api/modules/product/productInfo.js"
 
 import TimeUtil from "@/utils/datetime-utils.js"
 import TypeChecker from "@/utils/type-checker.js"
-import debounce from "@/utils/debounce"
 
 export default {
 	name: 'product',
@@ -128,7 +127,6 @@ export default {
 					defaultSizeIndex:null
 				}
 			},
-      debounceActionMonitor:debounce(this.actionMonitor,300,500),
       fieldELeQueried:{}      
     }
   },
@@ -151,17 +149,22 @@ export default {
 		//monitor user's action on the page
 		this.intervalTimer = setInterval(this.checkTime,1000);
 
-		this.$nextTick(()=>{
-			let doc = document;
-			window.addEventListener("resize",this.monitorUserAction)
+  },
+
+  mounted(){
+    this.$nextTick(()=>{
+      let doc = document;
+      window.addEventListener("resize",this.monitorUserAction)
 
       this.$refs.WholePage.addEventListener("mousemove", this.monitorUserAction)
       this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
       this.$refs.WholePage.addEventListener("mousewheel", this.monitorUserAction)
-			
-			let pageELe = doc.querySelector("#carouselPagination");
-			if(!!pageELe)pageELe.addEventListener("click",this.paginationMonitorClick);
-      doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitorClick);
+      
+      setTimeout(()=>{
+        doc.querySelector("#carouselPagination").addEventListener("click",this.paginationMonitorClick);
+        doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitorClick);
+        
+      })
 
       this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
       this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
@@ -175,10 +178,8 @@ export default {
       this.fieldELeQueried.CarouselWrapper.addEventListener("mouseleave",this.carouselMonitorMouseout);
 
       this.fieldELeQueried.ScrollnavContent.addEventListener("mousewheel",this.scrollMonitorMousewheel);
-			this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave",this.scrollMonitorMouseleave);
-
-		})    
-
+      this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave",this.scrollMonitorMouseleave);
+    })        
   },
   beforeDestroy() {
 		let doc = document,
@@ -352,54 +353,6 @@ export default {
         this.monitorMousemove.scrollNavMousewheel = false;          
       }
     },
-		// actionMonitor(event,type){
-		// 	this.fieldRef = {};
-		// 	event = event||window.event;
-		// 	for(let ref in this.$refs){
-		// 		if(this.$refs.hasOwnProperty(ref)){
-
-		// 			if(TypeChecker.isArray(this.$refs[ref])){
-		// 				if(this.$refs[ref][0].contains(event.target)){
-		// 					this.fieldRef[ref] = true;
-		// 				}						
-		// 			}else{
-		// 				if(this.$refs[ref].contains(event.target)){
-		// 					this.fieldRef[ref] = true;
-		// 				}
-		// 			}
-
-		// 		}
-		// 	}
-
-		// 	let itemCode = this.productInfoByCurrentSize.itemCode;
-		// 	this.area_field_Tracking(null,itemCode,this.fieldRef)
-		// },
-
-		// area_field_Tracking(itemCode,itemName,fieldRef){
-
-		// 	let area,
-		// 			allWrapperErea = ["ConversionZone","ContentZone","WholePage"];
-
-		// 	for(let i in fieldRef){
-		// 		if(fieldRef.hasOwnProperty(i)){
-		// 			if((!allWrapperErea.includes(i))&&fieldRef[i]){
-		// 				 this.areaOfField = i;
-		// 			}
-		// 		}
-		// 	}
-
-		// 	//area
-		// 	if(fieldRef.ConversionZone){
-		// 		area = "ConversionZone";
-		// 	}else if(fieldRef.ContentZone){
-		// 		area = "ContentZone";
-		// 	}else{
-		// 		area = "WholePage";
-		// 	}
-  //     this.area.from = this.area.to;
-		// 	this.area.to = area;
-	
-		// },
 		monitorUserAction(event){
 			event = event||window.event;
 			this.monitorCount = 0;

@@ -40,7 +40,7 @@
 				</ul>
 			</div>
 			<!-- carousel for display the photos-->
-			<div class="product-photo-carousel" ref = "MainPicBlock" @mousemove = "debounceActionMonitor($event,2)">
+			<div class="product-photo-carousel" ref = "MainPicBlock">
 				<carousel :per-page="1" :imageUrl = "imageUrl" :navigateTo = "navigateToPhoto" @pageChange = "pageChange">
 			    <slide v-for = "(img,imgIndex) in imageUrl">
 			      <img :src="img.url" width= "100%" height="100%" v-if = "img.type == 'img'"/>
@@ -96,7 +96,7 @@
 			<div class="product-shadow" v-show = "bShowShadow||bShowQRCode"></div>
 		</section>
 
-		<section class="product-description" @mousemove = "debounceActionMonitor($event,2)" ref = "ContentZone">
+		<section class="product-description" ref = "ContentZone">
 			<div class="product-title">
 				<p class="product-info-title">{{containerTitle}}</p>
 				<div class="page-lang">
