@@ -185,7 +185,7 @@ export default {
         doc.querySelector("#carouselPagination").addEventListener("click",this.paginationMonitorClick);
         doc.querySelector("#scrollnavTab").addEventListener("click",this.navMonitorClick);
         
-      })
+      },100)
 
       this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
       this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
