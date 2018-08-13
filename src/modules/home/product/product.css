@@ -72,7 +72,7 @@
     background: gray;
     border: 2px solid #c8c8c8;
     float: left;
-    cursor: pointer;
+    /*cursor: pointer;*/
     position: relative;
 }
 .product-color-item img{
@@ -126,7 +126,7 @@
     position: relative;
 }
 .product-dimensional-code i{
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
 .product-dimensional-code .icon-close{
     background: #fff;
@@ -220,7 +220,7 @@
     text-align: right;
     color: #898989;
     position: absolute;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
 
 .borderBottom2{
@@ -434,7 +434,6 @@
     }  
 
     .page-lang{
-        width: 100px;
         font-size: 20px;
         right: 120px;
     }

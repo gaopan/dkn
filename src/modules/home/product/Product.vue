@@ -100,8 +100,8 @@
 			<div class="product-title">
 				<p class="product-info-title">{{containerTitle}}</p>
 				<div class="page-lang">
-					<span class="page-lang-en" :class = "{borderBottom2:lang =='ZH'}" @click = "chooseLang('ZH')">中</span>
-					<span class="page-lang-zh" :class = "{borderBottom2:lang =='EN'}"  @click = "chooseLang('EN')">EN</span>
+					<span class="page-lang-en no-select" :class = "{borderBottom2:lang =='ZH'}" @click = "chooseLang('ZH')">中</span>
+					<span class="page-lang-zh no-select" :class = "{borderBottom2:lang =='EN'}"  @click = "chooseLang('EN')">EN</span>
 				</div>
 			</div>
 	    <scroll-nav @activeIndexChanged = "activeNavIndexChanged">
