@@ -63,12 +63,6 @@ let axiosHelper = {
         baseURL: obj.baseURL,
         timeout: obj.timeout ? obj.timeout : 30000
       });
-      instance.interceptors.request.use(function(config){
-        config.headers.UUID = UUIDGenerator.purchase();
-        return config;
-      }, function(err){
-        return Promise.reject(err);
-      });
       instance.interceptors.response.use(function(res) {
         return res;
       }, function(err) {

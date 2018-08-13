@@ -97,7 +97,7 @@
 		</section>
 
 		<section class="product-description" @mousemove = "debounceActionMonitor($event,2)" ref = "ContentZone">
-			<div class="product-title">
+			<div class="product-title" v-if="defaultLang!='EN'">
 				<p class="product-info-title">{{containerTitle}}</p>
 				<div class="page-lang">
 					<span class="page-lang-en" :class = "{borderBottom2:lang =='ZH'}" @click = "chooseLang('ZH')">中</span>
