@@ -292,12 +292,12 @@
 }
 @media only screen and (max-width:1600px){
     .scrollnav {
-        height: 614px;;
+        height: 600px;;
         margin-top: 18px;   
     }
 
     .scrollnav-content {
-        height: 610px;
+        height: 600px;
         margin-left: 58px;
     }
     .scrollnav-tab-item > li:first-child>span:after{
