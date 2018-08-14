@@ -1,6 +1,6 @@
 <template>
   <div class="carousel-pagination" id = "carouselPagination">
-    <span class="carousel-dot-button carousel-dot-buttonUp" :class="{'page-disabled':currentPage === 1}">
+    <span class="carousel-dot-button carousel-dot-buttonUp" :class="{'page-disabled':currentPage === 1|| pagniationCount == 0}">
       <i
         role="button"
         class="icon-up" 
@@ -11,7 +11,7 @@
     <span class="carousel-page-item current-page-item">{{currentPage}}</span>
     <span class="carousel-page-item">/</span>
     <span class="carousel-page-item carousel-page-count">{{pagniationCount}}</span>
-    <span class="carousel-dot-button carousel-dot-buttonDown" :class="{'page-disabled': pagniationCount === currentPage}">
+    <span class="carousel-dot-button carousel-dot-buttonDown" :class="{'page-disabled': pagniationCount === currentPage || pagniationCount == 0}">
       <i
         role="button"
         class="icon-down"
@@ -55,6 +55,7 @@ export default {
   },
   methods: {
     goToPage(type) {
+      if(this.pagniationCount == 0)return;
       let currentPage = this.currentPage;
 
       if(type == "prev"){

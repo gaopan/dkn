@@ -137,7 +137,7 @@
 
 	}
 	.select-menu-list li.selected{
-		color: #393939;
+		color: #5f5f5f;
     font-weight: 700;
 	}
 	.select-menu-list li{

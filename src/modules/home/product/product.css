@@ -1,8 +1,8 @@
 .product-container {
     height: 1080px;
     width: 1902px;
-    overflow-x: auto;    
-    overflow-y: hidden;    
+    /* overflow-x: auto; */    
+    /* overflow-y: hidden; */    
 }
 .product-photo-container {
     position: relative;
@@ -234,7 +234,7 @@
 .product-QR-code{
     background: #fff;
     position: absolute;
-    bottom: 116%;
+    bottom: 126%;
     right: 0;
     width: 597px;
     padding-top: 58px;
@@ -312,6 +312,7 @@
     left: 0;
     position: absolute;
     background-color: rgba(35, 35, 35, 0.15);
+    padding-bottom: 76px;
 }
 
 

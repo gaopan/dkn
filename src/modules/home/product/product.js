@@ -159,24 +159,28 @@ export default {
   mounted() {
     this.$nextTick(() => {
       let doc = document;
-      window.addEventListener("resize", this.monitorUserAction)
 
-
-      this.$refs.WholePage.addEventListener("mousemove", this.monitorUserAction)
-      this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
-      this.$refs.WholePage.addEventListener("mousewheel", this.monitorUserAction)
-
-      doc.querySelector("#carouselPagination").addEventListener("click", this.paginationMonitorClick);
-      doc.querySelector("#scrollnavTab").addEventListener("click", this.navMonitorClick);
 
       this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
       this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
       this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
       this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
       this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
+      
+      this.fieldELeQueried.carouselPagination = doc.querySelector("#carouselPagination");
+      this.fieldELeQueried.scrollnavTab = doc.querySelector("#scrollnavTab");
 
       this.fieldELeQueried.CarouselWrapper = doc.querySelector("#CarouselWrapper");
       this.fieldELeQueried.ScrollnavContent = doc.querySelector("#ScrollnavContent");
+
+      window.addEventListener("resize", this.monitorUserAction)
+
+      this.$refs.WholePage.addEventListener("mousemove", this.monitorUserAction)
+      this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
+      this.$refs.WholePage.addEventListener("mousewheel", this.monitorUserAction)
+
+      this.fieldELeQueried.carouselPagination.addEventListener("click", this.paginationMonitorClick);
+      this.fieldELeQueried.scrollnavTab.addEventListener("click", this.navMonitorClick);
 
       this.fieldELeQueried.CarouselWrapper.addEventListener("mousedown", this.carouselMonitorMousedown);
       this.fieldELeQueried.CarouselWrapper.addEventListener("mouseleave", this.carouselMonitorMouseout);
@@ -186,12 +190,9 @@ export default {
     })
   },
   beforeDestroy() {
-    let doc = document,
-      navTabELe = doc.querySelector("#scrollnavTab"),
-      pageELe = doc.querySelector("#carouselPagination");
 
-    if (!!navTabELe) navTabELe.removeEventListener("click", this.navMonitorClick);
-    if (!!pageELe) pageELe.removeEventListener("click", this.paginationMonitorClick);
+    this.fieldELeQueried.carouselPagination.removeEventListener("click", this.paginationMonitorClick);
+    this.fieldELeQueried.scrollnavTab.removeEventListener("click", this.navMonitorClick);
 
     window.removeEventListener("resize", this.monitorUserAction)
     this.$refs.WholePage.removeEventListener("mousemove", this.monitorUserAction)
@@ -203,6 +204,7 @@ export default {
 
     this.fieldELeQueried.ScrollnavContent.removeEventListener("mousewheel", this.scrollMonitorMousewheel);
     this.fieldELeQueried.ScrollnavContent.removeEventListener("mouseleave", this.scrollMonitorMouseleave);
+
     clearInterval(this.intervalTimer);
   },
   methods: {
@@ -331,7 +333,6 @@ export default {
           event: 2,
           stay_time: stayTime
         }
-        // console.log(data)
         ProductApi.postTracking(data).then(res => {
           // console.log(res.data);
         })
@@ -354,6 +355,7 @@ export default {
           event: 2,
           stay_time: stayTime
         }
+        // console.log(data)
         ProductApi.postTracking(data).then(res => {
           // console.log(res.data);
         })
@@ -772,8 +774,8 @@ export default {
         off = 100;
       if (!!pricesObj) {
         let sale_price = pricesObj.sale_price + "";
-        // let strickout_price = parseInt(Math.random()*800)+"";
         let strickout_price = pricesObj.strickout_price + "";
+        // let strickout_price = parseInt(Math.random()*800)+"";
         if (!!sale_price) {
 
           let sale_priceIndex = sale_price.indexOf(".");

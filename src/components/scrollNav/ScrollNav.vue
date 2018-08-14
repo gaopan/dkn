@@ -239,7 +239,8 @@
 
 
     .scrollnav-tab {
-        bottom: 52px;
+        /* bottom: 52px; */
+        bottom: 86px;
         right: 100px;  
         font-size: 20px;   
     }  
@@ -248,7 +249,7 @@
         top: -2px;
     }
     .scrollnav-tab-item > li:last-child>span:after{    
-        top: 24px;
+        top: 20px;
     }   
 /*@media only screen and (min-width:1560px){
     .scrollnav {
