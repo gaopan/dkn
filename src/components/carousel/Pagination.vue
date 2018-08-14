@@ -75,8 +75,13 @@ export default {
 
 <style scoped>
 .carousel-pagination {
-    flex: 1;
+    width: 130px;
+    /* height: 540px; */
+    height: 380px;
+    padding-top: 158px;    
     text-align: center;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 .carousel-page-item {
@@ -91,7 +96,7 @@ export default {
   display: inline-block;
   cursor: pointer;
   width: 32px;
-  line-height: 36px;
+  line-height: 38px;
   height: 32px;
   text-align: center;
   border-radius: 50%;
@@ -107,13 +112,21 @@ export default {
   cursor: not-allowed;
 }
 .carousel-dot-buttonUp{
-  margin-bottom: 24px;
+    margin-bottom: 23px;
+    width: 36px;
+    height: 36px;
+    
 }
 
 .carousel-dot-buttonDown{
-  margin-top: 24px;
+  margin-top: 23px;
 }
-@media only screen and (min-width:1600px){
+
+.carousel-page-item {
+    font-size: 20px;
+    line-height: 23px;
+}  
+/* @media only screen and (min-width:1600px){
   .carousel-pagination {
     padding-top: 224px;
     padding-left: 10px;
@@ -125,12 +138,13 @@ export default {
       line-height: 36px;
       height: 32px;
       font-size: 22px; 
+      line-height: 40px;
   }
   .carousel-page-item {
       font-size: 20px;
   }  
 }
-@media only screen /* and (min-width:1080px) */ and (max-width:1600px){
+@media only screen and (min-width:1080px) and (max-width:1600px){
   .carousel-pagination {
     padding-top: 110px;
     padding-left: 8px;
@@ -146,7 +160,7 @@ export default {
       font-size: 16px;
   }    
 
-}
+} */
 /* @media only screen and (min-width:480px) and (max-width:1080px){
   
 } */

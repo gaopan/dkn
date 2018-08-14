@@ -1,5 +1,5 @@
 <template>
-	<div class="custom-select">
+	<div class="custom-select" :class = "{'zIndex2': bShowMenu}">
 		<div class="select-label-wrapper" :class = "{'disabled':options.length == 0}" @click = "showMenu">
 			<span class="select-label">{{selectLabel}}</span>
 			<i class= "icon-down arrow-icon"></i>
@@ -80,10 +80,17 @@
 	}
 </script>
 <style type="text/css">
+
+	.zIndex2{
+		z-index: 2;
+	}
 	.custom-select{
 		width:100%;
-		line-height: 66px;
 		position: relative;
+    background-color: #ffffff;
+    border: solid 1px #c8c8c8;
+    display: inline-block;	
+    line-height: 68px;
 	}
 	.select-label-wrapper{
 		width: 100%;
@@ -97,6 +104,7 @@
     font-size: 27px;
     color: #393939;
 		margin-left: 20px;
+
 	}	
 	.arrow-icon{
     font-size: 24px;
@@ -104,7 +112,7 @@
     width: 66px;
     text-align: center;
     display: inline-block;
-    font-weight: bold;
+    color: #898989;
 	}
 
 	.select-menu{
@@ -132,8 +140,9 @@
     font-weight: 700;
 	}
 	.select-menu-list li{
-	  color: #5f5f5f;	
-	  cursor: pointer;	
+    color: #5f5f5f;
+    cursor: pointer;
+    font-size: 26px;
 	}
 	.select-menu-list li+li{
 		border-top:1px solid #e6e6e6;
@@ -144,7 +153,7 @@
 		background-color: #c8c8c8;
 	}
 
-@media only screen and (min-width:1600px){
+/* @media only screen and (min-width:1600px){
 	.custom-select{
 		line-height: 66px;
 	}
@@ -182,6 +191,6 @@
     font-size: 22px;	  	
 	}	
 
-}
+} */
 
 </style>

@@ -274,12 +274,17 @@ export default {
 };
 </script>
 <style>
-.carousel {
-  display: flex;
+.product-photo-carousel .carousel{
+    
 }
 
 .carousel-wrapper {
-  overflow: hidden;
+    overflow: hidden;
+    height: 540px;
+    width: 540px;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: -3px;   
 }
 
 
@@ -287,7 +292,7 @@ export default {
   height: 100%;
 }
 
-@media only screen and (min-width:1600px){
+/* @media only screen and (min-width:1600px){
   .carousel-wrapper {
     width: 540px;
     height: 540px;
@@ -299,7 +304,7 @@ export default {
     height: 380px;
   }
 
-}
+} */
 
 
 </style>

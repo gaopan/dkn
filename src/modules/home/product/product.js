@@ -49,7 +49,7 @@ export default {
         {label:{EN:'DESIGNED FOR',ZH:"適合在"},id:"DesignFor"},
         {label: {EN:'PRODUCT BENEFITS',ZH:"產品優點"},id:"ProductBenefit"},
         {label: {EN:'USER REVIEWS',ZH:"使用者回饋"},id:"UserReviews"},
-        {label: {EN:'TPRODUCT CONCEPT & TECHNOLOGY',ZH:"產品細節"},id:"ProdConceptTech"},
+        {label: {EN:'PRODUCT CONCEPT & TECHNOLOGY',ZH:"產品細節"},id:"ProdConceptTech"},
         {label: {EN:'TECHNICAL INFORMATION',ZH:"產品性能"},id:"TechInfo"},
       ],
       pageInfoLabel: {
@@ -132,20 +132,6 @@ export default {
           defaultSizeIndex: null
         }
       },
-			defaultIndex:{
-				ZH:{
-					defaultColorIndex:null,
-					defaultSizeIndex:null,
-				},
-				EN:{
-					defaultColorIndex:null,
-					defaultSizeIndex:null
-				},
-				other:{
-					defaultColorIndex:null,
-					defaultSizeIndex:null
-				}
-			},
       fieldELeQueried:{}      
     }
   },
@@ -494,8 +480,20 @@ export default {
     toggleQRCode() {
       if (this.QRCodeSrc.EN == null && this.QRCodeSrc.ZH == null) return;
       this.bShowQRCode = !this.bShowQRCode;
+      if(this.bShowQRCode){
+        document.addEventListener("click",this.fnBlur,false)
+      }else{
+        document.removeEventListener("click",this.fnBlur,false)
+      }
     },
+    fnBlur(event){
+      let QRCodeWrapper = document.querySelector("#QRCodeWrapper");
+      // let QRCodeIcon = document.querySelector("#QRCodeIcon");
 
+      if(QRCodeWrapper&&!QRCodeWrapper.contains(event.target)){
+        this.bShowQRCode = false;
+      }     
+    },
     chooseLang(lang) {
       if (this.lang == lang) return;
       this.lang = lang;

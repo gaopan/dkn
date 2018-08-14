@@ -33,7 +33,6 @@
                 currentOffset: 0,
                 currentPosition: 0,
                 scrolling: false,
-                // panelsHeightCount: []
             }
         },
         props: {
@@ -48,11 +47,6 @@
             }
         },
         watch: {
-            // activeIndex(val) {  
-
-                // this.scrollToTargetContent(this.activeIndex,false);     
-                // this.$emit("activeIndexChanged",this.activeIndex);
-            // },
             index(index) {
                 this.activeIndex = index;
                 this.scrollToTargetContent(index);
@@ -123,32 +117,12 @@
                 this.currentPosition = panel.offsetTop;
 
             },
-            // getPanelsHeightCount(panels){
-            //     let panelsHeight = [];
-            //     let panelsHeightCount = [];
-            //     panels.forEach((panel, index) => {
-            //         panelsHeight.push(panel.$el.offsetHeight);
-            //     });
-            //     panelsHeight.forEach((d,i)=>{
-            //         // if(i>0){
-            //             let count = 0;
-            //             panelsHeight.forEach((d_,i_)=>{
-            //                 if(i_<=i){
-            //                     count+=d_;
-            //                 }
-            //             })
-            //             panelsHeightCount.push(count);
-            //         // }
-            //     })
-            //     console.log(panelsHeightCount)                
-            //     return panelsHeightCount;
-            // }
+
         },
         mounted() {
             this.$nextTick(()=>{
                 this.init();
                 this.panels = this.getPanels();
-                // this.panelsHeightCount = this.getPanelsHeightCount(this.panels)
             });
         },
 
@@ -170,18 +144,16 @@
         
         position: relative;
         overflow:hidden;
+        height: 861px;
+        margin-top: 96px;
     }
-    /* .scrollnav ::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-    } */
+
     .scrollnav-tab {
         position: absolute;
         z-index: 1;
     }
 
     .scrollnav-tab-item {
-        -webkit-overflow-scrolling: touch;
         padding: 0;
         margin: 0;
         flex: 1;
@@ -253,20 +225,32 @@
         height: 100%;
     }
     .scrollnav-tab-item>li:first-child>span:after{
-        height: 8px;
+        height: 16px;
     }    
     .scrollnav-content {
         /*flex: 1;*/
         overflow-y: auto;
         overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
-        margin-left: 80px;
         position: absolute;
         top: 0;
         left: 0;
+        height: 881px;        
     }
 
-@media only screen and (min-width:1560px){
+
+    .scrollnav-tab {
+        bottom: 52px;
+        right: 100px;  
+        font-size: 20px;   
+    }  
+    
+    .scrollnav-tab-item > li:first-child>span:after{
+        top: -2px;
+    }
+    .scrollnav-tab-item > li:last-child>span:after{    
+        top: 24px;
+    }   
+/*@media only screen and (min-width:1560px){
     .scrollnav {
         height: 798px;
         margin-top: 24px;       
@@ -283,7 +267,6 @@
         margin-left: 80px;
     }
     .scrollnav-tab-item > li:first-child>span:after{
-        /* top: -55px; */
         top: 0;
     }
     .scrollnav-tab-item > li:last-child>span:after{    
@@ -302,7 +285,7 @@
     }
     .scrollnav-tab-item > li:first-child>span:after{
         top:-2px;
-        /* top: -50px; */
+        top: -50px;
     }
     .scrollnav-tab-item > li:last-child>span:after{    
         top: 22px;
@@ -323,5 +306,5 @@
         bottom: 42px;
         right: 64px;  
     }   
-}
+} */
 </style>

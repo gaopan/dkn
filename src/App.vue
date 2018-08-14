@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="as-mainwrapper">
+  <div id="app" class="as-mainwrapper no-select">
     <router-view></router-view>
   </div>
 </template>

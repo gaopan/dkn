@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'dkn-icon';
-  src:  url('fonts/dkn-icon.eot?gpb8sd');
-  src:  url('fonts/dkn-icon.eot?gpb8sd#iefix') format('embedded-opentype'),
-    url('fonts/dkn-icon.ttf?gpb8sd') format('truetype'),
-    url('fonts/dkn-icon.woff?gpb8sd') format('woff'),
-    url('fonts/dkn-icon.svg?gpb8sd#dkn-icon') format('svg');
+  src:  url('fonts/dkn-icon.eot?4o5squ');
+  src:  url('fonts/dkn-icon.eot?4o5squ#iefix') format('embedded-opentype'),
+    url('fonts/dkn-icon.ttf?4o5squ') format('truetype'),
+    url('fonts/dkn-icon.woff?4o5squ') format('woff'),
+    url('fonts/dkn-icon.svg?4o5squ#dkn-icon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -26,28 +26,33 @@
 
 .icon-check:before {
   content: "\e900";
+  /* color */: #fff;
 }
 .icon-close:before {
   content: "\e901";
+  /* color */: #fff;
 }
 .icon-arrow-down:before {
   content: "\e902";
+  /* color */: #fff;
 }
 .icon-down:before {
   content: "\e903";
-}
-.icon-QR_code:before {
-  content: "\e904";
+  /* color */: #fff;
 }
 .icon-right:before {
   content: "\e905";
+  /* color */: #fff;
 }
 .icon-arrow-right:before {
   content: "\e906";
+  /* color */: #fff;
 }
 .icon-star:before {
   content: "\e907";
+  /* color */: #fff;
 }
 .icon-up:before {
   content: "\e908";
+  /* color */: #fff;
 }

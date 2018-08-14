@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="68px" height="68px" viewBox="0 0 68 68" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>ico_list_bglight_qrcode_close</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.4.0_scanner_qrcode" transform="translate(-628.000000, -936.000000)">
+            <rect fill="#FFFFFF" x="0" y="0" width="1920" height="1080"></rect>
+            <g id="ico_list_bglight_qrcode_close" transform="translate(628.000000, 936.000000)">
+                <g>
+                    <g id="ico_list_bglight_qrcode" fill="#FFFFFF" stroke="#C8C8C8">
+                        <rect id="Rectangle" x="0.5" y="0.5" width="67" height="67"></rect>
+                    </g>
+                    <path d="M16,17 L51.3553391,52.3553391" id="Stroke-1" stroke="#393939" stroke-width="4"></path>
+                    <path d="M51.3553391,17 L16,52.3553391" id="Stroke-3" stroke="#393939" stroke-width="4"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

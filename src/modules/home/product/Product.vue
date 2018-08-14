@@ -32,7 +32,7 @@
 				<span class="product-color-selected">
 					{{pageInfoLabel.colorOption[lang]}}: <span>{{productInfoByCurrentColor.colorName}}</span>
 				</span>
-				<ul class="product-color-list" ref = "ColorOption" @click = "monitorClick_Color_QR_Select('ColorOption')">
+				<ul class="product-color-list clearfix" ref = "ColorOption" @click = "monitorClick_Color_QR_Select('ColorOption')">
 					<li class="product-color-item" :class="{'selected':color.checked}" v-for = "(color,colorIndex) in productColors" @click = "selectProductColor(color,colorIndex)">
 						<img :src="color.imgUrl"/>
 						<i :class="{'icon-check':color.checked,'icon-unSelected':!color.checked}"/>
@@ -68,15 +68,16 @@
 					</div>
 					<div 
 						class="product-dimensional-code" 
-						:class = "{'zIndex1': bShowQRCode,'no-item-code':QRCodeSrc[lang] == null}"
+						id = "QRCodeWrapper"
+						:class = "{'zIndex1': bShowQRCode}"
 						ref = "QRcode"
 						@click = "monitorClick_Color_QR_Select('QRcode')"
 					>
 						<i :class = '{
 									"icon-QR_code":!bShowQRCode,
 									"icon-close":bShowQRCode,
-									"cursor-not-allowed":QRCodeSrc[lang] == null
 								}' 
+								id = "QRCodeIcon"
 								@click = "toggleQRCode">
 						</i>
 						<div class="product-QR-code" v-show = "bShowQRCode">
@@ -151,7 +152,7 @@
 		            			<span class = "review-created-date">{{review.published_at}}</span>
 		            			<span class = "review-created-name">{{review.firstname}}</span>
 		            		</p>
-		            		<p>{{productInfoData[lang].WebLabel}} {{productInfoByCurrentColor.colorName}}</p>
+		            		<p><span v-if = "lang == 'EN'">On </span>{{productInfoData[lang].WebLabel}} {{productInfoByCurrentColor.colorName}}</p>
 		            	</div> 
 
 		            	<div class="review-content">
@@ -165,17 +166,17 @@
             		 :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
             		 v-else-if = "item.id === 'ProdConceptTech'"
             		 ref = "ConceptTechBlock">
-		            <div class = "information-wrapper">
-		            	<p class = "information-queation">{{pageInfoLabel.maintenanceAdv[lang]}}</p> 
-		            	<p class = "information-answer">{{productInfoData[lang].MaintenanceAdv}}</p> 
+		            <div class = "product-conpcept-wrapper">
+		            	<p class = "product-conpcept-title">{{pageInfoLabel.maintenanceAdv[lang]}}</p> 
+		            	<p class = "product-conpcept-content">{{productInfoData[lang].MaintenanceAdv}}</p> 
 		            </div>
-		            <div class = "information-wrapper">
-		            	<p class = "information-queation">{{pageInfoLabel.storageAdv[lang]}}</p> 
-		            	<p class = "information-answer">{{productInfoData[lang].StorageAdv}}</p> 
+		            <div class = "product-conpcept-wrapper">
+		            	<p class = "product-conpcept-title">{{pageInfoLabel.storageAdv[lang]}}</p> 
+		            	<p class = "product-conpcept-content">{{productInfoData[lang].StorageAdv}}</p> 
 		            </div>
-		            <div class = "information-wrapper">
-		            	<p class = "information-queation">{{pageInfoLabel.uesRes[lang]}}</p> 
-		            	<p class = "information-answer">{{productInfoData[lang].UsageRestriction}}</p> 
+		            <div class = "product-conpcept-wrapper">
+		            	<p class = "product-conpcept-title">{{pageInfoLabel.uesRes[lang]}}</p> 
+		            	<p class = "product-conpcept-content">{{productInfoData[lang].UsageRestriction}}</p> 
 		            </div>
 	          </div>
 						<!-- TECHNICAL INFORMATION -->
