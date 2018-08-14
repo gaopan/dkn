@@ -12,11 +12,11 @@ export default {
 
     let url = `productInfo/ean/${rfid}/store_id/${storeId}/lang/${lang}`;
     return instance.get(url)
-    // if(lang == "ZH"){
-    //   return Promise.resolve(MockData.getProductInfo.ZH);
-    // }else{
-    //   return Promise.resolve(MockData.getProductInfo.EN);
-    // }
+    if(lang == "ZH"){
+      return Promise.resolve(MockData.getProductInfo.ZH);
+    }else{
+      return Promise.resolve(MockData.getProductInfo.EN);
+    }
   },
 
   getStock(storeId = localStorage.getItem(storeIdKey), itemCode) {

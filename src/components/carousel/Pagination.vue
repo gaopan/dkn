@@ -1,6 +1,12 @@
 <template>
   <div class="carousel-pagination" id = "carouselPagination">
-    <span class="carousel-dot-button carousel-dot-buttonUp" :class="{'page-disabled':currentPage === 1|| pagniationCount == 0}">
+    <span class="carousel-dot-button carousel-dot-buttonUp icon-up_" :class="{'page-up-disabled':currentPage === 1|| pagniationCount == 0}"
+      role="button"
+      id = "iconUp"       
+      v-on:click="goToPage('prev')">
+ 
+    </span>
+<!--     <span class="carousel-dot-button carousel-dot-buttonUp" :class="{'page-disabled':currentPage === 1|| pagniationCount == 0}">
       <i
         role="button"
         class="icon-up" 
@@ -8,15 +14,12 @@
         v-on:click="goToPage('prev')"
       ></i>  
     </span>
-    <span class="carousel-page-item current-page-item">{{currentPage}}</span>
+     -->    <span class="carousel-page-item current-page-item">{{currentPage}}</span>
     <span class="carousel-page-item">/</span>
     <span class="carousel-page-item carousel-page-count">{{pagniationCount}}</span>
-    <span class="carousel-dot-button carousel-dot-buttonDown" :class="{'page-disabled': pagniationCount === currentPage || pagniationCount == 0}">
+    <span class="carousel-dot-button carousel-dot-buttonDown icon-down_" :class="{'page-down-disabled': pagniationCount === currentPage || pagniationCount == 0}" role="button" id = "iconDown" v-on:click="goToPage('next')">
       <i
-        role="button"
-        class="icon-down"
-        id = "iconDown"
-        v-on:click="goToPage('next')"
+
       ></i> 
     </span>      
   </div>
@@ -96,27 +99,26 @@ export default {
 .carousel-dot-button {
   display: inline-block;
   cursor: pointer;
-  width: 32px;
-  line-height: 38px;
-  height: 32px;
+/*   width: 32px;
+line-height: 38px;
+height: 32px; */
+  width: 38px;
+  height: 38px;
   text-align: center;
   border-radius: 50%;
   font-size: 22px;
-  border: 2px solid #5f5f5f;
+  /* border: 2px solid #5f5f5f; */
 }
 
 
-.page-disabled{
+/* .page-disabled{
   background-color: #efefef;
   color:#c8c8c8;
   border: 2px solid #efefef;
   cursor: not-allowed;
-}
+} */
 .carousel-dot-buttonUp{
-    margin-bottom: 23px;
-    width: 36px;
-    height: 36px;
-    
+    margin-bottom: 23px;    
 }
 
 .carousel-dot-buttonDown{
@@ -127,6 +129,20 @@ export default {
     font-size: 20px;
     line-height: 23px;
 }  
+.icon-up_{
+  background: url(../../assets/svg/ico_list_bglight_arrow_up_n.svg) no-repeat top left;
+}
+.icon-down_{
+  background: url(../../assets/svg/ico_list_bglight_arrow_down_n.svg) no-repeat top left;
+}
+.page-up-disabled{
+  background: url(../../assets/svg/ico_list_bglight_arrow_up_d.svg) no-repeat top left;
+
+}
+.page-down-disabled{
+  background: url(../../assets/svg/ico_list_bglight_arrow_down_d.svg) no-repeat top left;
+
+}
 /* @media only screen and (min-width:1600px){
   .carousel-pagination {
     padding-top: 224px;

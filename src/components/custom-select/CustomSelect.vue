@@ -2,6 +2,7 @@
 	<div class="custom-select" :class = "{'zIndex2': bShowMenu}">
 		<div class="select-label-wrapper" :class = "{'disabled':options.length == 0}" @click = "showMenu">
 			<span class="select-label">{{selectLabel}}</span>
+			<!-- <i class= "arrow-icon icon-select-down_"></i> -->
 			<i class= "icon-down arrow-icon"></i>
 		</div>
 		<div class="select-menu" :class = "{'select-menu-up':true,'select-menu-down':false}" v-show = "bShowMenu">
@@ -91,9 +92,11 @@
     border: solid 1px #c8c8c8;
     display: inline-block;	
     line-height: 68px;
+    height: 68px;
 	}
 	.select-label-wrapper{
 		width: 100%;
+    height: 100%;		
 		display: flex;
     cursor: pointer;
 	}
@@ -109,6 +112,7 @@
 	.arrow-icon{
     font-size: 24px;
     line-height: 66px;	
+    height: 66px;	
     width: 66px;
     text-align: center;
     display: inline-block;
@@ -153,7 +157,9 @@
 		cursor: not-allowed;
 		background-color: #c8c8c8;
 	}
-
+	.icon-select-down_{
+		background: url(../../assets/svg/ico_list_bglight_arrow_down_d.svg) no-repeat center center;
+	}
 /* @media only screen and (min-width:1600px){
 	.custom-select{
 		line-height: 66px;
