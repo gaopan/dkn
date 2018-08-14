@@ -94,7 +94,7 @@
 				</div>
 			</div>
 
-			<div class="product-shadow" v-show = "bShowShadow||bShowQRCode"></div>
+			<div class="product-shadow" id = "ProductShadow" v-show = "bShowShadow||bShowQRCode"></div>
 		</section>
 
 		<section class="product-description" ref = "ContentZone">

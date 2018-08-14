@@ -119,9 +119,10 @@
     width: 100%;
     position: absolute;
     left: -1px;
-    border: 1px solid gray;
     z-index: 2;
     background: #fff;
+	  box-shadow: 0 -2px 6px 0 rgba(35, 35, 35, 0.2);
+	  border: solid 1px #c8c8c8;    
 	}
 	.select-menu-up{
 		bottom:100%;

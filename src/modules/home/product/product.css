@@ -295,9 +295,9 @@
     border-right: 9px solid transparent;
     border-left: 9px solid transparent;
 }
-.code-tip{
-
-}
+/* .arrow-icon_{
+    background: url(../../../assets/svg/ico_list_bglight_qrcode_n.svg) no-repeat top left;    
+} */
 .code-tip-en{
     width: 230px;
 }
@@ -313,6 +313,8 @@
     position: absolute;
     background-color: rgba(35, 35, 35, 0.15);
 }
+
+
 .product-description {
     position: relative;
     background-color: #fafafa;

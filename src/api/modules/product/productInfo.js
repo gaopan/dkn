@@ -46,19 +46,19 @@ export default {
 
   // item_code\item_name\area\field\event\stay_time
   postTracking(data){
-    let url = `tracking/save`;
-    let form = new FormData();
+    let url = `http://13.229.158.94/api/tracking/save`;
+    let form = [];
 
     for(let key in data) {
       if(data.hasOwnProperty(key)) {
-        form.set(key, data[key]);
+        form.push(`${key}=${data[key]}`);
       }
     }
 
     return axios({
       method: 'post',
       url: url,
-      data: form,
+      data: form.join('&'),
       config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
     });
     // return instance.post(url,data)
