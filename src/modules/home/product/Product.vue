@@ -51,8 +51,8 @@
 
 			<div class="product-size-option">
 				<span class="size-label">
-					<span class="size-mark">{{pageInfoLabel.size[lang]}}: </span>
-					<span class="size-access">{{productStock <= 0 ? pageInfoLabel.outOfStock[lang]:pageInfoLabel.inStock[lang]}}</span>
+					<span class="size-mark">{{pageInfoLabel.size[lang]}}</span>
+					<span class="size-access">{{pageInfoLabel.stock[lang]}}{{productStock <= 0 ? pageInfoLabel.outOfStock[lang]:pageInfoLabel.inStock[lang]}}</span>
 				</span>
 
 				<div class="product-size-wrapper">
@@ -105,8 +105,8 @@
 					<span class="page-lang-zh no-select" :class = "{borderBottom2:lang =='EN'}"  @click = "chooseLang('EN')">EN</span>
 				</div>
 			</div>
-	    <scroll-nav @activeIndexChanged = "activeNavIndexChanged">
-	        <scroll-nav-panel :lang = "lang" :label="item.label" :idCus = "item.id" v-for="(item, index) in navTabList" :key="index">
+	    <scroll-nav @activeIndexChanged = "activeNavIndexChanged" :list = "navTabList_" :index = "activeNavIndex">
+	        <scroll-nav-panel :lang = "lang" :label="item.label" :idCus = "item.id" v-for="(item, index) in navTabList_" :key="index">
             
             <!-- DESIGNED FOR -->
             <div 
@@ -114,8 +114,8 @@
           		:class="{'panel-designed-for':item.id === 'DesignFor'}" 
           		:style = "{ visibility:activeNavIndex == index ? 'visible':'hidden' }"
           		v-if = "item.id === 'DesignFor'"
-          		ref = "DesignForBlock">
-
+          		ref = "DesignForBlock"
+          	>
 	            <p>{{productInfoData[lang].DesignedFor}}</p> 
 	            <p>{{productInfoData[lang].Catchline}}</p> 
 
@@ -126,7 +126,8 @@
             	class="panel-cell-wrapper product-benefits" 
           		:style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
           		v-else-if = "item.id === 'ProductBenefit'"
-          		ref = "ProdBenefitBlock">
+          		ref = "ProdBenefitBlock"
+          		>
 		            <div class = "product-benefits-item" :class = "{'marginBottom0': benefitIndex == productInfoData[lang].Benefits.length-1}"  v-for= "(benefit,benefitIndex) in productInfoData[lang].Benefits">
 		            	<p class = "benefits-points">{{benefit.label}}</p> 
 		            	<p class = "benefits-points-content">{{benefit.text}}</p> 
@@ -140,7 +141,7 @@
             		<div class="product-scorce-wrapper">
             			<rate :rate = "productScore[lang]"></rate> 
             			<span class="user-review-count" v-if = "lang=='EN'">
-            				{{productReviews[lang].length}} {{productReviews[lang].length>1?'reviews':'review'}}
+            				{{productReviews[lang].length}} {{productReviews[lang]&&productReviews[lang].length>1?'reviews':'review'}}
             			</span>
             			<span class="user-review-count" v-else-if = "lang=='ZH'">
 	            			{{productReviews[lang].length}} 評價
@@ -165,16 +166,17 @@
             <div class="panel-cell-wrapper product-tech" 
             		 :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
             		 v-else-if = "item.id === 'ProdConceptTech'"
-            		 ref = "ConceptTechBlock">
-		            <div class = "product-conpcept-wrapper">
+            		 ref = "ConceptTechBlock"
+            		 >
+		            <div class = "product-conpcept-wrapper" v-show = "!!productInfoData[lang].MaintenanceAdv">
 		            	<p class = "product-conpcept-title">{{pageInfoLabel.maintenanceAdv[lang]}}</p> 
 		            	<p class = "product-conpcept-content">{{productInfoData[lang].MaintenanceAdv}}</p> 
 		            </div>
-		            <div class = "product-conpcept-wrapper">
+		            <div class = "product-conpcept-wrapper"  v-show = "!!productInfoData[lang].StorageAdv">
 		            	<p class = "product-conpcept-title">{{pageInfoLabel.storageAdv[lang]}}</p> 
 		            	<p class = "product-conpcept-content">{{productInfoData[lang].StorageAdv}}</p> 
 		            </div>
-		            <div class = "product-conpcept-wrapper">
+		            <div class = "product-conpcept-wrapper"  v-show = "!!productInfoData[lang].UsageRestriction">
 		            	<p class = "product-conpcept-title">{{pageInfoLabel.uesRes[lang]}}</p> 
 		            	<p class = "product-conpcept-content">{{productInfoData[lang].UsageRestriction}}</p> 
 		            </div>
@@ -183,7 +185,8 @@
             <div class="panel-cell-wrapper tech-information" 
             		 :style = "{visibility:activeNavIndex == index ? 'visible':'hidden'}" 
             		 v-else-if = "item.id === 'TechInfo'"
-            		 ref = "TechInfoBlock">
+            		 ref = "TechInfoBlock"
+            		 >
 		            <div class = "information-wrapper" v-for= "(Functionality,FunctionalityIndex) in productInfoData[lang].Functionalities">
 		            	<p class = "information-queation">{{Functionality.label}}</p> 
 		            	<p class = "information-answer">{{Functionality.text}}</p> 

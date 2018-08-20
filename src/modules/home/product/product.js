@@ -45,16 +45,18 @@ export default {
 			navigateToPhoto:1,
 			imageUrl:[],
 			navTabList: [
-        {label:{EN:'DESIGNED FOR',ZH:"適合在"},id:"DesignFor"},
-        {label: {EN:'PRODUCT BENEFITS',ZH:"產品優點"},id:"ProductBenefit"},
-        {label: {EN:'USER REVIEWS',ZH:"使用者回饋"},id:"UserReviews"},
-        {label: {EN:'PRODUCT CONCEPT & TECHNOLOGY',ZH:"產品細節"},id:"ProdConceptTech"},
-        {label: {EN:'TECHNICAL INFORMATION',ZH:"產品性能"},id:"TechInfo"},
+        {label:{EN:'DESIGNED FOR',ZH:"適合在"},show:true,id:"DesignFor"},
+        {label: {EN:'PRODUCT BENEFITS',ZH:"產品優點"},show:true,id:"ProductBenefit"},
+        {label: {EN:'USER REVIEWS',ZH:"使用者回饋"},show:true,id:"UserReviews"},
+        {label: {EN:'PRODUCT CONCEPT & TECHNOLOGY',ZH:"產品細節"},show:true,id:"ProdConceptTech"},
+        {label: {EN:'TECHNICAL INFORMATION',ZH:"產品性能"},show:true,id:"TechInfo"},
       ],
+      navTabList_:[],
       pageInfoLabel: {
         itemCode: { EN: "Item code", ZH: "貨號" },
         colorOption: { EN: "Color option", ZH: "顏色選項" },
         size: { EN: "Size", ZH: "尺寸" },
+        stock: { EN: "Stock: ", ZH: "库存： " },
         inStock: { EN: "In Stock", ZH: "尚有庫存" },
         outOfStock: { EN: "Out of Stock", ZH: "無庫存" },
         QRCode: { EN: "Want to buy online?Click me!", ZH: "線上購買？點擊我！", },
@@ -150,9 +152,11 @@ export default {
       }
     }
     //the nav title on the right
-    this.containerTitle = this.navTabList[0].label[this.lang];
+    // this.containerTitle = this.navTabList_[0].label[this.lang];
 
     this.initPageData(this.lang);
+
+    this.intervalTimer = setInterval(this.checkTime,1000)
 
   },
 
@@ -228,7 +232,7 @@ export default {
           stay_time: stayTime
         }
 
-        console.log("carousel mouse out", data)
+        // console.log("carousel mouse out", data)
         ProductApi.postTracking(data).then(res => {
           // console.log(res.data);
         })
@@ -305,25 +309,50 @@ export default {
 
       this.monitorMousemove.scrollNavMousewheel = true;
       let target = null,
-        eventTarget = event.target;
-      if (this.$refs.DesignForBlock[0].contains(eventTarget)) {
-        target = "DesignForBlock";
+        eventTarget = event.target
+        ;
+      if (this.$refs.DesignForBlock){
+        if(TypeChecker.isArray(this.$refs.DesignForBlock)){
+          if(this.$refs.DesignForBlock[0]&&this.$refs.DesignForBlock[0].contains(eventTarget))target = "DesignForBlock";
+        }else{
+          if(this.$refs.DesignForBlock.contains(eventTarget))target = "DesignForBlock";
+
+        }
       }
-      if (this.$refs.ProdBenefitBlock[0].contains(eventTarget)) {
-        target = "ProdBenefitBlock";
+      if (this.$refs.ProdBenefitBlock){
+        if(TypeChecker.isArray(this.$refs.ProdBenefitBlock)){
+          if(this.$refs.ProdBenefitBlock[0]&&this.$refs.ProdBenefitBlock[0].contains(eventTarget))target = "ProdBenefitBlock";
+        }else{
+          if(this.$refs.ProdBenefitBlock.contains(eventTarget))target = "ProdBenefitBlock";
+
+        }
       }
-      if (this.$refs.UserReviewsBlock[0].contains(eventTarget)) {
-        target = "UserReviewsBlock";
+      if (this.$refs.UserReviewsBlock){
+        if(TypeChecker.isArray(this.$refs.UserReviewsBlock)){
+          if(this.$refs.UserReviewsBlock[0]&&this.$refs.UserReviewsBlock[0].contains(eventTarget))target = "UserReviewsBlock";
+        }else{
+          if(this.$refs.UserReviewsBlock.contains(eventTarget))target = "UserReviewsBlock";
+
+        }
       }
-      if (this.$refs.TechInfoBlock[0].contains(eventTarget)) {
-        target = "TechInfoBlock";
+      if (this.$refs.TechInfoBlock){
+        if(TypeChecker.isArray(this.$refs.TechInfoBlock)){
+          if(this.$refs.TechInfoBlock[0]&&this.$refs.TechInfoBlock[0].contains(eventTarget))target = "TechInfoBlock";
+        }else{
+          if(this.$refs.TechInfoBlock.contains(eventTarget))target = "TechInfoBlock";
+
+        }
       }
-      if (this.$refs.ConceptTechBlock[0].contains(eventTarget)) {
-        target = "ConceptTechBlock";
+      if (this.$refs.ConceptTechBlock){
+        if(TypeChecker.isArray(this.$refs.ConceptTechBlock)){
+          if(this.$refs.ConceptTechBlock[0]&&this.$refs.ConceptTechBlock[0].contains(eventTarget))target = "ConceptTechBlock";
+        }else{
+          if(this.$refs.ConceptTechBlock.contains(eventTarget))target = "ConceptTechBlock";
+
+        }
       }
+
       if (this.monitorMousemove.scrollTarget && this.monitorMousemove.scrollTarget != target) {
-        // debugger
-        // console.log(target);
         let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime) / 1000).toFixed(2);
         let data = {
           item_code: this.productInfoByCurrentSize.itemCode,
@@ -398,7 +427,6 @@ export default {
 
       this.productInfoByCurrentSize = {
         itemCode: "",
-        // stock: 0,
         price: {
           original: {
             int: "0",
@@ -433,7 +461,6 @@ export default {
       //init size
       let firstSizeItem = this.productInfoByCurrentColor.sizeItems[0];
       this.productInfoByCurrentSize = {
-        // stock: firstSizeItem.stock,
         price: firstSizeItem.prices,
         itemCode: firstSizeItem.itemCode
       }
@@ -464,7 +491,6 @@ export default {
           itemCode = d.itemCode;
 
           this.productInfoByCurrentSize = Object.assign({}, {
-            // stock: d.stock,
             price: d.prices,
             itemCode: d.itemCode
           })
@@ -500,13 +526,26 @@ export default {
         this.bShowQRCode = false;
       }     
     },
+
     chooseLang(lang) {
       if (this.lang == lang) return;
       this.lang = lang;
 
+      this.checkNavPanelDisplay(this.productInfoData[lang]);
+      this.navTabList_ = [];
+      this.navTabList.forEach(d=>{
+        if(d.show)this.navTabList_.push({
+              label:d.label,
+              id:d.id
+            })
+      })
+      console.log(this.navTabList_)
+      this.activeNavIndex = 0;
+      this.containerTitle = this.navTabList_[0].label[this.lang];
+
       this.navigateToPhoto = 1;
 
-      this.containerTitle = this.navTabList[this.activeNavIndex].label[lang];
+      // this.containerTitle = this.navTabList_[this.activeNavIndex].label[lang];
 
       localStorage.setItem("lang", lang)
 
@@ -529,7 +568,7 @@ export default {
 
     activeNavIndexChanged(args) {
       this.activeNavIndex = args;
-      this.containerTitle = this.navTabList[args].label[this.lang];
+      this.containerTitle = this.navTabList_[args].label[this.lang];
     },
 
     /**
@@ -574,18 +613,30 @@ export default {
     initPageData(lang) {
 
       ProductApi.getProductInfo(this.rfid, undefined, "ZH").then(res => {
-        // debugger
+
         if (res.data && res.data.dsm) this.productInfoData["ZH"] = res.data.dsm;
         if (res.data && res.data.models) this.productModels["ZH"] = res.data.models;
-
+        
         //get default model_code and itemCode
         let defaultData = getDefaultCodeIndex(this.productModels["ZH"], res.data.default_model_code, res.data.default_item_code)
-        // let defaultData = getDefaultCodeIndex(this.productModels["ZH"],8315702,328449/*res.data.default_item_code*/)
+        
         this.defaultIndex.ZH.defaultColorIndex = defaultData.defaultColorIndex
         this.defaultIndex.ZH.defaultSizeIndex = defaultData.defaultSizeIndex
 
         if (lang == "ZH") {
           this.makeProductPageInfoData(this.productModels[lang], this.defaultIndex[lang]);
+
+          this.checkNavPanelDisplay(this.productInfoData["ZH"])
+          this.navTabList_ = [];
+          this.navTabList.forEach(d=>{
+            if(d.show)this.navTabList_.push({
+              label:d.label,
+              id:d.id
+            })
+          }) 
+          this.activeNavIndex = 0;
+          this.containerTitle = this.navTabList_[0].label[this.lang];
+                   
         }
       }, err => {
         console.log(err)
@@ -598,12 +649,23 @@ export default {
 
 
         let defaultData = getDefaultCodeIndex(this.productModels["EN"], res.data.default_model_code, res.data.default_item_code)
-        // let defaultData = getDefaultCodeIndex(this.productModels["EN"],8315702,328449/*res.data.default_item_code*/)
         this.defaultIndex.EN.defaultColorIndex = defaultData.defaultColorIndex
         this.defaultIndex.EN.defaultSizeIndex = defaultData.defaultSizeIndex
 
         if (lang == "EN") {
-          this.makeProductPageInfoData(this.productModels[lang], this.defaultIndex[lang]);
+          this.makeProductPageInfoData(this.productModels[lang], this.defaultIndex[lang]);        
+
+          this.checkNavPanelDisplay(this.productInfoData["EN"]);
+          this.navTabList_ = [];
+          this.navTabList.forEach(d=>{
+            if(d.show)this.navTabList_.push({
+              label:d.label,
+              id:d.id
+            })
+          })
+          this.activeNavIndex = 0;
+          this.containerTitle = this.navTabList_[0].label[this.lang]; 
+
         }
       }, err => {
         console.log(err)
@@ -648,6 +710,7 @@ export default {
 
           this.imageUrl = this.productInfoByCurrentColor.videosAndImages
 
+          debugger
           //init size
           this.productInfoByCurrentSize = {
             // stock: this.productInfoByCurrentColor.sizeItems[defaultIndex.defaultSizeIndex].stock,
@@ -752,6 +815,7 @@ export default {
         productScore = +((score / resData.length).toFixed(2));
 
         return {
+          // productReviews: resData,
           productReviews: resData,
           productScore: productScore
         }
@@ -803,6 +867,31 @@ export default {
         return { original, discount, off }
       }
     },
+    showNavTab(bShow,id){
+      this.navTabList.every(d=>{
+        if(d.id == id){
+          d.show = bShow;
+          return false;
+        }
+        return true;
+      })
+    },
+    checkNavPanelDisplay(productInfoData){
+      let bTechInfo = !!(productInfoData.Functionalities&&productInfoData.Functionalities.length),
+
+          bProductConcept =  !!productInfoData.MaintenanceAdv
+           ||!!productInfoData.StorageAdv
+           ||!!productInfoData.UsageRestriction,
+
+          bBenefits = !!(productInfoData.Benefits&&productInfoData.Benefits.length), 
+
+          bDesignedFor = !!productInfoData.DesignedFor||!!productInfoData.Catchline; 
+
+      this.showNavTab(bDesignedFor,"DesignFor")
+      this.showNavTab(bBenefits,"ProductBenefit")
+      this.showNavTab(bProductConcept,"ProdConceptTech")      
+      this.showNavTab(bTechInfo,"TechInfo")      
+    }
 
   },
   components: {
@@ -816,7 +905,29 @@ export default {
   computed: {
     itemName() {
       return this.productInfoData[this.lang].WebLabel;
-    }
+    },
+    /*showTechInfo(){
+      let bTechInfo = this.productInfoData[this.lang].Functionalities&&this.productInfoData[this.lang].Functionalities.length;
+      this.showNavTab(bTechInfo)
+      return bTechInfo;      
+    },
+    showProductConcept(){
+      let bProductConcept =  !!this.productInfoData[this.lang].MaintenanceAdv
+           ||!!this.productInfoData[this.lang].StorageAdv
+           ||!!this.productInfoData[this.lang].UsageRestriction;
+      this.showNavTab(bProductConcept)
+      return bProductConcept;                
+    },
+    showBenefits(){
+      let bBenefits = this.productInfoData[this.lang].Benefits&&this.productInfoData[this.lang].Benefits.length      
+      this.showNavTab(bBenefits)
+      return bBenefits;
+    },
+    showDesignedFor(){
+      let bDesignedFor = !!this.productInfoData[this.lang].DesignedFor||!!this.productInfoData[this.lang].Catchline;      
+      this.showNavTab(bDesignedFor)
+      return bDesignedFor;
+    }*/
   }
 
 }

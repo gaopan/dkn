@@ -33,6 +33,8 @@
                 currentOffset: 0,
                 currentPosition: 0,
                 scrolling: false,
+                panels:[],
+                scrollViewTop:0
             }
         },
         props: {
@@ -44,12 +46,28 @@
             },
             callback: {
                 type: Function
+            },
+            list:{
+                type:Array
             }
         },
         watch: {
             index(index) {
                 this.activeIndex = index;
                 this.scrollToTargetContent(index);
+            },
+            list:{
+                handler(newV,oldV){
+                    if(newV){
+                        this.navList = [];
+                        newV.forEach(child=>{
+                            this.navList.push({label: child.label, id:child.id})
+                        })           
+                        setTimeout(()=>{
+                            this.panels = this.getPanels();
+                        },10)             
+                    }
+                }
             }
         },
         methods: {
@@ -85,24 +103,27 @@
 
                 const panels = this.panels;
                 let scrollBoxHeight = this.scrollView.offsetHeight;
-
                 let activeIndex = null;
-                panels.forEach((panel, index) => {
-                    if (panel.$el.getBoundingClientRect().top <= scrollBoxHeight/2 + this.contentOffsetTop) {
-                           activeIndex = index;
+
+                if(panels&&panels.length){
+                    panels.forEach((panel, index) => {
+                        let viewHeight = this.scrollView.scrollTop- this.scrollViewTop >= 0 ? scrollBoxHeight : 20;
+
+                        if (panel.$el.getBoundingClientRect().top <= viewHeight + this.contentOffsetTop) {
+                               activeIndex = index;
+                        }
+                    });
+                    this.scrollViewTop = this.scrollView.scrollTop;
+                    if(activeIndex != this.activeIndex){
+                        this.activeIndex  = activeIndex;
+                       this.scrollToTargetContent(this.activeIndex,false); 
+                       this.$emit("activeIndexChanged",this.activeIndex);
+
                     }
-                });
-
-                if(activeIndex != this.activeIndex){
-                    this.activeIndex  = activeIndex;
-                   this.scrollToTargetContent(this.activeIndex,false); 
-                   this.$emit("activeIndexChanged",this.activeIndex);
-
                 }
 
             },
             scrollToTargetContent(index, animate = true) {
-                // debugger
                 this.activeIndex = index;
                 this.$emit("activeIndexChanged",this.activeIndex);
                 this.scrolling = true;
@@ -119,10 +140,16 @@
             },
 
         },
+        created(){
+            if(this.list.length){
+                this.list.forEach(child=>{
+                    this.navList.push({label: child.label, id:child.idCus})
+                })   
+            }
+        },
         mounted() {
             this.$nextTick(()=>{
                 this.init();
-                this.panels = this.getPanels();
             });
         },
 
@@ -246,10 +273,10 @@
     }  
     
     .scrollnav-tab-item > li:first-child>span:after{
-        top: -2px;
+        top: -7px;
     }
     .scrollnav-tab-item > li:last-child>span:after{    
-        top: 20px;
+        top: 40%;
     }   
 /*@media only screen and (min-width:1560px){
     .scrollnav {

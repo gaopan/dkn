@@ -14,7 +14,7 @@
         },
         mounted() {
             this.$parent.lang = this.$props.lang;
-            this.$parent.addItem({label: this.label, id:this.idCus, _uid: this._uid});
+            // this.$parent.addItem({label: this.label, id:this.idCus});
         },
         watch:{
             lang(newV,oldV){
