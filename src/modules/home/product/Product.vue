@@ -44,7 +44,7 @@
 					</div>
 				</div>
 				<div class="empty-price">
-					<p v-if = "noPrice">Please chekc label or ask SA to get the price</p>
+					<p v-if = "noPrice">Please check label or ask SA to get the price</p>
 				</div>
 			</div>
 			<!-- select different colors of product  -->
