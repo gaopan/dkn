@@ -196,7 +196,7 @@ export default {
       }
 
       if (this.defaultLang != 'EN') {
-        localStorage.set(lang, this.defaultLang);
+        localStorage.set("lang", this.defaultLang);
       }
     })
   },
