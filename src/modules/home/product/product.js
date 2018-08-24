@@ -145,7 +145,6 @@ export default {
   },
   created() {
     this.rfid = this.$router.currentRoute.params.rfid;
-    this.rfid = 3608439935121;
 
     this.defaultLang = StoreService.getLang();
 
