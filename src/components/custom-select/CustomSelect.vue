@@ -3,7 +3,7 @@
 		<div class="select-label-wrapper" :class = "{'disabled':options.length == 0}" @click = "showMenu">
 			<span class="select-label">{{selectLabel}}</span>
 			<span class="item-stock" 
-					  :class = "{'stock-ab':subLabel > 0,'stock-unab':subLabel <= 0}"
+					  :class = "{'stock-ab':subLabel > 0,'stock-unab':subLabel <= 0||subLabel == undefined}"
 					  v-show = "!bShowMenu && this.$props.label && subLabel != null">
 						{{subLabel > 0 ? inStock[lang]:outOfStock[lang]}}
 			</span>
@@ -29,8 +29,7 @@
 		name:"custom-select",
 		props:{
 			label:{
-				type:[String,Number],
-				default:"Please Select"
+				type:[String,Number]
 			},
 			subLabel:{
 				type:Number
