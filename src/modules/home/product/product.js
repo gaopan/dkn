@@ -194,10 +194,6 @@ export default {
         this.fieldELeQueried.ScrollnavContent.addEventListener("mousewheel", this.scrollMonitorMousewheel);
         this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave", this.scrollMonitorMouseleave);
       }
-
-      if (this.defaultLang != 'EN') {
-        localStorage.set("lang", this.defaultLang);
-      }
     })
   },
   beforeDestroy() {
@@ -222,6 +218,10 @@ export default {
     }
 
     clearInterval(this.intervalTimer);
+
+    if (this.defaultLang != 'EN') {
+      localStorage.setItem("lang", this.defaultLang);
+    }
   },
   methods: {
     carouselMonitorMousedown() {
