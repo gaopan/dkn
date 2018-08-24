@@ -8,53 +8,13 @@ import router from '../router'
 import StoreManager from '../utils/store-manager.js'
 import CookiesManager from '../utils/cookies-manager.js'
 // import Noty from '@/utils/noty-operation.js'
-import CommonGenerators from '@/utils/common-generators.js'
+// import CommonGenerators from '@/utils/common-generators.js'
+import Router from 'vue-router'
 
-let CancelToken = axios.CancelToken
-let serviceVariantConfigs = {};
-let UUIDGenerator = CommonGenerators.UUIDGenerator;
-
-let common = {
-  newCancelToken: function(fnAwareCancelFunc) {
-    return new CancelToken(function(c) {
-      if (TypeChecker.isFunction(fnAwareCancelFunc)) {
-        fnAwareCancelFunc.call(this, c);
-      }
-    });
-  },
-  getServiceVariantConfig: function(serviceKey) {
-    if(serviceVariantConfigs[serviceKey]) return serviceVariantConfigs[serviceKey];
-    let serviceVariantConfig = serviceVariantConfigs[serviceKey] = {
-      list: null,
-      forAll: false,
-      suffix: '1',
-      endpoints: {}
-    };
-
-    return serviceVariantConfig;
-  },
-  getEndpointVariantConfig: function(serviceKey, endpointKey, isMustSuffix){
-    let serviceVariantConfig = this.getServiceVariantConfig(serviceKey);
-    if(serviceVariantConfig[endpointKey]) {
-      if(isMustSuffix) {
-        serviceVariantConfig[endpointKey].prefix = '/' + serviceKey + serviceVariantConfig.suffix;
-      }
-      return serviceVariantConfig[endpointKey];
-    }
-
-    let endpointVariantConfig = serviceVariantConfig[endpointKey] = {
-      prefix: "/" + serviceKey
-    };
-
-    if(!!isMustSuffix || serviceVariantConfig.forAll || (TypeChecker.isArray(serviceVariantConfig.list) && serviceVariantConfig.list.indexOf(endpointKey) > -1)) {
-      endpointVariantConfig.prefix += serviceVariantConfig.suffix;
-    }
-
-    return endpointVariantConfig;
-  }
-
-};
-
+// let CancelToken = axios.CancelToken
+// let serviceVariantConfigs = {};
+// let UUIDGenerator = CommonGenerators.UUIDGenerator;
+let routerInstance = new Router();
 
 let axiosHelper = {
   createAxios: function(obj) {
@@ -66,43 +26,8 @@ let axiosHelper = {
       instance.interceptors.response.use(function(res) {
         return res;
       }, function(err) {
-        if(TypeChecker.isObject(err.response) && TypeChecker.isObject(err.response.data) && TypeChecker.isString(err.response.data.message)) {
-          console.error(err.response.data.message);
-        } else {
-          console.error(err.message);
-        }
-
-        if (err.response && (err.response.status == 401 || err.response.status == 403)) {
-          console.error("Unauthorized")
-          /*// FilterServices.clear();
-          const storageKey1 = 'globalFilters-data';
-          const sm = new StoreManager('session');
-          sm.deleteStorage(storageKey1);
-          store.dispatch('setSavedFilters', null);
-
-          // UserServices.clearCurrentUser();
-          const storageKey2 = 'logined-user';
-          const tokenKey = 'LEAP-token';
-          const tokenCookieOpt = {
-            path: '/services/api/v1',
-            secure: false
-          };
-          CookiesManager.del(storageKey2);
-          CookiesManager.del(tokenKey, { path: tokenCookieOpt.path });
-          delete axios.defaults.headers.common['Authorization'];
-          store.dispatch('setUserProfile', null);
-
-          // ProcessSelectionService.clearProcessSelection();
-          const storageKey3 = 'logined-process';
-          CookiesManager.del(storageKey3);
-          store.dispatch('setProcessSelection', null);
-
-          // router redirrect
-          router.replace('/passport/login');*/
-
-        } else {
-          return Promise.reject(err);
-        }
+        // routerInstance.push("/error")
+        return Promise.reject(err);
       });
       return instance;
     }
@@ -110,4 +35,4 @@ let axiosHelper = {
 }
 
 
-export { axios, cookies, common, axiosHelper }
+export { axios, cookies, axiosHelper }

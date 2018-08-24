@@ -14,9 +14,9 @@
         v-on:click="goToPage('prev')"
       ></i>  
     </span>
-     -->    <span class="carousel-page-item current-page-item">{{currentPage}}</span>
-    <span class="carousel-page-item">/</span>
-    <span class="carousel-page-item carousel-page-count">{{pagniationCount}}</span>
+     -->    <span class="carousel-page-item current-page-item" :class = "{'no-image':currentPage==0}">{{currentPage}}</span>
+    <span class="carousel-page-item" :class = "{'no-image':currentPage==0}">/</span>
+    <span class="carousel-page-item carousel-page-count" :class = "{'no-image':currentPage==0}">{{pagniationCount}}</span>
     <span class="carousel-dot-button carousel-dot-buttonDown icon-down_" :class="{'page-down-disabled': pagniationCount === currentPage || pagniationCount == 0}" role="button" id = "iconDown" v-on:click="goToPage('next')">
       <i
 
@@ -26,58 +26,62 @@
 </template>
 
 <script>
-export default {
-  name: "pagination",
-  inject: ["carousel"],
-  props:{
-    activetPage:{
-      type:Number,
-      validator(val){
-        return val >= 1;
+  export default {
+    name: "pagination",
+    inject: ["carousel"],
+    props:{
+      activetPage:{
+        type:Number,
+        validator(val){
+          return val >= 1;
+        }
       }
-    }
-  },
-  data(){
-    return {
-      // currentPage:1
-    }
-  },
-  created(){
-    // if(typeof this.$props.activetPage == "number"){
-    //   if(this.$props.activetPage>this.pagniationCount)this.$props.activetPage = this.pagniationCount;
-    //   this.currentPage = this.$props.activetPage;
-    // }
-  },
-  computed: {
-    pagniationCount() {
-      return this.carousel.slideCount;
     },
-    currentPage(){
-      return this.carousel.currentPage;
-    }
-  },
-  methods: {
-    goToPage(type) {
-      if(this.pagniationCount == 0)return;
-      let currentPage = this.currentPage;
-
-      if(type == "prev"){
-        if(this.currentPage === 1)return;
-        currentPage -= 1;
-      }else if(type == "next"){
-        // console.log(this.currentPage)
-        // console.log(this.pagniationCount)
-        if(this.currentPage == this.pagniationCount)return;
-        currentPage += 1;
+    data(){
+      return {
+        // currentPage:1
       }
+    },
+    created(){
+      // if(typeof this.$props.activetPage == "number"){
+      //   if(this.$props.activetPage>this.pagniationCount)this.$props.activetPage = this.pagniationCount;
+      //   this.currentPage = this.$props.activetPage;
+      // }
+    },
+    computed: {
+      pagniationCount() {
+        return this.carousel.slideCount;
+      },
+      currentPage(){
+        if(this.carousel.slideCount==0)return 0;
+        return this.carousel.currentPage;
+      }
+    },
+    methods: {
+      goToPage(type) {
+        if(this.pagniationCount == 0)return;
+        let currentPage = this.currentPage;
 
-      this.$emit("paginationclick", currentPage);
+        if(type == "prev"){
+          if(this.currentPage === 1)return;
+          currentPage -= 1;
+        }else if(type == "next"){
+          // console.log(this.currentPage)
+          // console.log(this.pagniationCount)
+          if(this.currentPage == this.pagniationCount)return;
+          currentPage += 1;
+        }
+
+        this.$emit("paginationclick", currentPage);
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
+.carousel-page-item.no-image{
+  color:#e6e6e6;
+}
 .carousel-pagination {
     width: 130px;
     /* height: 540px; */

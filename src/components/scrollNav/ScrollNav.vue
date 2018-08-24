@@ -34,7 +34,8 @@
                 currentPosition: 0,
                 scrolling: false,
                 panels:[],
-                scrollViewTop:0
+                scrollViewTop:0,
+                scrollView:null
             }
         },
         props: {
@@ -99,28 +100,29 @@
                 });
             },
             scrollHandler() {
-                if (this.scrolling) return;
+                // if (this.scrolling) return;
 
-                const panels = this.panels;
-                let scrollBoxHeight = this.scrollView.offsetHeight;
-                let activeIndex = null;
+                // const panels = this.panels;
+                // let scrollBoxHeight = this.scrollView.offsetHeight;
+                // let activeIndex = 0;
 
-                if(panels&&panels.length){
-                    panels.forEach((panel, index) => {
-                        let viewHeight = this.scrollView.scrollTop- this.scrollViewTop >= 0 ? scrollBoxHeight : 20;
+                // if(panels&&panels.length){
+                //     panels.forEach((panel, index) => {
+                //         let viewHeight = this.scrollView.scrollTop- this.scrollViewTop >= 0 ? scrollBoxHeight : 20;
 
-                        if (panel.$el.getBoundingClientRect().top <= viewHeight + this.contentOffsetTop) {
-                               activeIndex = index;
-                        }
-                    });
-                    this.scrollViewTop = this.scrollView.scrollTop;
-                    if(activeIndex != this.activeIndex){
-                        this.activeIndex  = activeIndex;
-                       this.scrollToTargetContent(this.activeIndex,false); 
-                       this.$emit("activeIndexChanged",this.activeIndex);
+                //         if (panel.$el.getBoundingClientRect().top <= viewHeight + this.contentOffsetTop) {
+                //                activeIndex = index;
+                //         }
+                //     });
+                //     this.scrollViewTop = this.scrollView.scrollTop;
+                //     if(activeIndex != this.activeIndex){
+                //         this.activeIndex  = activeIndex;
+                //         // console.log(activeIndex)
+                //        this.scrollToTargetContent(this.activeIndex,false); 
+                //        this.$emit("activeIndexChanged",this.activeIndex);
 
-                    }
-                }
+                //     }
+                // }
 
             },
             scrollToTargetContent(index, animate = true) {
@@ -252,7 +254,7 @@
         height: 100%;
     }
     .scrollnav-tab-item>li:first-child>span:after{
-        height: 16px;
+        height: 28px;
     }    
     .scrollnav-content {
         /*flex: 1;*/
@@ -273,66 +275,9 @@
     }  
     
     .scrollnav-tab-item > li:first-child>span:after{
-        top: -7px;
+        top: -14px;
     }
     .scrollnav-tab-item > li:last-child>span:after{    
-        top: 40%;
+        top: 41%;
     }   
-/*@media only screen and (min-width:1560px){
-    .scrollnav {
-        height: 798px;
-        margin-top: 24px;       
-    }
-
-    .scrollnav-tab {
-        bottom: 52px;
-        right: 100px;  
-        font-size: 20px;   
-    }  
-    
-    .scrollnav-content {
-        height: 798px;
-        margin-left: 80px;
-    }
-    .scrollnav-tab-item > li:first-child>span:after{
-        top: 0;
-    }
-    .scrollnav-tab-item > li:last-child>span:after{    
-        top: 24px;
-    }    
-}
-@media only screen and (max-width:1600px){
-    .scrollnav {
-        height: 600px;;
-        margin-top: 18px;   
-    }
-
-    .scrollnav-content {
-        height: 600px;
-        margin-left: 58px;
-    }
-    .scrollnav-tab-item > li:first-child>span:after{
-        top:-2px;
-        top: -50px;
-    }
-    .scrollnav-tab-item > li:last-child>span:after{    
-        top: 22px;
-    }    
-
-}
-
-@media only screen and (min-width:1080px) and (max-width:1600px){
-    .scrollnav-tab {
-        font-size: 14px;
-        bottom: 42px;
-        right: 80px;  
-    }   
-}
-@media only screen and (max-width:1080px){
-    .scrollnav-tab {
-        font-size: 14px;
-        bottom: 42px;
-        right: 64px;  
-    }   
-} */
 </style>

@@ -1,8 +1,13 @@
 <template>
   <section class="carousel">
     <div class="carousel-wrapper" id = "CarouselWrapper" ref="carouselWrapper">
-
-      <div ref="carousel-inner" class="carousel-inner" role="listbox"
+      <div class="no-carousel-image" v-if = "noImage">
+        No images found
+      </div>
+      <div 
+        ref="carousel-inner" 
+        class="carousel-inner" 
+        role="listbox"
         :style="{
           'transform': `translate(0,${currentOffset}px)`,
           'transition': dragging ? 'none' : transitionStyle,         
@@ -11,7 +16,8 @@
         <slot></slot>
       </div> 
     </div>
-    
+
+
     <pagination @paginationclick="goToPage" :activetPage = "navigateTo"/>
     <!-- <pagination @paginationclick="goToPage" :activetPage = "navigateTo"/> -->
 
@@ -58,6 +64,7 @@ export default {
     };
   },
   props: {
+    noImage:Boolean,
     imageUrl:{
       type:Array
     },
@@ -284,7 +291,8 @@ export default {
     width: 540px;
     display: inline-block;
     vertical-align: top;
-    margin-right: -3px;   
+    margin-right: -3px;  
+    background-color: #f5f5f5; 
 }
 
 
@@ -292,19 +300,12 @@ export default {
   height: 100%;
 }
 
-/* @media only screen and (min-width:1600px){
-  .carousel-wrapper {
-    width: 540px;
-    height: 540px;
-  }
+
+.no-carousel-image{
+  font-size: 20px;
+  font-weight: bold;
+  color: #c8c8c8;
+  line-height: 540px;
+  text-align: center;
 }
-@media only screen and (max-width:1600px){
-  .carousel-wrapper {
-    width: 380px;
-    height: 380px;
-  }
-
-} */
-
-
 </style>

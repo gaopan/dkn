@@ -2,13 +2,23 @@
 	<div class="custom-select" :class = "{'zIndex2': bShowMenu}">
 		<div class="select-label-wrapper" :class = "{'disabled':options.length == 0}" @click = "showMenu">
 			<span class="select-label">{{selectLabel}}</span>
+			<span class="item-stock" 
+					  :class = "{'stock-ab':subLabel > 0,'stock-unab':subLabel <= 0}"
+					  v-show = "!bShowMenu && this.$props.label && subLabel != null">
+						{{subLabel > 0 ? "available":"unavailable"}}
+			</span>
 			<!-- <i class= "arrow-icon icon-select-down_"></i> -->
 			<i class= "icon-down arrow-icon"></i>
 		</div>
 		<div class="select-menu" :class = "{'select-menu-up':true,'select-menu-down':false}" v-show = "bShowMenu">
 			<ul class="select-menu-list">
 				<li v-for = "(item,itemIndex) in $props.options" @click = "selectItem(item,itemIndex)" :key = "itemIndex" :class = "{'selected': item.label == selectLabel}">
-					{{item.label}}
+					<span class="item-size">{{item.label}}</span>  
+					<span class="item-stock" 
+								:class = "{'stock-ab':item.stock > 0,'stock-unab':item.stock <= 0}"
+								v-if = "item.stock != null|| typeof item.stock == 'undefined'">
+						{{item.stock > 0 ? "available":"unavailable"}}
+					</span>
 				</li>
 			</ul>
 		</div>
@@ -21,6 +31,9 @@
 			label:{
 				type:[String,Number],
 				default:"Please Select"
+			},
+			subLabel:{
+				type:Number
 			},
 			options:{	
 				type:Array
@@ -40,6 +53,8 @@
 			// this.selectLabel = this.$props.label;
 			if(!!this.$props.label){
 				this.selectLabel = this.$props.label;
+			}else{
+				this.selectLabel = this.lang == "ZH"?"請選擇":"Please select";
 			}
 		
 			document.addEventListener("click",this.fnBlur,false)
@@ -73,6 +88,8 @@
 				handler(newV,oldV){
 					if(!!newV){
 						this.selectLabel = newV;
+					}else{
+						this.selectLabel = this.lang == "ZH"?"請選擇":"Please select";
 					}				
 				}
 			}
@@ -109,6 +126,18 @@
 		margin-left: 20px;
 
 	}	
+	.stock-ab {
+	  color: #03c18d;
+	}
+	.stock-unab {
+		color: #fe0000;
+	}
+	.item-stock {
+		font-size: 20px;
+    line-height: 68px;
+    margin-right: 25px;
+    float: right;
+	}
 	.arrow-icon{
     font-size: 24px;
     line-height: 66px;	
@@ -141,8 +170,7 @@
 
 	}
 	.select-menu-list li.selected{
-		color: #5f5f5f;
-    font-weight: 700;
+		color: #c8c8c8;
 	}
 	.select-menu-list li{
     color: #5f5f5f;

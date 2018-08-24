@@ -22,8 +22,13 @@
     font-size: 20px;
     color: #c8c8c8;    
 }
+.no-QR-code{
+  width: 68px;
+  height: 68px;
+  background-color: #f5f5f5;
+}
 .product-price-container{
-    margin: 16px 0 40px 0;
+    margin: 16px 0 0px 0;
 }
 .product-name {
     display: inline-block;
@@ -33,12 +38,30 @@
     font-weight: bold;
     /* line-height: 1.25; */
     line-height: 40px;
-    margin-right: 30px;
+    /* margin-right: 30px; */
     color: #393939;
     vertical-align: top;
 }
+.no-product-name{
+    width: 383px;
+    margin-right: 81px;
+    vertical-align: top;
+    display: inline-block;
+}
+.info-top{
+    width: 383px;
+    height: 25px;
+    display: inline-block;
+    margin-bottom: 5px;
+    background-color: #f5f5f5;
+}
+.info-bottom{
+    width: 207px;
+    height: 25px;
+    background-color: #f5f5f5;
+}
 .product-price-mark {
-    width: 133px;
+    width: 163px;
     height: 76px;
     font-weight: bold;
     line-height: 1;
@@ -57,16 +80,12 @@
 .product-price-noDiscount{
     color: #393939;
     background-color: #feea27;
-/*     font-size: 32px;
-   line-height: 32px;
-   padding-top: 6px;
-   padding-bottom: 6px;  */   
 }
 
 .product-price-noDiscount,
 .product-price-discount{
     font-size: 32px;
-    width: 133px;
+    width: 163px;
     height: 50px;
     text-align: center;
     line-height: 50px;
@@ -87,7 +106,14 @@
     color: #393939;
 }
 
-
+.range-symbol,
+.range-price-integer{ 
+    font-size: 22px;
+}
+.range-price-decimal{
+    font-size: 14px;
+    margin-left: -7px;
+}
 .price-discount-off {
     color: #fe0000;
     display: inline-block;
@@ -96,6 +122,20 @@
     font-size: 20px;
     font-weight: normal;
     margin-left: 4px;
+}
+
+.empty-price{
+  width: 463px;
+  height: 24px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #e86531;
+  margin-bottom: 25px;
+}
+.empty-price-label{
+  width: 133px;
+  height: 50px;
+  background-color: #efefef;
 }
 .product-color-selected{ 
     display: inline-block;
@@ -123,17 +163,22 @@
     margin-left: 16px;
 }
 .product-color-item {
-    /* background: gray;
-    border: 2px solid #c8c8c8;
-    float: left;
-    cursor: pointer;
-    position: relative; */
     float: left;
     position: relative;
     width: 60px;
     height: 60px;
     background-color: #ffffff;
     border: solid 1px #c8c8c8;    
+}
+.product-color-item.noBorder{
+    border: none;
+}
+.icon-image,
+.no-icon-image{
+    width: 60px;
+    height: 60px;
+    background-color: #f5f5f5;
+    display: inline-block;
 }
 .product-color-item img{
     height: 100%;
@@ -152,7 +197,7 @@
     left: 0;
 }
 .product-photo-carousel {
-    margin-top: 23px;
+    margin-top: 16px;
     height:540px; 
     width:676px;
 }
@@ -180,9 +225,14 @@
     color: #5f5f5f;
     /* font-family: RobotoCondensed-Regular; */
 }
+.no-size-option{
+  width: 540px;
+  height: 68px;
+  background-color: #f5f5f5;
+}
 .product-size-option{
-	font-size:0;
-    margin-top: 31px;
+	/* font-size:0; */
+    margin-top: 20px;
 }
 .product-size-wrapper{
     display: flex;
@@ -328,7 +378,30 @@
     overflow: hidden;  
     /* padding-bottom: 22px; */
 }	
-
+.no-product-description{
+    width: 1074px;
+    height: 664px;
+    padding-left: 80px;
+    padding-top: 400px;
+    display: inline-block;
+    background-color: #fafafa;
+}
+.empty-description-icon {
+  width: 220px;
+  height: 220px;
+  margin-right: 29px;
+  vertical-align: top;
+  background: url(../../../assets/svg/img_list_bglight_missing_info.svg) no-repeat top left;  
+  display: inline-block;
+}
+.empty-description {
+  width: 694px;
+  height: 190px;
+  font-size: 40px;
+  line-height: 1.4;
+  color: #898989;
+  display: inline-block;
+}
 .product-info-title{
     font-weight: 700;
     color: #393939;
@@ -363,6 +436,9 @@
     border-bottom: 2px solid #000;
     color: #393939;
     padding-bottom: 4px;
+}
+.disable-ZH-btn{
+    cursor: not-allowed;
 }
 .scroll-nav-panel {
     /* height: 100%; */
@@ -500,414 +576,28 @@
     .product-conpcept-wrapper {
         margin-bottom:70px;
     }
-
-
-
-/* @media only screen and (min-width:1600px){
-    .panel-cell-wrapper{
-        padding-top: 100px;
+    .empty-description-wrapper{
+        width: 724px;
+        /* height: 412px; */
+        background-color: #ffffff;
+        /* box-shadow: 0 5px 30px 0 rgba(0, 72, 122, 0.3); */        
     }
-    .product-photo-container {
-        padding-top: 1.87%;
-        padding-left: 3.64%; 
-    }    
-    .product-code {    
-        height: 24px;
-        font-size: 20px;
-        margin-bottom: 6px;
-    }
-        
-    .product-name {
-        font-size: 26px;
-    } 
-    .product-price-mark{
-        width: 134px;
-        height: 80px;
-        line-height: 50px;     
-    }    
-
-    .product-price-discount ,
-    .product-price-noDiscount{
-        font-size: 32px;
-        line-height: 32px;
-        padding-top: 6px;
-        padding-bottom: 6px;        
-    }    
-
-    .product-price-decimal {
-        font-size: 20px;
-    }
-
-    .product-price-original,
-    .price-discount-off {
-        height: 20px;
-        font-size: 20px; 
-        
-    }
-    .product-color-selected{
-        height: 24px;
-        font-size: 20px;
-        margin-bottom: 16px;        
-    } 
-    .product-color-item .icon-check {
-        font-size: 22px;
-        width: 22px;
-        height: 22px; 
-    }
-    .product-color-option{
-        padding-top: 30px;
-    }   
-    .product-color-list {
-
-        height: 60px;
-        margin-bottom: 20px;
-    }     
-    .product-size-option{
-        margin-right: 50px;
-    }
-    .product-color-item {
-        height: 58px;
-        width: 58px;
-    }
-    .product-photo-carousel{
-        margin-bottom: 32px;
-    }    
-    .size-mark,.size-access{
-        font-size: 20px;
-    }
-
-    .product-size-select,
-    .product-dimensional-code{
-        margin-top: 18px;       
-    }    
-
-    .product-size-select {
-        height: 68px;
-        margin-right: 18px;
-    }    
-    .code-tip{
-        top: -52px;
-        right: 0px;
-        font-size: 20px;
-        line-height: 36px;
-        padding: 0 10px;
-    }
-    .code-tip-en{
-        width: 230px;
-    }
-    
-    .code-tip-zh{
-        width: 188px;
-    }
-    .QR-code-img{
-        width: 164px;
-        height: 164px;
-        padding: 14px;
-    }
-    .product-dimensional-code {
-        width: 48px;
-        height: 48px ;
-        padding: 10px;  
-    }
-    .product-dimensional-code i{
-        font-size: 48px;
-    }
-    .product-QR-code{
-        height: 204px;
-    }
-
-    .product-QR-code p{
-        height: 168px;
-        font-size: 32px;
-    }    
-    .product-title{
-      padding: 66px 0 0 80px;  
-    }
-    .product-info-title{
-      font-size: 32px;
-      height: 38px;
-    }  
-
-    .page-lang{
-        font-size: 20px;
-        right: 120px;
-    }
-
-    .page-lang-en{
-        margin-right: 30px;
-    }
-
-    .product-info-title:after{
-        width:74px;
-        margin-top: 20px;
-    } 
-
-    .panel-cell-wrapper{
-        margin-right: 300px;
-    }
-    .panel-cell-wrapper p{
-        margin-right: 50px;
-    }
-    .panel-designed-for{
-        font-size: 40px;
-        padding-top: 200px;
-    }    
-    .panel-designed-for:after{
-        margin-top: 20px;
-        width:80px;
-    }  
-    .benefits-points{
-        font-size: 40px;
-    }
-    .benefits-points-content{
-
-        font-size: 24px;
-    }
-    .product-benefits-item {
-        margin-right: 42px;
-        margin-bottom: 80px;
-    }
-
-    .product-scorce-wrapper .rate{
-        margin-right: 42px; 
-    }   
-
-    .user-review-count{
-        font-size: 32px;
-    }
-
-    .review-created-on {
-        height: 58px;
-        font-size: 20px;
-        margin-bottom: 20px;  
-    }    
-    .review-content{
-        font-size: 40px;
-    } 
-    .information-wrapper {
-        margin-bottom:70px;
-    }
-
-    .information-queation{
-        font-size: 32px;
-        margin-bottom: 20px;
-    }  
-    .information-answer{
-        font-size: 24px;
-    }      
-}   
-
-
-@media only screen and (min-width:1280px)and (max-width:1600px){
-    .product-QR-code p{
-        height: 168px;      
-        font-size: 24px;
-    }
-}
-@media only screen and (max-width:1600px){ 
-    .panel-cell-wrapper{
-        padding-top: 80px;
-    }    
-    .product-photo-container {
-        padding-top: 1.27%;
-        padding-left: 3.04%;    
-    }    
-    .product-code {    
-        height: 18px;
-        font-size: 16px;
-        margin-bottom: 2px;
-    }
-    .product-name {
-        font-size: 16px;
-    }    
-    .product-price-mark{
-        width: 106px;
-        height: 70px;
-        line-height: 42px;        
-    }
-    .product-price-discount ,
-    .product-price-noDiscount{
-        font-size: 26px;
-        line-height: 26px;
-        padding-top: 6px;
-        padding-bottom: 6px;        
-    } 
-    .product-price-decimal {
-        font-size: 18px;
-    }
-    .product-price-original,
-    .price-discount-off {
-        height: 20px;
-        font-size: 16px; 
-    }    
-
-    .product-color-selected{
-        height: 18px;
-        font-size: 15px;
-        margin-bottom: 12px;
-    }
-    .product-color-item .icon-check {
-        font-size: 17px;
-        width: 17px;
-        height: 17px; 
-    }    
-    .product-color-option{
-        padding-top: 16px;
-    }    
-    .product-color-list {
-        height: 48px;
-        margin-bottom: 12px;
-    }      
-    .product-size-option{
-        margin-right: 40px;
-    }
-
-    .product-color-item {
-        height: 46px;
-        width: 46px;
-    }
-
-    .product-photo-carousel{
-        margin-bottom: 24px;
-    }  
-    .size-mark,.size-access{
-        font-size: 18px;
-    }  
-    .product-size-select,
-    .product-dimensional-code{
-        margin-top: 12px;      
-    }     
-    .product-size-select {
-        height: 50px;
-        margin-right: 16px;
-    }    
-    .code-tip{
-        font-size: 16px;
-        line-height: 30px;
-        padding: 0 7px;
-        top: -43px;
-        right: -6px;     
-    }
-    .code-tip-en{
-        width: 183px;
-    }    
-    .code-tip-zh{
-        width: 150px;
-    }
-    .QR-code-img{
-        width: 120px;
-        height: 120px;
-        padding: 14px;    
-    }    
-    .product-dimensional-code {
-        width: 40px;
-        height: 40px;
-        padding: 5px;
-    }
-    .product-dimensional-code i{
-        font-size: 40px;
-    } 
-
-    .product-QR-code{
-        height: 146px;
-
-    }
-    .product-info-title{
-        font-size: 28px;
+    .empty-description-title {
+        width: 100%;
         height: 32px;
-    }  
-    .product-title{
-        padding: 46px 0 0 58px;
-    }    
-    .product-info-title:after{
-        width:74px;
-        margin-top: 16px;
-    } 
-
-    .page-lang{
-        width: 80px;
-        font-size: 16px;
-        right: 96px;
-    }
-
-    .page-lang-en{
-        margin-right: 24px;
-    }    
-    .panel-designed-for{
+        font-family: SourceHanSansCN;
         font-size: 32px;
-        padding-top: 160px;
-        font-size: 32px;
-        margin-right: 240px;
-    }  
-
-
-    right
-    .panel-cell-wrapper{
-        padding-top: 80px;
-        margin-right: 260px;
-    }      
-    .panel-cell-wrapper p{
-        margin-right: 40px;
+        text-align: center;
+        margin-bottom: 27px;
+        color: #393939;
+        margin-top: 67px;
     }    
-    .product-benefits-item {
-        margin-right: 32px;
-        margin-bottom: 64px;
-    } 
-    .benefits-points{
-        font-size: 32px;
+    .empty-description-subtitle{
+        width: 100%;
+        height: 28px;
+        font-family: SourceHanSansCN;
+        font-size: 28px;
+        text-align: center;
+        color: #898989;
+        margin-bottom: 105px;
     }
-    .benefits-points-content{
-        font-size: 20px;
-    }
-    .product-scorce-wrapper .rate{
-        margin-right: 32px;  
-    }
-
-    .user-review-count{
-        font-size: 25px;
-    }   
-    .review-created-on {
-        height: 47px;
-        font-size: 16px;
-        margin-bottom: 16px;    
-    }
-    .review-content{
-        font-size: 32px;
-    }
-
-    .information-wrapper {
-        margin-bottom: 56px;
-    }  
-
-    .information-queation{
-        font-size: 26px;
-        margin-bottom: 16px;
-    }
-
-    .information-answer{
-        font-size: 19px;
-    }    
-}
-
-@media only screen and (min-width:960px) and (max-width:1280px){
-    .product-QR-code p{
-        height: 168px;  
-        font-size: 18px;
-    }
-
-    .QR-code-img {
-        width: 80px;
-        height: 80px;
-    }    
-}
-@media only screen and (max-width:800px){
-    .product-QR-code p{
-        display: none
-    }
-    
-    .product-QR-code {
-        width: 148px;
-        height: 148px;
-        padding:0;
-    }
-} */

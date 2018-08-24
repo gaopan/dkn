@@ -16,7 +16,7 @@ let routerTable = {
       components: {
         default: () => import('@/modules/home/init/Init.vue')
       }
-    }, {
+    },{
       path: 'index',
       name: 'Home Index',
       components: {
@@ -27,6 +27,12 @@ let routerTable = {
       name: 'Product',
       components: {
         default: () => import('@/modules/home/product/Product.vue')
+      }
+    }, {
+      path: 'error',
+      name: 'Error Page',
+      components: {
+        default: () => import('@/modules/home/error/Error.vue')
       }
     }]
 

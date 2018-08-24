@@ -1,0 +1,137 @@
+	.error-container {
+    height: 1080px;
+    width: 1902px;  
+	}
+	.error-photo-container{
+		width: 680px;
+		height: 1016px;
+		padding-top: 64px;
+		padding-left: 69px;
+		vertical-align: top;
+		display: inline-block;
+	}
+	.error-info{
+		margin-bottom: 77px;
+	}
+	.info-left{
+		width: 413px;
+		margin-right: 81px;
+		vertical-align: top;
+		display: inline-block;
+	}
+	.info-left-top{
+		width: 413px;
+	  height: 25px;
+	  display: inline-block;
+	  margin-bottom: 5px;
+	  background-color: #f5f5f5;
+	}
+	.info-left-bottom{
+		width: 207px;
+	  height: 25px;
+	  background-color: #f5f5f5;
+	}
+	.info-right{
+		display: inline-block;
+	  width: 133px;
+	  height: 50px;
+	  background-color: #f5f5f5;		
+	}
+
+	.error-photo-carousel{
+	  width: 540px;
+	  height: 540px;
+	  margin-bottom: 81px;
+	  background-color: #f5f5f5;
+	  display: inline-block;
+	  vertical-align: top;
+	}	
+
+	.error-photo-pagination{
+		width:136px;
+	  height: 540px;
+	  margin-top: 177px;
+	  font-size: 20px;
+	  color: #e6e6e6;
+	  text-align: center;
+		display: inline-block;  
+	}
+
+	.pagination-icon{
+	  width: 36px;
+	  height: 36px;		
+		display: inline-block;
+    cursor: pointer;	  
+	}
+	.pagination-icon-up{
+		margin-bottom: 23px;
+    background: url(../../../assets/svg/ico_list_bglight_arrow_up_d.svg) no-repeat top left;
+
+	}
+	.pagination-icon-down{
+		margin-top: 23px;
+    background: url(../../../assets/svg/ico_list_bglight_arrow_down_d.svg) no-repeat top left;		
+	}
+
+	.page-spot{
+		display: block;
+		margin:10px 0;
+	}
+	.page-number{
+		display: block;
+	}
+
+	.size-left{
+	  width: 540px;
+	  height: 68px;
+	  background-color: #f5f5f5;		
+		display: inline-block;
+		margin-right: 18px;
+	}
+	.size-right{
+	  width: 68px;
+	  height: 68px;
+		display: inline-block;
+	  background-color: #f5f5f5;
+	}
+
+	.error-description {
+	  /* width: 1070px; */
+	  flex: 1;
+	  height: 680px;
+	  padding-top: 400px;
+	  padding-left: 80px;
+	  background-color: #f5f5f5;
+		display: inline-block;	  
+	}	
+
+	.error-image{
+	  width: 220px;
+	  height: 220px;
+	  margin-right: 30px;
+	  object-fit: contain;	
+		display: inline-block;	
+    background: url(../../../assets/svg/img_list_bglight_missing_all.svg) no-repeat top left;
+
+	}	
+
+	.description-content-wrapper{
+    display: inline-block;
+    width: 694px;
+    height: 232px;	
+	}	
+
+	.description-content-word{
+	  font-size: 40px;
+	  line-height: 1.4;
+	  color: #898989;	
+		display: inline-block;	  	
+	}
+	.back-index{
+	  width: 667px;
+	  height: 50px;
+	  font-size: 28px;
+	  line-height: 2;
+	  color: #0082c3;	
+		display: inline-block;	  	
+	}
