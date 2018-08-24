@@ -4,9 +4,9 @@
 		<section class="product-photo-container" ref = "ConversionZone">
 
 			<div class="product-info">
-				<span class="product-code">{{pageInfoLabel.itemCode[lang]}}: {{defaultCode.other.default_item_code}}</span>
+				<span class="product-code">{{pageInfoLabel.itemCode[lang]}}: {{original_dicount_price_itemcode.itemCode}}</span>
 				<div class="product-price-container">
-					<p class="product-name" v-if = "!!productInfoDataDatBase[lang].WebLabel">{{productInfoDataDatBase[lang].WebLabel}}</p>
+					<p class="product-name" v-if = "!!productInfoDataDatBase.WebLabel">{{productInfoDataDatBase.WebLabel}}</p>
 					<div class="no-product-name" v-else>
 						<div class="info-top"></div>
 						<div class="info-bottom"></div>
@@ -14,29 +14,32 @@
 					<div class="product-price-mark">
 						<div class="product-with-discount" v-if = "showDiscountPrice">
 							<span class="product-price-discount">
-								<span>$</span>
+								<span>{{priceUnit}}</span>
 								<span class="product-price-integer">{{original_dicount_price_itemcode.price.discount.int}}</span>
-								<span class="product-price-decimal">{{original_dicount_price_itemcode.price.discount.decimal}}</span>
+								<span class="product-price-decimal" v-if = "priceUnit=='$'">{{original_dicount_price_itemcode.price.discount.decimal}}</span>
 							</span>
-							<span class="product-price-original">$ {{original_dicount_price_itemcode.price.original.int}}{{original_dicount_price_itemcode.price.original.decimal}}</span>
+							<span class="product-price-original">
+								$ {{original_dicount_price_itemcode.price.original.int}}
+								<span v-if = "priceUnit=='$'">{{original_dicount_price_itemcode.price.original.decimal}}</span>
+							</span>
 							<span class="price-discount-off">{{original_dicount_price_itemcode.price.off}}%off</span>
 						</div>
 						<div class="product-without-discount" v-if ="showRangePrice">
 							<span class="product-price-noDiscount">
-								<span class="range-symbol">$</span>
+								<span class="range-symbol">{{priceUnit}}</span>
 								<span class="range-price-integer">{{priceRange.min.int}}</span>
-								<span class="range-price-decimal">{{priceRange.min.decimal}}</span>						
+								<span class="range-price-decimal" v-if = "priceUnit=='$'">{{priceRange.min.decimal}}</span>						
 								<span>-</span>
-								<span class="range-symbol">$</span>
+								<span class="range-symbol"><span>{{priceUnit}}</span></span>
 								<span class="range-price-integer">{{priceRange.max.int}}</span>
-								<span class="range-price-decimal">{{priceRange.max.decimal}}</span>
+								<span class="range-price-decimal" v-if = "priceUnit=='$'">{{priceRange.max.decimal}}</span>
 							</span>
 						</div>
 						<div class="product-without-discount" v-if = "showOriginalPrice">
 							<span class="product-price-noDiscount">
-								<span>$</span>
+								<span>{{priceUnit}}</span>
 								<span class="product-price-integer">{{original_dicount_price_itemcode.price.original.int}}</span>
-								<span class="product-price-decimal">{{original_dicount_price_itemcode.price.original.decimal}}</span>
+								<span class="product-price-decimal" v-if = "priceUnit=='$'">{{original_dicount_price_itemcode.price.original.decimal}}</span>
 							</span>
 						</div>
 						<div class="empty-price-label"  v-if = "bEmptyPrice"></div>
@@ -164,8 +167,8 @@
           		v-if = "item.id === 'DesignFor'"
           		ref = "DesignForBlock"
           	>
-	            <p>{{productInfoDataDatBase[lang].DesignedFor}}</p> 
-	            <p>{{productInfoDataDatBase[lang].Catchline}}</p> 
+	            <p>{{productInfoDataDatBase.DesignedFor}}</p> 
+	            <p>{{productInfoDataDatBase.Catchline}}</p> 
 
             </div>
 						
@@ -176,7 +179,7 @@
           		v-else-if = "item.id === 'ProductBenefit'"
           		ref = "ProdBenefitBlock"
           		>
-		            <div class = "product-benefits-item" :class = "{'marginBottom0': benefitIndex == productInfoDataDatBase[lang].Benefits.length-1}"  v-for= "(benefit,benefitIndex) in productInfoDataDatBase[lang].Benefits">
+		            <div class = "product-benefits-item" :class = "{'marginBottom0': benefitIndex == productInfoDataDatBase.Benefits.length-1}"  v-for= "(benefit,benefitIndex) in productInfoDataDatBase.Benefits">
 		            	<p class = "benefits-points">{{benefit.label}}</p> 
 		            	<p class = "benefits-points-content">{{benefit.text}}</p> 
 		            </div>
@@ -201,7 +204,7 @@
 		            			<span class = "review-created-date">{{review.published_at}}</span>
 		            			<span class = "review-created-name">{{review.firstname}}</span>
 		            		</p>
-		            		<p><span v-if = "lang == 'EN'">On </span>{{productInfoDataDatBase[lang].WebLabel}} {{size_image_colorName.colorName}}</p>
+		            		<p><span v-if = "lang == 'EN'">On </span>{{productInfoDataDatBase.WebLabel}} {{size_image_colorName.colorName}}</p>
 		            	</div> 
 
 		            	<div class="review-content">
@@ -216,17 +219,17 @@
             		 v-else-if = "item.id === 'ProdConceptTech'"
             		 ref = "ConceptTechBlock"
             		 >
-		            <div class = "product-conpcept-wrapper" v-show = "!!productInfoDataDatBase[lang].MaintenanceAdv">
+		            <div class = "product-conpcept-wrapper" v-show = "!!productInfoDataDatBase.MaintenanceAdv">
 		            	<p class = "product-conpcept-title">{{pageInfoLabel.maintenanceAdv[lang]}}</p> 
-		            	<p class = "product-conpcept-content">{{productInfoDataDatBase[lang].MaintenanceAdv}}</p> 
+		            	<p class = "product-conpcept-content">{{productInfoDataDatBase.MaintenanceAdv}}</p> 
 		            </div>
-		            <div class = "product-conpcept-wrapper"  v-show = "!!productInfoDataDatBase[lang].StorageAdv">
+		            <div class = "product-conpcept-wrapper"  v-show = "!!productInfoDataDatBase.StorageAdv">
 		            	<p class = "product-conpcept-title">{{pageInfoLabel.storageAdv[lang]}}</p> 
-		            	<p class = "product-conpcept-content">{{productInfoDataDatBase[lang].StorageAdv}}</p> 
+		            	<p class = "product-conpcept-content">{{productInfoDataDatBase.StorageAdv}}</p> 
 		            </div>
-		            <div class = "product-conpcept-wrapper"  v-show = "!!productInfoDataDatBase[lang].UsageRestriction">
+		            <div class = "product-conpcept-wrapper"  v-show = "!!productInfoDataDatBase.UsageRestriction">
 		            	<p class = "product-conpcept-title">{{pageInfoLabel.uesRes[lang]}}</p> 
-		            	<p class = "product-conpcept-content">{{productInfoDataDatBase[lang].UsageRestriction}}</p> 
+		            	<p class = "product-conpcept-content">{{productInfoDataDatBase.UsageRestriction}}</p> 
 		            </div>
 	          </div>
 						<!-- TECHNICAL INFORMATION -->
@@ -235,7 +238,7 @@
             		 v-else-if = "item.id === 'TechInfo'"
             		 ref = "TechInfoBlock"
             		 >
-		            <div class = "information-wrapper" v-for= "(Functionality,FunctionalityIndex) in productInfoDataDatBase[lang].Functionalities">
+		            <div class = "information-wrapper" v-for= "(Functionality,FunctionalityIndex) in productInfoDataDatBase.Functionalities">
 		            	<p class = "information-queation">{{Functionality.label}}</p> 
 		            	<p class = "information-answer">{{Functionality.text}}</p> 
 		            </div>

@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       rfid: null,
+      priceUnit:null,
       showModal:false,
       area: {
         to: null,
@@ -111,21 +112,11 @@ export default {
       bShowShadow: false,
       bShowQRCode: false,
 
-      productInfoDataDatBase: {
-        EN: {},ZH: {},MY: {}
-      },
-      productModelsDatBase: {
-        EN: {},ZH: {},MY: {}
-      },
-      reviewsDataBase: { //user reviews
-        EN: [],ZH: [],MY: []
-      },
-      priceDataBase:{
-        EN: [],ZH: [],MY: []
-      },
-      stockDataBase:{
-        EN: [],ZH: [],MY: []
-      },
+      productInfoDataDatBase: {},
+      productModelsDatBase: {},
+      reviewsDataBase: {},
+      priceDataBase:{},
+      stockDataBase:{},
       QRCodeSrc: null,
       productReviews:[],
       productScore:0,
@@ -133,10 +124,6 @@ export default {
         ZH: {
           defaultColorIndex: null,
           defaultSizeIndex: null,
-        },
-        EN: {
-          defaultColorIndex: null,
-          defaultSizeIndex: null
         },
         other: {
           defaultColorIndex: null,
@@ -173,7 +160,6 @@ export default {
       bEmptyProductInfo:false,
       //show decription title when decription loaded
       bDescriptionDataLoaded:false,
-      noZHProductInfo:false,
       disableZHbtn:false
           
     }
@@ -474,10 +460,10 @@ export default {
       //user select color item while data was loading
       this.bEmptyPrice = false;
 
-      this.priceRange = this.getRangePrice(this.priceDataBase[this.lang],color.modelCode);
+      this.priceRange = this.getRangePrice(this.priceDataBase,color.modelCode);
 
-      if(Object.keys(this.reviewsDataBase[this.lang]).length){
-        let reviewData = this.reviewsDataBase[this.lang][color.modelCode];
+      if(Object.keys(this.reviewsDataBase).length){
+        let reviewData = this.reviewsDataBase[color.modelCode];
         var obj = this.makeUserReviewData(reviewData);
         this.productReviews = obj.productReviews;
         this.productScore = obj.productScore;
@@ -530,8 +516,8 @@ export default {
       this.original_dicount_price_itemcode.itemCode = args.itemCode;
 
       //prevent before price returned
-      if(Object.keys(this.priceDataBase[this.lang]).length){
-        let price = this.priceDataBase[this.lang].items[args.itemCode];
+      if(Object.keys(this.priceDataBase).length){
+        let price = this.priceDataBase.items[args.itemCode];
 
         if(!price){
           this.bEmptyPrice = true;
@@ -564,45 +550,22 @@ export default {
 
     chooseLang(lang) {
       if (this.lang == lang||this.disableZHbtn) return;
-
-      localStorage.setItem("lang", lang);
-      window.location.reload()
-
-      if(this.noZHProductInfo&&lang=="ZH"){
-        this.showModal = true;
-        this.disableZHbtn = true;
+      
+      if(lang=="ZH" && this.defaultLang == "ZH"){
+        ProductApi.getProductInfo(this.rfid, "ZH", "tw").then(res=>{
+          localStorage.setItem("lang", lang);
+          window.location.reload()
+        },err=>{
+          this.showModal = true;
+          this.disableZHbtn = true;
+        })
         return;
+      }else{
+        localStorage.setItem("lang", lang);
+        window.location.reload()
       }
-      this.lang = lang;
       
-
-      this.sizeSelected = {value:null,label:null,stock:null};
-      this.get_size_review_description_options(lang);
-
-      let default_model_code = this.defaultCode[lang].default_model_code,
-          default_item_code = this.defaultCode[lang].default_item_code;
-
-      if(!this.bEmptyProductInfo && !this.noPrice){
-        this.get_original_dicount_price(lang)
-      }
-
-      if(!this.noUserView && !this.bEmptyProductInfo){
-        //reveiws of default product      
-        let reviewData = this.reviewsDataBase[lang][default_model_code];
-        //review_UI and product sorce
-        var obj = this.makeUserReviewData(reviewData);
-        this.productReviews = obj.productReviews;
-        this.productScore = obj.productScore; 
-      }
-
-      if(!this.bEmptyProductInfo&&!this.noStock){
-        console.log(this.productAllInfoByColor)   
-        this.addStockToInfo(this.stockDataBase[lang]);
-      }
-
-      this.navigateToPhoto = 1;    
-      
-      this.activeNavIndex = 0;      
+    
     },
 
     activeNavIndexChanged(args) {
@@ -617,78 +580,111 @@ export default {
     initPageData(lang) {
       //request  product in  tw_en , tw_zh and my
       let country = this.defaultLang == "ZH"?"tw":"my";
+
       var productInfoPromise = ProductApi.getProductInfo(this.rfid, lang, country).then(res => {
-        if (res.data && res.data.dsm) this.productInfoDataDatBase[lang] = res.data.dsm;
-        if (res.data && res.data.models) this.productModelsDatBase[lang] = res.data.models; 
+        if (res.data && res.data.dsm) this.productInfoDataDatBase = res.data.dsm;
+        if (res.data && res.data.models) this.productModelsDatBase = res.data.models; 
         
         this.defaultCode[lang].default_item_code = res.data.default_item_code;
         this.defaultCode[lang].default_model_code = res.data.default_model_code;
-        var defaultData = getDefaultCodeIndex(this.productModelsDatBase[lang], res.data.default_model_code, res.data.default_item_code)
-        this.defaultIndex[lang] = Object.assign({},defaultData); 
         
+        var defaultIndex = getDefaultCodeIndex(this.productModelsDatBase, res.data.default_model_code, res.data.default_item_code)
+        this.defaultIndex[lang] = Object.assign({},defaultIndex); 
+        
+        //bDescriptionDataLoaded——show description title
         this.bDescriptionDataLoaded = true;
-        this.get_size_review_description_options(lang);
+    
+        //default size, no defalut stock now
+        this.sizeSelected = this.getSizeLabel(
+                              this.productModelsDatBase,
+                              this.stockDataBase,
+                              this.defaultCode[lang].default_model_code,
+                              this.defaultCode[lang].default_item_code
+                            )
+        
+        //show or hide the tab  
+        this.checkNavPanelDisplay(this.productInfoDataDatBase)
+
+        //get product description list
+        this.navTabList_ = [];
+        this.navTabList.forEach(d=>{
+          if(d.show)this.navTabList_.push({
+            label:d.label,
+            id:d.id
+          })
+        }) 
+
+        this.activeNavIndex = 0;
+        this.containerTitle = this.navTabList_[0].label[this.lang];
+
+        //make color options and size options
+        this.dataGenerator(lang, this.productModelsDatBase, this.productInfoDataDatBase);
+
         this.getQRCode(this.defaultCode[lang].default_model_code,lang)
 
-
       }, err => {
-        this.noZHProductInfo = true;
+
         this.bEmptyProductInfo = true;
-        if(lange == "ZH")this.$router.push('/error');       
+        this.$router.push('/error');       
+
       })
 
-      var userReview = ProductApi.getUserReview(this.rfid, lang, country).then(res => {
-        this.reviewsDataBase[lang] = res.data;         
+      var userReviewPromise = ProductApi.getUserReview(this.rfid, lang, country).then(res => {
+        this.reviewsDataBase = res.data;         
       },err=>{
         this.noUserView = true;
       })
 
       var stockPromise = ProductApi.getStock(this.rfid, undefined, lang, country).then(res => {
-        this.stockDataBase[lang] = res.data;
+        this.stockDataBase = res.data;
       },err=> {
         this.noStock = true;
       })
    
       var pricePromise = ProductApi.getPrice(this.rfid, undefined,lang,country).then(res=> {
-        this.priceDataBase[lang] = res.data;
+        this.priceUnit = res.data.currency == "TWD" ? "NT$":"$"
+        this.priceDataBase = res.data;
       },err=> {
         this.noPrice = true;
       }) 
 
-        Promise.all([productInfoPromise,pricePromise]).then(()=>{
-          if(this.bEmptyProductInfo||this.noPrice)return;
+      Promise.all([productInfoPromise,pricePromise]).then(()=>{
+        if(this.bEmptyProductInfo||this.noPrice)return;
 
+        if(this.defaultModelChanged){
+          //change modeCode only
+          if(this.defaultCode.other.default_model_code && !this.defaultCode.other.default_item_code){
+            this.priceRange = this.getRangePrice(this.priceDataBase,this.defaultCode.other.default_model_code);
+          }
+          //change itemcode
+          if(this.defaultCode.other.default_item_code)this.get_original_dicount_price(lang);
+        }else{
+          this.get_original_dicount_price(lang);
+        }          
 
-          if(this.defaultModelChanged){
-            this.priceRange = this.getRangePrice(this.priceDataBase[lang],this.defaultCode[lang].default_model_code);
-            if(this.defaultCode.other.default_item_code)this.get_original_dicount_price(lang);
-          }else{
-            this.get_original_dicount_price(lang);
-          }          
+      })
 
-        })
+      Promise.all([productInfoPromise,userReviewPromise]).then(()=>{
+        if(this.noUserView||this.bEmptyProductInfo)return;
+        //reveiws of default product        
+        let default_model_code = this.defaultCode.other.default_model_code ? this.defaultCode[lang].default_model_code : this.defaultCode.other.default_model_code;
 
-        Promise.all([productInfoPromise,userReview]).then(()=>{
-          if(this.noUserView||this.bEmptyProductInfo)return;
-          //reveiws of default product
-          let default_model_code = this.defaultCode[lang].default_model_code;
-          
-          let reviewData = this.reviewsDataBase[lang][default_model_code];
+        let reviewData = this.reviewsDataBase[default_model_code];
 
-          //review_UI and product sorce
-          var obj = this.makeUserReviewData(reviewData);
-          this.productReviews = obj.productReviews;
-          this.productScore = obj.productScore;          
-        })
+        //review_UI and product sorce
+        var obj = this.makeUserReviewData(reviewData);
+        this.productReviews = obj.productReviews;
+        this.productScore = obj.productScore;          
+      })
 
-        Promise.all([productInfoPromise,stockPromise]).then(()=>{
-          if(this.bEmptyProductInfo)return;
-          this.addStockToInfo(this.stockDataBase[lang]);
+      Promise.all([productInfoPromise,stockPromise]).then(()=>{
+        if(this.bEmptyProductInfo||this.noStock)return;
+        this.addStockToInfo(this.stockDataBase);
 
-          this.sizeSelected = getSizeSelected(this,lang);
+        //update stock in label
+        this.sizeSelected = getSizeSelected(this,lang);
 
-          console.log(this.productAllInfoByColor)
-        })      
+      })      
 
 
       function getDefaultCodeIndex(model, model_code, item_code) {
@@ -723,11 +719,12 @@ export default {
 
         if(vm.defaultModelChanged){
           sizeSelected = {value:null,label:null,stock:null}
+          //change modelcode or itemcode
           if(otherItemCode){
-            sizeSelected = vm.getSizeLabel(vm.productModelsDatBase[lang], vm.stockDataBase[lang],otherModelCode||default_model_code, otherItemCode) 
+            sizeSelected = vm.getSizeLabel(vm.productModelsDatBase, vm.stockDataBase,otherModelCode||default_model_code, otherItemCode) 
           }
         }else{
-          sizeSelected = vm.getSizeLabel(vm.productModelsDatBase[lang], vm.stockDataBase[lang],default_model_code, default_item_code) 
+          sizeSelected = vm.getSizeLabel(vm.productModelsDatBase, vm.stockDataBase,default_model_code, default_item_code) 
         } 
         return  sizeSelected;      
       }
@@ -742,12 +739,15 @@ export default {
       })
     },
     get_original_dicount_price(lang){
+      
       let otherItem_code = this.defaultCode.other.default_item_code;
+      
       //otherItem_code: user choose another size item
       //default_item_code: default item code
+
       let defaultItemCode = !!otherItem_code ? otherItem_code :this.defaultCode[lang].default_item_code ;
 
-      let price = this.priceDataBase[lang].items[defaultItemCode];
+      let price = this.priceDataBase.items[defaultItemCode];
 
       if(!price){
         this.bEmptyPrice = true;
@@ -756,7 +756,7 @@ export default {
         this.original_dicount_price_itemcode.itemCode = defaultItemCode;
         this.original_dicount_price_itemcode.price = this.calculateDiscount(price);
       }  
-      console.log("get_original_dicount_price",this.bEmptyPrice)
+
     },
     getRangePrice(priceDataBase,modelCode){
       let priceRange = {
@@ -785,7 +785,6 @@ export default {
           }
         }
       }
-      console.log("getRangePrice",this.bEmptyPrice) 
       return priceRange;
     },
 
@@ -794,7 +793,6 @@ export default {
         let model = this.makeProductInfoDataByColor(productModelsDatBase, this.defaultIndex[lang], lang);
 
         this.productAllInfoByColor = model.productAllInfoByColor;
-
         this.colorOptions = model.colorOptions;
 
         if (this.productAllInfoByColor.length) {
@@ -802,7 +800,7 @@ export default {
           this.size_image_colorName = this.productAllInfoByColor[this.defaultIndex[lang].defaultColorIndex];
 
           this.imageUrl = this.size_image_colorName.videosAndImages
-          this.noImage = this.imageUrl.length?false:true;
+          this.noImage = this.imageUrl.length ? false : true;
 
           this.defaultIndex.other = Object.assign({},this.defaultIndex[lang]);
         }
@@ -825,21 +823,8 @@ export default {
 
     get_size_review_description_options(lang){
 
-      //default size
-      this.sizeSelected = this.getSizeLabel(
-                            this.productModelsDatBase[lang],
-                            this.stockDataBase[lang],
-                            this.defaultCode[lang].default_model_code,
-                            this.defaultCode[lang].default_item_code
-                          )
-
-      //make product description
-      this.getProductDescription(this.productInfoDataDatBase[lang])
-
-      //make color options and size options
-      this.dataGenerator(lang, this.productModelsDatBase[lang], this.productInfoDataDatBase[lang]);
-
     },
+
     getSizeLabel(productModelsDatBase,stockDataBase,default_model_code,defaultItemCode){
       let sizeSelected = {};
 
@@ -864,18 +849,7 @@ export default {
 
     getProductDescription(productInfoData){
 
-      this.checkNavPanelDisplay(productInfoData)
 
-      //get product description list
-      this.navTabList_ = [];
-      this.navTabList.forEach(d=>{
-        if(d.show)this.navTabList_.push({
-          label:d.label,
-          id:d.id
-        })
-      }) 
-      this.activeNavIndex = 0;
-      this.containerTitle = this.navTabList_[0].label[this.lang];
 
     },
     getQRCode(modelCode,lang){
@@ -949,7 +923,7 @@ export default {
       let score = 0,
         productScore = 0;
 
-      if (!!resData.length) {
+      if (resData&&!!resData.length) {
         resData.forEach(d => {
           d.published_at = TimeUtil.getFullDate(new Date(d.published_at), 'yyyy-MM-dd')
           score += ~~d.note
@@ -1045,7 +1019,7 @@ export default {
   },
   computed: {
     itemName() {
-      return this.productInfoDataDatBase[this.lang].WebLabel;
+      return this.productInfoDataDatBase.WebLabel;
     },
     showOriginalPrice(){
       if(this.bEmptyPrice)return false;
@@ -1067,7 +1041,7 @@ export default {
       }
     },
     noProductDescription(){
-      return (this.navTabList_.length == 1) && this.noUserView;
+      return this.navTabList_.length == 1;
     }
   },
   watch:{
