@@ -47,24 +47,28 @@ export default {
 			navigateToPhoto:1,
 			imageUrl:[],
 			navTabList: [
-        {label:{EN:'DESIGNED FOR',ZH:"適合在"},show:true,id:"DesignFor"},
-        {label: {EN:'PRODUCT BENEFITS',ZH:"產品優點"},show:true,id:"ProductBenefit"},
-        {label: {EN:'USER REVIEWS',ZH:"使用者回饋"},show:true,id:"UserReviews"},
-        {label: {EN:'PRODUCT CONCEPT & TECHNOLOGY',ZH:"產品細節"},show:true,id:"ProdConceptTech"},
-        {label: {EN:'TECHNICAL INFORMATION',ZH:"產品性能"},show:true,id:"TechInfo"},
+        {label:{MY:'DESIGNED FOR',EN:'DESIGNED FOR',ZH:"適合在"},show:true,id:"DesignFor"},
+        {label: {MY:'PRODUCT BENEFITS',EN:'PRODUCT BENEFITS',ZH:"產品優點"},show:true,id:"ProductBenefit"},
+        {label: {MY:'USER REVIEWS',EN:'USER REVIEWS',ZH:"使用者回饋"},show:true,id:"UserReviews"},
+        {label: {MY:'PRODUCT CONCEPT & TECHNOLOGY',EN:'PRODUCT CONCEPT & TECHNOLOGY',ZH:"產品細節"},show:true,id:"ProdConceptTech"},
+        {label: {MY:'TECHNICAL INFORMATION',EN:'TECHNICAL INFORMATION',ZH:"產品性能"},show:true,id:"TechInfo"},
       ],
       navTabList_:[],
       pageInfoLabel: {
-        itemCode: { EN: "Item code", ZH: "貨號" },
-        colorOption: { EN: "Color option", ZH: "顏色選項" },
-        size: { EN: "Size", ZH: "尺寸" },
-        stock: { EN: "Stock: ", ZH: "库存： " },
-        inStock: { EN: "In Stock", ZH: "尚有庫存" },
-        outOfStock: { EN: "Out of Stock", ZH: "無庫存" },
-        QRCode: { EN: "Want to buy online?Click me!", ZH: "線上購買？點擊我！", },
-        maintenanceAdv: { EN: "MAINTENANCE ADVICE", ZH: "保養建議" },
-        storageAdv: { EN: "STORAGE ADVICE", ZH: "存放建議" },
-        uesRes: { EN: "USE RESTRICTIONS", ZH: "使用限制" }
+        itemCode: { MY: "Item code", EN: "Item code", ZH: "貨號" },
+        colorOption: { MY: "Color option",EN: "Color option", ZH: "顏色選項" },
+        size: { MY: "Size",EN: "Size", ZH: "尺寸" },
+        stock: { MY: "Stock: ",EN: "Stock: ", ZH: "库存： " },
+        inStock: { MY: "In Stock",EN: "In Stock", ZH: "尚有庫存" },
+        outOfStock: { MY: "Out of Stock",EN: "Out of Stock", ZH: "無庫存" },
+        QRCode: { MY: "Want to buy online?Click me!",EN: "Want to buy online?Click me!", ZH: "線上購買？點擊我！", },
+        maintenanceAdv: { MY: "MAINTENANCE ADVICE",EN: "MAINTENANCE ADVICE", ZH: "保養建議" },
+        storageAdv: { MY: "STORAGE ADVICE",EN: "STORAGE ADVICE", ZH: "存放建議" },
+        uesRes: { MY: "USE RESTRICTIONS",EN: "USE RESTRICTIONS", ZH: "使用限制" },
+        tip1: { MY: "Sorry! The product is too new.",EN: "Sorry! The product is too new.", ZH: "抱歉！此產品為新品," },
+        tip2: { MY: "We are still working on the detail information.",EN: "We are still working on the detail information.", ZH: "我們正努力更新中." },
+        tip3: { MY: "information.",EN: "information.", ZH: "" },
+        emptyPriceLabel: { MY: "Please check label or ask SA to get the price",EN: "Please check label or ask SA to get the price", ZH: "請查看商品標簽或向店員詢問價格信息" }
       },
       containerTitle: null,
       activeNavIndex: 0,
@@ -167,6 +171,7 @@ export default {
   created() {
     console.log("created")
     this.rfid = this.$router.currentRoute.params.rfid;
+    // this.rfid = 3608439935121;
 
     this.defaultLang = StoreService.getLang();
 
@@ -175,7 +180,8 @@ export default {
       this.lang = "MY";
     } else {
       let langInLocal = localStorage.getItem("lang");
-      this.lang = !!langInLocal ? langInLocal:this.defaultLang;
+      this.lang = !!langInLocal ? langInLocal:"EN";      
+      // this.lang = !!langInLocal ? langInLocal:this.defaultLang;
     }
 
     this.initPageData(this.lang)
@@ -505,7 +511,6 @@ export default {
     },
 
     selectProductSize(args) {
-
       if (args.value == this.sizeSelected.value) return;
       this.defaultModelChanged = true;
       this.defaultIndex.other.defaultSizeIndex = args.index;
@@ -584,7 +589,7 @@ export default {
       var productInfoPromise = ProductApi.getProductInfo(this.rfid, lang, country).then(res => {
         if (res.data && res.data.dsm) this.productInfoDataDatBase = res.data.dsm;
         if (res.data && res.data.models) this.productModelsDatBase = res.data.models; 
-        
+
         this.defaultCode[lang].default_item_code = res.data.default_item_code;
         this.defaultCode[lang].default_model_code = res.data.default_model_code;
         
@@ -651,6 +656,9 @@ export default {
       Promise.all([productInfoPromise,pricePromise]).then(()=>{
         if(this.bEmptyProductInfo||this.noPrice)return;
 
+        let priceItems = Object.keys(this.priceDataBase);
+        if( (this.navTabList_.length == 1) &&(priceItems.length == 0))this.$router.push("/error");
+
         if(this.defaultModelChanged){
           //change modeCode only
           if(this.defaultCode.other.default_model_code && !this.defaultCode.other.default_item_code){
@@ -661,7 +669,7 @@ export default {
         }else{
           this.get_original_dicount_price(lang);
         }          
-
+        console.log(this.original_dicount_price_itemcode)
       })
 
       Promise.all([productInfoPromise,userReviewPromise]).then(()=>{
@@ -956,14 +964,19 @@ export default {
         let sale_price = pricesObj.sale_price + "";
         let strikeout_price = pricesObj.strikeout_price + "";
         // let strikeout_price = parseInt(Math.random()*800)+"";
-        if (!!sale_price) {
-          discount = this.divideFloat(sale_price)
-        }
 
-        if (!!strikeout_price) {
+        if(strikeout_price == ""){
+          original = this.divideFloat(sale_price);
+        }else{
+          if (!!sale_price) {
+            discount = this.divideFloat(sale_price)
+          }
 
-          original = this.divideFloat(strikeout_price);
-          off = +(((+sale_price) * 100 / (+strikeout_price)).toFixed(0))
+          if (!!strikeout_price) {
+
+            original = this.divideFloat(strikeout_price);
+            off = +(((+sale_price) * 100 / (+strikeout_price)).toFixed(0))
+          }          
         }
         return { original, discount, off }
       }
@@ -1044,10 +1057,10 @@ export default {
       return this.navTabList_.length == 1;
     }
   },
-  watch:{
-    bEmptyPrice(newV,oldV){
-      console.log(newV)
-    }
-  }
+  // watch:{
+  //   bEmptyPrice(newV,oldV){
+  //     console.log(newV)
+  //   }
+  // }
 
 }

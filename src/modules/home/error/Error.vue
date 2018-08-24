@@ -38,9 +38,9 @@
 			<div class="error-image"></div>
 			<div class="description-content-wrapper">
 				<div class="description-content-word">
-					<p>OOPS!</p>
-					<p>The product information seems missing.</p>
-					<p>Please try later or call our teammates to help you.</p>
+					<p>{{pageInfoLabel.error1[lang]}}</p>
+					<p>{{pageInfoLabel.error2[lang]}}</p>
+					<p>{{pageInfoLabel.error3[lang]}}</p>
 				</div>
 				<p class="back-index">Back to Index in {{countdown}}s</p>
 			</div>

@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<div class="empty-price">
-					<p v-if = "noPrice">Please check label or ask SA to get the price</p>
+					<p v-if = "noPrice">{{pageInfoLabel.emptyPriceLabel[lang]}}</p>
 				</div>
 			</div>
 			<!-- select different colors of product  -->
@@ -141,11 +141,15 @@
 		</section>
 
 		<div class="no-product-description" v-if = "noProductDescription">
+			<div class="empty-page-lang" v-if = "defaultLang == 'ZH'">
+				<span class="page-lang-en no-select" :class = "{borderBottom2:lang =='ZH','disable-ZH-btn':disableZHbtn}" @click = "chooseLang('ZH')">中</span>
+				<span class="page-lang-zh no-select" :class = "{borderBottom2:lang =='EN'}"  @click = "chooseLang('EN')">EN</span>
+			</div>			
 			<div class="empty-description-icon"></div>
 			<div class="empty-description">
-				<p>Sorry! The product is too new.</p>
-				<p>We are still working on the detail</p> 
-				<p>information.</p>
+				<p>{{pageInfoLabel.tip1[lang]}}</p>
+				<p>{{pageInfoLabel.tip2[lang]}}</p> 
+				<p>{{pageInfoLabel.tip3[lang]}}</p>
 			</div>
 		</div>
 		<section class="product-description" v-else ref = "ContentZone">

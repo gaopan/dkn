@@ -376,6 +376,7 @@
     padding-left: 80px; 
     display: inline-block; 
     overflow: hidden;  
+
     /* padding-bottom: 22px; */
 }	
 .no-product-description{
@@ -384,6 +385,7 @@
     padding-left: 80px;
     padding-top: 400px;
     display: inline-block;
+    position: relative;    
     background-color: #fafafa;
 }
 .empty-description-icon {
@@ -430,7 +432,11 @@
     color: #898989;
     position: absolute;
 }
-
+.empty-page-lang{
+    position: absolute;
+    top: 65px;
+    right: 124px;
+  }
 .borderBottom2{
     font-weight: bold;
     border-bottom: 2px solid #000;

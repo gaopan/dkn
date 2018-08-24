@@ -100,29 +100,29 @@
                 });
             },
             scrollHandler() {
-                if (this.scrolling) return;
+                // if (this.scrolling) return;
 
-                const panels = this.panels;
-                let scrollBoxHeight = this.scrollView.offsetHeight;
-                let activeIndex = 0;
+                // const panels = this.panels;
+                // let scrollBoxHeight = this.scrollView.offsetHeight;
+                // let activeIndex = 0;
 
-                if(panels&&panels.length){
-                    panels.forEach((panel, index) => {
-                        let viewHeight = this.scrollView.scrollTop- this.scrollViewTop >= 0 ? scrollBoxHeight : 20;
+                // if(panels&&panels.length){
+                //     panels.forEach((panel, index) => {
+                //         let viewHeight = this.scrollView.scrollTop- this.scrollViewTop >= 0 ? scrollBoxHeight : 20;
 
-                        if (panel.$el.getBoundingClientRect().top <= viewHeight + this.contentOffsetTop) {
-                               activeIndex = index;
-                        }
-                    });
-                    this.scrollViewTop = this.scrollView.scrollTop;
-                    if(activeIndex != this.activeIndex){
-                        this.activeIndex  = activeIndex;
-                        // console.log(activeIndex)
-                       this.scrollToTargetContent(this.activeIndex,false); 
-                       this.$emit("activeIndexChanged",this.activeIndex);
+                //         if (panel.$el.getBoundingClientRect().top <= viewHeight + this.contentOffsetTop) {
+                //                activeIndex = index;
+                //         }
+                //     });
+                //     this.scrollViewTop = this.scrollView.scrollTop;
+                //     if(activeIndex != this.activeIndex){
+                //         this.activeIndex  = activeIndex;
+                //         // console.log(activeIndex)
+                //        this.scrollToTargetContent(this.activeIndex,false); 
+                //        this.$emit("activeIndexChanged",this.activeIndex);
 
-                    }
-                }
+                //     }
+                // }
 
             },
             scrollToTargetContent(index, animate = true) {
