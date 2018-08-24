@@ -152,8 +152,8 @@ export default {
       this.lang = "MY";
     } else {
       let langInLocal = localStorage.getItem("lang");
-      this.lang = !!langInLocal ? langInLocal : "EN";
-      // this.lang = !!langInLocal ? langInLocal : this.defaultLang;
+      // this.lang = !!langInLocal ? langInLocal : "EN";
+      this.lang = !!langInLocal ? langInLocal : this.defaultLang;
     }
 
     this.initPageData(this.lang)
@@ -196,10 +196,11 @@ export default {
         this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave", this.scrollMonitorMouseleave);
       }
 
-      // if (this.defaultLang != 'EN') {
-      //   //"ZH"
-      //   localStorage.setItem("lang", this.defaultLang);
-      // }
+      if (this.defaultLang != 'EN') {
+        //"ZH"
+        localStorage.setItem("lang", this.defaultLang);
+      }
+
     })
   },
   beforeDestroy() {
@@ -224,6 +225,10 @@ export default {
     }
 
     clearInterval(this.intervalTimer);
+
+    if (this.defaultLang != 'EN') {
+      localStorage.setItem("lang", this.defaultLang);
+    }
   },
   methods: {
     carouselMonitorMousedown() {
