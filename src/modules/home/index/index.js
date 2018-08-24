@@ -25,6 +25,7 @@ export default {
       this.bMoveIcon = !this.bMoveIcon;
     }, 1000);
 
+    console.log(StoreService.getLang());
     this.lang = StoreService.getLang();
   },
   beforeDestroy() {
