@@ -1,12 +1,10 @@
-/**
-
-**/
 import { Carousel, Slide } from "@/components/carousel"
 import { ScrollNav, ScrollNavPanel } from "@/components/scrollNav"
 import CustomSelect from "@/components/custom-select"
 import popup from "@/components/popup/Popup.vue"
 import Rate from "@/components/rate/Rate.vue"
 import StoreService from '@/services/store-services.js'
+import CommonUtils from '@/utils/common-utils.js'
 
 import ProductApi from "@/api/modules/product/productInfo.js"
 import ProductConfig from './product.config.js'
@@ -140,28 +138,11 @@ export default {
       //show decription title when decription loaded
       bDescriptionDataLoaded: false,
       disableZHbtn: false
-
     }
   },
   created() {
-    this.rfid = this.$router.currentRoute.params.rfid;
-
-    this.defaultLang = StoreService.getLang();
-
-    if (this.defaultLang == 'EN') {
-      this.lang = "MY";
-    } else {
-      let langInLocal = localStorage.getItem("lang");
-      // this.lang = !!langInLocal ? langInLocal : "EN";
-      this.lang = !!langInLocal ? langInLocal : this.defaultLang;
-    }
-
-    this.initPageData(this.lang)
-
-    this.intervalTimer = setInterval(this.checkTime, 1000)
-
+    this.init();
   },
-
   mounted() {
     this.$nextTick(() => {
       let doc = document;
@@ -231,6 +212,136 @@ export default {
     }
   },
   methods: {
+    init(initData) {
+      if (initData) {
+        this.priceUnit = null;
+        this.showModal = false;
+        this.area = {
+          to: null,
+          from: null,
+        };
+        this.areaOfField = null;
+        this.fieldRef = {};
+        this.monitorCount = 0;
+        this.monitorTime = null;
+        this.monitorMousemove = {
+          carouselClicked: false,
+          carouselTime: 0,
+          scrollNavMousewheel: false,
+          scrollTarget: null,
+          scrollNavTime: 0,
+        };
+        this.lang = null;
+        this.navigateToPhoto = 1;
+        this.imageUrl = [];
+        this.navTabList = CommonUtils.deepClone(ProductConfig.navTabList);
+        this.navTabList_ = [];
+        this.pageInfoLabel = CommonUtils.deepClone(ProductConfig.pageInfoLabel);
+        this.containerTitle = null;
+        this.activeNavIndex = 0;
+
+        this.colorOptions = [];
+        this.defaultModelChanged = false;
+
+        this.productAllInfoByColor = [];
+        this.size_image_colorName = {
+          colorName: null,
+          videosAndImages: [],
+          sizeOptions: []
+        };
+        this.original_dicount_price_itemcode = {
+          itemCode: "",
+          price: {
+            original: {
+              int: "0",
+              decimal: ".00"
+            },
+            discount: {
+              int: "0",
+              decimal: ".00"
+            },
+            off: 100
+          }
+        };
+        this.priceRange = {
+          max: {
+            int: "0",
+            decimal: ".00"
+          },
+          min: {
+            int: "0",
+            decimal: ".00"
+          },
+        };
+        this.productStock = 0;
+        this.sizeSelected = {
+          label: null,
+          stock: null,
+          value: null
+        };
+        this.bShowShadow = false;
+        this.bShowQRCode = false;
+        this.productInfoDataDatBase = {};
+        this.productModelsDatBase = {};
+        this.reviewsDataBase = {};
+        this.priceDataBase = {};
+        this.stockDataBase = {};
+        this.QRCodeSrc = null;
+        this.productReviews = [];
+        this.productScore = 0;
+        this.defaultIndex = {
+          ZH: {
+            defaultColorIndex: null,
+            defaultSizeIndex: null,
+          },
+          other: {
+            defaultColorIndex: null,
+            defaultSizeIndex: null
+          }
+        };
+        this.defaultCode = {
+          ZH: {
+            default_item_code: null,
+            default_model_code: null
+          },
+          EN: {
+            default_item_code: null,
+            default_model_code: null
+          },
+          other: {
+            default_item_code: null,
+            default_model_code: null
+          }
+        };
+        this.fieldELeQueried = {};
+        this.bEmptyPrice = true;
+        this.noQRCode = true;
+        this.noImage = false;
+        this.noUserView = false;
+        this.noStock = false;
+        this.noPrice = false;
+        this.bEmptyProductInfo = false;
+        this.bDescriptionDataLoaded = false;
+        this.disableZHbtn = false;
+      }
+      this.rfid = this.$router.currentRoute.params.rfid;
+
+      this.defaultLang = StoreService.getLang();
+
+      if (this.defaultLang == 'EN') {
+        this.lang = "MY";
+      } else {
+        let langInLocal = localStorage.getItem("lang");
+        this.lang = !!langInLocal ? langInLocal : this.defaultLang;
+      }
+
+      this.initPageData(this.lang)
+      if (this.intervalTimer) {
+        clearInterval(this.intervalTimer);
+        this.intervalTimer = null;
+      }
+      this.intervalTimer = setInterval(this.checkTime, 1000)
+    },
     carouselMonitorMousedown() {
       if (!this.monitorMousemove.carouselClicked) {
         this.monitorMousemove.carouselClicked = true;
@@ -1039,9 +1150,12 @@ export default {
       return this.navTabList_.length == 1;
     }
   },
-  watch:{
-    activeNavIndex(newV,oldV){
+  watch: {
+    activeNavIndex(newV, oldV) {
       // console.log(newV)
+    },
+    '$route.params.rfid': function() {
+      this.init(true);
     }
   }
 
