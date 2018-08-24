@@ -6,13 +6,15 @@ const storageKey = 'store-id';
 const mapping = {
   1639: 'ZH',
   666: 'ZH',
-  2002: 'EN'
+  2002: 'EN',
+  1600: 'EN'
 };
 
 let _storeId = null;
 
 export default {
   setStoreId(storeId, cb) {
+    _storeId = storeId;
     localStorage.setItem(storageKey, storeId);
     if (TypeChecker.isFunction(cb)) {
       cb.call(this);
