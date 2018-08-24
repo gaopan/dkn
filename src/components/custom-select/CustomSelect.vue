@@ -5,7 +5,7 @@
 			<span class="item-stock" 
 					  :class = "{'stock-ab':subLabel > 0,'stock-unab':subLabel <= 0}"
 					  v-show = "!bShowMenu && this.$props.label && subLabel != null">
-						{{subLabel > 0 ? "available":"unavailable"}}
+						{{subLabel > 0 ? inStock[lang]:outOfStock[lang]}}
 			</span>
 			<!-- <i class= "arrow-icon icon-select-down_"></i> -->
 			<i class= "icon-down arrow-icon"></i>
@@ -17,7 +17,7 @@
 					<span class="item-stock" 
 								:class = "{'stock-ab':item.stock > 0,'stock-unab':item.stock <= 0}"
 								v-if = "item.stock != null|| typeof item.stock == 'undefined'">
-						{{item.stock > 0 ? "available":"unavailable"}}
+						{{item.stock > 0 ? inStock[lang]:outOfStock[lang]}}
 					</span>
 				</li>
 			</ul>
@@ -46,7 +46,9 @@
 			return{
 				bShowMenu:false,
 				menuOption:[],
-				selectLabel:null
+				selectLabel:null,
+		    inStock: { MY: "available", EN: "available", ZH: "有庫存" },
+		    outOfStock: { MY: "unavailable", EN: "unavailable", ZH: "無庫存" },				
 			}
 		},
 		created(){

@@ -2,7 +2,7 @@
   <section class="carousel">
     <div class="carousel-wrapper" id = "CarouselWrapper" ref="carouselWrapper">
       <div class="no-carousel-image" v-if = "noImage">
-        No images found
+        {{emptyImageLabel}}
       </div>
       <div 
         ref="carousel-inner" 
@@ -40,6 +40,7 @@ export default {
   },
   data() {
     return {
+      emptyImage: { MY: "No image found", EN: "No image found", ZH: "暫時無圖片", },
       transitionStyle:null,
       browserWidth: null,
       carouselHeight: 0,
@@ -85,7 +86,8 @@ export default {
       validator(val){
         return val > 0;
       }
-    }
+    },
+    lang:String
   },
 
   watch: {
@@ -110,6 +112,9 @@ export default {
   },
 
   computed: {
+    emptyImageLabel(){
+      return this.emptyImage[this.$props.lang];
+    },
     // The vertical distance the inner wrapper is offset while navigating.
     currentOffset() {
       return (this.offset + this.dragOffset) * -1;

@@ -145,6 +145,7 @@ export default {
   },
   created() {
     this.rfid = this.$router.currentRoute.params.rfid;
+    this.rfid = 3608439935121;
 
     this.defaultLang = StoreService.getLang();
 
@@ -152,7 +153,8 @@ export default {
       this.lang = "MY";
     } else {
       let langInLocal = localStorage.getItem("lang");
-      this.lang = !!langInLocal ? langInLocal : this.defaultLang;
+      this.lang = !!langInLocal ? langInLocal : "EN";
+      // this.lang = !!langInLocal ? langInLocal : this.defaultLang;
     }
 
     this.initPageData(this.lang)
@@ -195,9 +197,10 @@ export default {
         this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave", this.scrollMonitorMouseleave);
       }
 
-      if (this.defaultLang != 'EN') {
-        localStorage.set(lang, this.defaultLang);
-      }
+      // if (this.defaultLang != 'EN') {
+      //   //"ZH"
+      //   localStorage.setItem("lang", this.defaultLang);
+      // }
     })
   },
   beforeDestroy() {
@@ -506,7 +509,7 @@ export default {
           this.original_dicount_price_itemcode.price = this.calculateDiscount(price);
         }
 
-        console.log(this.original_dicount_price_itemcode.price)
+        // console.log(this.original_dicount_price_itemcode.price)
       }
     },
 
@@ -594,7 +597,7 @@ export default {
           })
         })
 
-        this.activeNavIndex = 0;
+        // this.activeNavIndex = 0;
         this.containerTitle = this.navTabList_[0].label[this.lang];
 
         //make color options and size options
@@ -644,7 +647,7 @@ export default {
         } else {
           this.get_original_dicount_price(lang);
         }
-        console.log(this.original_dicount_price_itemcode)
+        // console.log(this.original_dicount_price_itemcode)
       })
 
       Promise.all([productInfoPromise, userReviewPromise]).then(() => {
@@ -1032,10 +1035,10 @@ export default {
       return this.navTabList_.length == 1;
     }
   },
-  // watch:{
-  //   bEmptyPrice(newV,oldV){
-  //     console.log(newV)
-  //   }
-  // }
+  watch:{
+    activeNavIndex(newV,oldV){
+      // console.log(newV)
+    }
+  }
 
 }
