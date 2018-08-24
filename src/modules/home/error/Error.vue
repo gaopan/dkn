@@ -42,7 +42,7 @@
 					<p>{{pageInfoLabel.error2[lang]}}</p>
 					<p>{{pageInfoLabel.error3[lang]}}</p>
 				</div>
-				<p class="back-index">Back to Index in {{countdown}}s</p>
+				<p class="back-index">{{pageInfoLabel.errorBack[lang]}} {{countdown}} {{lang=="ZH"?'秒':'s'}}</p>
 			</div>
 
 	  </section>	

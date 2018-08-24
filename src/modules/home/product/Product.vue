@@ -124,7 +124,7 @@
 								@click = "toggleQRCode">
 						</i>
 						<div class="product-QR-code" v-show = "bShowQRCode">
-							<p>Scan this QR code with your phone, get product information on decathlon.com!</p>
+							<p>{{pageInfoLabel.QRTip[lang]}}</p>
 							<div class="QR-code-img">
 								<img :src="QRCodeSrc" width="100%" height ="100%"/>
 							</div>

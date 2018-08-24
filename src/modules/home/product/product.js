@@ -144,7 +144,8 @@ export default {
     }
   },
   created() {
-    this.rfid = this.$router.currentRoute.params.rfid;
+    // this.rfid = this.$router.currentRoute.params.rfid;
+    this.rfid = 3608459565957;
 
     this.defaultLang = StoreService.getLang();
 
@@ -679,8 +680,8 @@ export default {
 
       function getDefaultCodeIndex(model, model_code, item_code) {
         //get default model_code and itemCode
-        let defaultColorIndex = null,
-          defaultSizeIndex = null;
+        let defaultColorIndex = 0,
+          defaultSizeIndex = 0;
         if (model.length) {
           model.forEach((d, i) => {
             if (d.ModelCode == model_code) {
@@ -886,7 +887,11 @@ export default {
           })
         }
 
-        let colorName = d.BusinessColors[0].label;
+        let colorName = "";
+        if(d.BusinessColors&&d.BusinessColors[0]){
+          colorName = d.BusinessColors[0].label;
+        }
+
         productAllInfoByColor.push({
           colorName: colorName,
           modelCode: d.ModelCode,

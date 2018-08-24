@@ -19,7 +19,8 @@ let config = {
     tip1: { MY: "Sorry! The product is too new.", EN: "Sorry! The product is too new.", ZH: "抱歉！此產品為新品," },
     tip2: { MY: "We are still working on the detail information.", EN: "We are still working on the detail information.", ZH: "我們正努力更新中." },
     tip3: { MY: "information.", EN: "information.", ZH: "" },
-    emptyPriceLabel: { MY: "Please check label or ask SA to get the price", EN: "Please check label or ask SA to get the price", ZH: "請查看商品標簽或向店員詢問價格信息" }
+    emptyPriceLabel: { MY: "Please check label or ask SA to get the price", EN: "Please check label or ask SA to get the price", ZH: "請查看商品標簽或向店員詢問價格信息" },
+    QRTip: { MY: "Scan this QR code with your phone, get product information on decathlon.com!", EN: "Scan this QR code with your phone, get product information on decathlon.com!", ZH: "請用手機掃二維碼，從迪卡儂官網上獲取產品信息！" }
   }
 }
 
