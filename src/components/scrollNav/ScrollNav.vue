@@ -54,7 +54,6 @@
         },
         watch: {
             index(index) {
-                console.log(index)
                 if(index===this.activeIndex)return;
                 this.activeIndex = index;
                 this.scrollToTargetContent(index);

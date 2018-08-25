@@ -130,7 +130,7 @@
 							</div>
 
 						</div>
-						<span class="code-tip" :class = "{'code-tip-en':lang == 'EN','code-tip-zh':lang == 'ZH'}" v-show = "!bShowQRCode">
+						<span class="code-tip" :class = "{'code-tip-en':lang == 'EN'||lang == 'MY','code-tip-zh':lang == 'ZH'}" v-show = "!bShowQRCode">
 							{{pageInfoLabel.QRCode[lang]}}
 						</span> 
 					</div>
@@ -152,7 +152,10 @@
 				<p>{{pageInfoLabel.tip3[lang]}}</p>
 			</div>
 		</div>
+
+
 		<section class="product-description" v-else ref = "ContentZone">
+
 			<div class="product-title" v-show = "bDescriptionDataLoaded">
 				<p class="product-info-title">{{containerTitle}}</p>
 				<div class="page-lang" v-if = "defaultLang == 'ZH'">
@@ -160,6 +163,7 @@
 					<span class="page-lang-zh no-select" :class = "{borderBottom2:lang =='EN'}"  @click = "chooseLang('EN')">EN</span>
 				</div>
 			</div>
+
 	    <scroll-nav @activeIndexChanged = "activeNavIndexChanged" :list = "navTabList_" :index = "activeNavIndex">
 	        <scroll-nav-panel :lang = "lang" :label="item.label" :idCus = "item.id" v-for="(item, index) in navTabList_" :key="index">
             
@@ -195,7 +199,7 @@
 		            ref = "UserReviewsBlock">
             		<div class="product-scorce-wrapper">
             			<rate :rate = "productScore"></rate> 
-            			<span class="user-review-count" v-if = "lang=='EN'">
+            			<span class="user-review-count" v-if = "lang=='EN'||lang=='MY'">
             				{{productReviews.length}} {{productReviews&&productReviews.length>1?'reviews':'review'}}
             			</span>
             			<span class="user-review-count" v-else-if = "lang=='ZH'">
@@ -208,7 +212,7 @@
 		            			<span class = "review-created-date">{{review.published_at}}</span>
 		            			<span class = "review-created-name">{{review.firstname}}</span>
 		            		</p>
-		            		<p><span v-if = "lang == 'EN'">On </span>{{productInfoDataDatBase.WebLabel}} {{size_image_colorName.colorName}}</p>
+		            		<p><span v-if = "lang == 'EN'||lang == 'MY'">On </span>{{productInfoDataDatBase.WebLabel}} {{size_image_colorName.colorName}}</p>
 		            	</div> 
 
 		            	<div class="review-content">
@@ -260,6 +264,7 @@
 		  </popup>
 	  	
 	  </div>
+	  <element-loading :active="showLoader" :color = "'#0082c3'" :is-full-screen="true"></element-loading>
 	</div>
 </template>
 

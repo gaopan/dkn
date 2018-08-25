@@ -3,6 +3,9 @@ import { ScrollNav, ScrollNavPanel } from "@/components/scrollNav"
 import CustomSelect from "@/components/custom-select"
 import popup from "@/components/popup/Popup.vue"
 import Rate from "@/components/rate/Rate.vue"
+import elementLoading from '@/components/loader/loader.vue'
+
+
 import StoreService from '@/services/store-services.js'
 import CommonUtils from '@/utils/common-utils.js'
 
@@ -97,25 +100,7 @@ export default {
       QRCodeSrc: null,
       productReviews: [],
       productScore: 0,
-      defaultIndex: {
-        ZH: {
-          defaultColorIndex: null,
-          defaultSizeIndex: null,
-        },
-        other: {
-          defaultColorIndex: null,
-          defaultSizeIndex: null
-        }
-      },
       defaultCode: {
-        ZH: {
-          default_item_code: null,
-          default_model_code: null
-        },
-        EN: {
-          default_item_code: null,
-          default_model_code: null
-        },
         other: {
           default_item_code: null,
           default_model_code: null
@@ -137,7 +122,8 @@ export default {
       bEmptyProductInfo: false,
       //show decription title when decription loaded
       bDescriptionDataLoaded: false,
-      disableZHbtn: false
+      disableZHbtn: false,
+      showLoader:true
     }
   },
   created() {
@@ -289,25 +275,7 @@ export default {
         this.QRCodeSrc = null;
         this.productReviews = [];
         this.productScore = 0;
-        this.defaultIndex = {
-          ZH: {
-            defaultColorIndex: null,
-            defaultSizeIndex: null,
-          },
-          other: {
-            defaultColorIndex: null,
-            defaultSizeIndex: null
-          }
-        };
         this.defaultCode = {
-          ZH: {
-            default_item_code: null,
-            default_model_code: null
-          },
-          EN: {
-            default_item_code: null,
-            default_model_code: null
-          },
           other: {
             default_item_code: null,
             default_model_code: null
@@ -323,6 +291,7 @@ export default {
         this.bEmptyProductInfo = false;
         this.bDescriptionDataLoaded = false;
         this.disableZHbtn = false;
+        this.showLoader = true;
       }
       this.rfid = this.$router.currentRoute.params.rfid;
       // this.rfid = 3608459565957;
@@ -582,7 +551,7 @@ export default {
           this.imageUrl = this.size_image_colorName.videosAndImages;
           this.noImage = this.imageUrl.length ? false : true;
 
-          this.defaultIndex.other.defaultColorIndex = modelsIndex;
+          // this.defaultIndex.other.defaultColorIndex = modelsIndex;
 
           return false;
         }
@@ -606,7 +575,7 @@ export default {
     selectProductSize(args) {
       if (args.value == this.sizeSelected.value) return;
       this.defaultModelChanged = true;
-      this.defaultIndex.other.defaultSizeIndex = args.index;
+      // this.defaultIndex.other.defaultSizeIndex = args.index;
 
       this.sizeSelected = Object.assign({}, { value: args.value, label: args.label, stock: args.stock });
 
@@ -678,16 +647,68 @@ export default {
     initPageData(lang) {
       //request  product in  tw_en , tw_zh and my
       let country = this.defaultLang == "ZH" ? "tw" : "my";
+      this.defaultCode[lang] = {};
+      // this.defaultIndex[lang] = {};
+
+      function findDefaultCode(model_code,item_code,modelsDatBase){
+        // debugger
+        let default_item_code,default_model_code;
+        if(modelsDatBase.length){
+          modelsDatBase.every((model,modelIndex)=>{
+            if(model.ModelCode == model_code){
+              default_model_code = model.ModelCode;
+              model.items.every(item=>{
+                if(item.ItemCode==item_code){
+                  default_item_code = item_code;
+                  return false;
+                }
+                return true;
+              })
+              return false
+            }
+            return true;
+          })
+
+          if(typeof default_model_code == "undefined"){
+            modelsDatBase.every((model,modelIndex)=>{
+              if(model.ModelCode){
+                default_model_code = model.ModelCode;
+                return false;
+              }
+              return true;
+            })
+          }
+
+          if(typeof default_item_code == "undefined"){
+            modelsDatBase.every((model,modelIndex)=>{
+              if(model.ModelCode == default_model_code){
+                model.items.every(item=>{
+                  if(item.ItemCode){
+                    default_item_code = item.ItemCode;
+                    return false;
+                  }
+                  return true;
+                })
+                return false;
+              }
+              return true;
+            })
+          } 
+
+        }
+          return { default_item_code,default_model_code }         
+      }
+
 
       var productInfoPromise = ProductApi.getProductInfo(this.rfid, lang, country).then(res => {
+        this.showLoader = false;
         if (res.data && res.data.dsm) this.productInfoDataDatBase = res.data.dsm;
         if (res.data && res.data.models) this.productModelsDatBase = res.data.models;
 
-        this.defaultCode[lang].default_item_code = res.data.default_item_code;
-        this.defaultCode[lang].default_model_code = res.data.default_model_code;
+        this.defaultCode[lang] = findDefaultCode(res.data.default_model_code,res.data.default_item_code,this.productModelsDatBase);
 
-        var defaultIndex = getDefaultCodeIndex(this.productModelsDatBase, res.data.default_model_code, res.data.default_item_code)
-        this.defaultIndex[lang] = Object.assign({}, defaultIndex);
+        this.original_dicount_price_itemcode.itemCode = this.defaultCode[lang].default_item_code;
+        console.log(this.defaultCode[lang])
 
         //bDescriptionDataLoaded——show description title
         this.bDescriptionDataLoaded = true;
@@ -837,7 +858,6 @@ export default {
         info.sizeOptions.forEach(size => {
           let stock = stockDataBase[size.itemCode];
           size.stock = typeof stock == "number" ? stock : 0;
-          console.log(size.stock)
         })
       })
     },
@@ -856,7 +876,7 @@ export default {
         this.bEmptyPrice = true;
       } else {
         this.bEmptyPrice = false;
-        this.original_dicount_price_itemcode.itemCode = defaultItemCode;
+        // this.original_dicount_price_itemcode.itemCode = defaultItemCode;
         this.original_dicount_price_itemcode.price = this.calculateDiscount(price);
       }
 
@@ -893,19 +913,27 @@ export default {
 
     dataGenerator(lang, productModelsDatBase, productInfoData) {
       if (productModelsDatBase.length) {
-        let model = this.makeProductInfoDataByColor(productModelsDatBase, this.defaultIndex[lang], lang);
+        let model = this.makeProductInfoDataByColor(productModelsDatBase, this.defaultCode[lang].default_model_code, lang);
 
         this.productAllInfoByColor = model.productAllInfoByColor;
         this.colorOptions = model.colorOptions;
 
         if (this.productAllInfoByColor.length) {
+          // this.size_image_colorName = this.productAllInfoByColor[this.defaultIndex[lang].defaultColorIndex];
 
-          this.size_image_colorName = this.productAllInfoByColor[this.defaultIndex[lang].defaultColorIndex];
+          this.productAllInfoByColor.every((info,infoIndex)=>{
+            if(info.modelCode == this.defaultCode[lang].default_model_code){
+              this.size_image_colorName = info;
+              return false;
+            }
+            return true;
+          })
+          
 
           this.imageUrl = this.size_image_colorName.videosAndImages
           this.noImage = this.imageUrl.length ? false : true;
 
-          this.defaultIndex.other = Object.assign({}, this.defaultIndex[lang]);
+          // this.defaultIndex.other = Object.assign({}, this.defaultIndex[lang]);
         }
 
       }
@@ -965,7 +993,7 @@ export default {
       })
     },
 
-    makeProductInfoDataByColor(data, defaultIndex, lang) {
+    makeProductInfoDataByColor(data, defaultModelCode, lang) {
       let productAllInfoByColor = [],
         colorOptions = [];
 
@@ -973,7 +1001,7 @@ export default {
         let videos = [],
           images = [],
           sizeOptions = [],
-          productColorChecked = modelsIndex === defaultIndex.defaultColorIndex ? true : false;
+          productColorChecked = d.ModelCode === defaultModelCode ? true : false;
 
         if (d.Videos && d.Videos.length) {
           d.Videos.forEach(d => {
@@ -1127,7 +1155,8 @@ export default {
     ScrollNavPanel,
     CustomSelect,
     Rate,
-    popup
+    popup,
+    elementLoading
   },
   computed: {
     itemName() {
