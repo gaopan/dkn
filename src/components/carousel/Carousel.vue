@@ -28,7 +28,7 @@ import debounce from "@/utils/debounce";
 import Pagination from "./Pagination.vue";
 import Slide from "./Slide.vue";
 
-
+// console.log(/Android|webOS|iPhone|iPod|Blac+kBerry/i.test(navigator.userAgent))
 export default {
   name: "carousel",
   // beforeUpdate() {
@@ -50,7 +50,7 @@ export default {
       dragOffset: 0,
       dragStartY: 0,
       dragStartX: 0,
-      isTouch: typeof window !== "undefined" && "ontouchstart" in window,
+      isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent),
       offset: 0,
       refreshRate: 100,
       slideCount: 0,

@@ -26,8 +26,6 @@ export default {
         to: null,
         from: null,
       },
-      areaOfField: null,
-      fieldRef: {},
 
       monitorCount: 0,
       monitorTime: null,
@@ -123,7 +121,8 @@ export default {
       //show decription title when decription loaded
       bDescriptionDataLoaded: false,
       disableZHbtn: false,
-      showLoader:true
+      showLoader:true,
+      isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)     
     }
   },
   created() {
@@ -145,22 +144,30 @@ export default {
       this.fieldELeQueried.ScrollnavContent = doc.querySelector("#ScrollnavContent");
 
       window.addEventListener("resize", this.monitorUserAction)
+      let leaveEvent = this.isTouch ? "touchend" : "mouseleave", 
+          downEvent = this.isTouch ? "touchstart" : "mousedown",
+          wheelEvent = this.isTouch ? "touchmove" : "wheel";
 
-      this.$refs.WholePage.addEventListener("mousemove", this.monitorUserAction)
-      this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
-      this.$refs.WholePage.addEventListener("mousewheel", this.monitorUserAction)
+      if(this.isTouch){
+        this.$refs.WholePage.addEventListener("touchmove", this.monitorUserAction)
+        this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
+      }else{
+        this.$refs.WholePage.addEventListener("mousemove", this.monitorUserAction)
+        this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
+        this.$refs.WholePage.addEventListener("wheel", this.monitorUserAction)
+      }
 
       if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.addEventListener("click", this.paginationMonitorClick);
       if (this.fieldELeQueried.scrollnavTab) this.fieldELeQueried.scrollnavTab.addEventListener("click", this.navMonitorClick);
 
       if (this.fieldELeQueried.CarouselWrapper) {
-        this.fieldELeQueried.CarouselWrapper.addEventListener("mouseleave", this.carouselMonitorMouseout);
-        this.fieldELeQueried.CarouselWrapper.addEventListener("mousedown", this.carouselMonitorMousedown);
+        this.fieldELeQueried.CarouselWrapper.addEventListener(leaveEvent, this.carouselMonitorMouseout);
+        this.fieldELeQueried.CarouselWrapper.addEventListener(downEvent, this.carouselMonitorMousedown);
       }
 
       if (this.fieldELeQueried.ScrollnavContent) {
-        this.fieldELeQueried.ScrollnavContent.addEventListener("mousewheel", this.scrollMonitorMousewheel);
-        this.fieldELeQueried.ScrollnavContent.addEventListener("mouseleave", this.scrollMonitorMouseleave);
+        this.fieldELeQueried.ScrollnavContent.addEventListener(leaveEvent, this.scrollMonitorMouseleave);
+        this.fieldELeQueried.ScrollnavContent.addEventListener(wheelEvent, this.scrollMonitorMousewheel);
       }
 
       if (this.defaultLang != 'EN') {
@@ -174,21 +181,35 @@ export default {
 
     window.removeEventListener("resize", this.monitorUserAction)
 
-    this.$refs.WholePage.removeEventListener("mousemove", this.monitorUserAction)
-    this.$refs.WholePage.removeEventListener("click", this.monitorUserAction)
-    this.$refs.WholePage.removeEventListener("mousewheel", this.monitorUserAction)
+    // this.$refs.WholePage.removeEventListener("mousemove", this.monitorUserAction)
+    // this.$refs.WholePage.removeEventListener("click", this.monitorUserAction)
+    // this.$refs.WholePage.removeEventListener("wheel", this.monitorUserAction)
+
+    if(this.isTouch){
+      this.$refs.WholePage.addEventListener("touchmove", this.monitorUserAction)
+      this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
+    }else{
+      this.$refs.WholePage.addEventListener("mousemove", this.monitorUserAction)
+      this.$refs.WholePage.addEventListener("click", this.monitorUserAction)
+      this.$refs.WholePage.addEventListener("wheel", this.monitorUserAction)
+    }
+
 
     if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.removeEventListener("click", this.paginationMonitorClick);
     if (this.fieldELeQueried.scrollnavTab) this.fieldELeQueried.scrollnavTab.removeEventListener("click", this.navMonitorClick);
 
+    let leaveEvent = this.isTouch ? "touchend" : "mouseleave", 
+        downEvent = this.isTouch ? "touchstart" : "mousedown",
+        wheelEvent = this.isTouch ? "touchmove" : "wheel";
+
     if (this.fieldELeQueried.CarouselWrapper) {
-      this.fieldELeQueried.CarouselWrapper.removeEventListener("mouseleave", this.carouselMonitorMouseout);
-      this.fieldELeQueried.CarouselWrapper.removeEventListener("mousedown", this.carouselMonitorMousedown);
+      this.fieldELeQueried.CarouselWrapper.removeEventListener(leaveEvent, this.carouselMonitorMouseout);
+      this.fieldELeQueried.CarouselWrapper.removeEventListener(downEvent, this.carouselMonitorMousedown);
     }
 
     if (this.fieldELeQueried.ScrollnavContent) {
-      this.fieldELeQueried.ScrollnavContent.removeEventListener("mousewheel", this.scrollMonitorMousewheel);
-      this.fieldELeQueried.ScrollnavContent.removeEventListener("mouseleave", this.scrollMonitorMouseleave);
+      this.fieldELeQueried.ScrollnavContent.removeEventListener(leaveEvent, this.scrollMonitorMouseleave);
+      this.fieldELeQueried.ScrollnavContent.removeEventListener(wheelEvent, this.scrollMonitorMousewheel);
     }
 
     clearInterval(this.intervalTimer);
@@ -206,8 +227,6 @@ export default {
           to: null,
           from: null,
         };
-        this.areaOfField = null;
-        this.fieldRef = {};
         this.monitorCount = 0;
         this.monitorTime = null;
         this.monitorMousemove = {
@@ -293,8 +312,10 @@ export default {
         this.disableZHbtn = false;
         this.showLoader = true;
       }
-      this.rfid = this.$router.currentRoute.params.rfid;
-      // this.rfid = 3608459565957;
+      // this.rfid = this.$router.currentRoute.params.rfid;
+      this.rfid = 3608459565957;
+      // this.rfid = 3608429814474;
+      // this.rfid = 3608459664568;
       this.defaultLang = StoreService.getLang();
 
       if (this.defaultLang == 'EN') {
@@ -323,7 +344,6 @@ export default {
         let stayTime = +((Date.now() - this.monitorMousemove.carouselTime) / 1000).toFixed(2);
 
         let data = {
-          item_code: this.defaultCode.other.default_item_code,
           item_code: this.original_dicount_price_itemcode.itemCode,
           item_name: this.itemName,
           area: "ConversionZone",
@@ -353,7 +373,6 @@ export default {
       if (target == fieldEle.TechInfo) field = "TechInfo";
 
       let data = {
-        item_code: this.defaultCode.other.default_item_code,
         item_code: this.original_dicount_price_itemcode.itemCode,
         item_name: this.itemName,
         area: "ContentZone",
@@ -361,20 +380,19 @@ export default {
         event: 1,
         stay_time: 0
       }
-      this.areaOfField = field;
 
       ProductApi.postTracking(data).then(res => {
         // console.log(res.data);
       })
     },
     paginationMonitorClick(event) {
+
       event = event || window.event;
 
       let doc = document;
       if (event.target == doc.querySelector("#iconDown") || event.target == doc.querySelector("#iconUp")) {
         let data = {
           item_code: this.original_dicount_price_itemcode.itemCode,
-          item_code: this.defaultCode.other.default_item_code,
           item_name: this.itemName,
           area: "ConversionZone",
           field: "Moreviews",
@@ -390,7 +408,6 @@ export default {
 
     monitorClick_Color_QR_Select(field) {
       let data = {
-        item_code: this.defaultCode.other.default_item_code,
         item_code: this.original_dicount_price_itemcode.itemCode,
         item_name: this.itemName,
         area: "ConversionZone",
@@ -398,13 +415,13 @@ export default {
         event: 1,
         stay_time: 0
       }
-      this.areaOfField = field;
 
       ProductApi.postTracking(data).then(res => {
         // console.log(res.data);
       })
     },
     scrollMonitorMousewheel(event) {
+      console.log(event.deltaY)
       event = event || event.target;
       if (!this.monitorMousemove.scrollNavMousewheel) {
         this.monitorMousemove.scrollNavTime = Date.now();
@@ -481,7 +498,6 @@ export default {
 
         let stayTime = +((Date.now() - this.monitorMousemove.scrollNavTime) / 1000).toFixed(2);
         let data = {
-          // item_code: this.defaultCode.other.default_item_code,
           item_code: this.original_dicount_price_itemcode.itemCode,
           item_name: this.itemName,
           area: "ContentZone",

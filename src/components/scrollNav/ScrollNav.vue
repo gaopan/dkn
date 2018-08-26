@@ -14,7 +14,9 @@
                 </li>
             </ul>
         </div>
-        <div class="scrollnav-content" id = "ScrollnavContent" ref="scrollView">
+        <div class="scrollnav-content" 
+            id = "ScrollnavContent" 
+            ref="scrollView">
             <slot></slot>
         </div>
     </div>
@@ -22,6 +24,7 @@
 
 <script>
     import {scrollTop} from './utils/tool.js';
+    import debounce from '@/utils/debounce.js';
 
     export default {
         name: 'scrollnav',
@@ -35,7 +38,7 @@
                 scrolling: false,
                 panels:[],
                 scrollViewTop:0,
-                scrollView:null
+                scrollView:null, 
             }
         },
         props: {
@@ -79,6 +82,7 @@
                 this.contentOffsetTop = this.scrollView.getBoundingClientRect().top;
 
                 this.calculateWidth();
+
                 this.scrollView.addEventListener('scroll', this.scrollHandler);
                 window.addEventListener('resize', this.scrollHandler);
                 window.addEventListener('resize',this.calculateWidth)
@@ -100,11 +104,25 @@
                     return item.$options.name === 'scrollnav-panel'
                 });
             },
-            scrollHandler() {
+
+            scrollHandler(event) {
                 if (this.scrolling) return;
+                event = event||window.event;
+                // console.log(event.type)
+                
+                let scrollBoxHeight = this.scrollView.offsetHeight;
+
+                // if(event.type == "wheel"){
+                //     event.preventDefault();
+                //     if(event.deltaY>0){
+                //         this.scrollView.scrollTop += scrollBoxHeight;
+                //     }else{
+                //         this.scrollView.scrollTop -= scrollBoxHeight;
+                //     }
+                // }
 
                 const panels = this.panels;
-                let scrollBoxHeight = this.scrollView.offsetHeight;
+                
                 let activeIndex = 0;
 
                 if(panels&&panels.length){
@@ -118,7 +136,6 @@
                     this.scrollViewTop = this.scrollView.scrollTop;
                     if(activeIndex != this.activeIndex){
                         this.activeIndex  = activeIndex;
-                        // console.log(activeIndex)
                        this.scrollToTargetContent(this.activeIndex,false); 
                        this.$emit("activeIndexChanged",this.activeIndex);
 
@@ -149,6 +166,7 @@
                     this.navList.push({label: child.label, id:child.idCus})
                 })   
             }
+
         },
         mounted() {
             this.$nextTick(()=>{
