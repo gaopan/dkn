@@ -312,8 +312,8 @@ export default {
         this.disableZHbtn = false;
         this.showLoader = true;
       }
-      // this.rfid = this.$router.currentRoute.params.rfid;
-      this.rfid = 3608459565957;
+      this.rfid = this.$router.currentRoute.params.rfid;
+      // this.rfid = 3608459565957;
       // this.rfid = 3608429814474;
       // this.rfid = 3608459664568;
       this.defaultLang = StoreService.getLang();
@@ -421,7 +421,6 @@ export default {
       })
     },
     scrollMonitorMousewheel(event) {
-      console.log(event.deltaY)
       event = event || event.target;
       if (!this.monitorMousemove.scrollNavMousewheel) {
         this.monitorMousemove.scrollNavTime = Date.now();

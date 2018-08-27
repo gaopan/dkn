@@ -18,11 +18,13 @@
 								<span class="product-price-integer">{{original_dicount_price_itemcode.price.discount.int}}</span>
 								<span class="product-price-decimal" v-if = "priceUnit=='$'">{{original_dicount_price_itemcode.price.discount.decimal}}</span>
 							</span>
-							<span class="product-price-original">
-								{{priceUnit}} {{original_dicount_price_itemcode.price.original.int}}
-								<span v-if = "priceUnit=='$'">{{original_dicount_price_itemcode.price.original.decimal}}</span>
+							<span class = "price-original-off">
+								<span class="product-price-original">
+									{{priceUnit}} {{original_dicount_price_itemcode.price.original.int}}
+									<span v-if = "priceUnit=='$'">{{original_dicount_price_itemcode.price.original.decimal}}</span>
+								</span>
+								<span class="price-discount-off">{{original_dicount_price_itemcode.price.off}}%off</span>
 							</span>
-							<span class="price-discount-off">{{original_dicount_price_itemcode.price.off}}%off</span>
 						</div>
 						<div class="product-without-discount" v-if ="showRangePrice">
 							<span class="product-price-noDiscount">

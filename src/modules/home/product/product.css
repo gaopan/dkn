@@ -105,7 +105,11 @@
     font-weight: normal;
     color: #393939;
 }
-
+.price-original-off{
+    text-align: center;
+    width: 163px;
+    display: inline-block;
+}
 .range-symbol,
 .range-price-integer{ 
     font-size: 18px;
