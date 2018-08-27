@@ -7,7 +7,11 @@ export default {
       bRedirection: false,
       bMoveIcon: false,
       intervalTimer: null,
-      lang: null
+      lang: null,
+      indexLabel:{
+        levelOne:{ZH:"想了解更多商品資訊 ?",EN:"More Information"},
+        levelTwo:{ZH:"掃描商品 , 立即查詢",EN:"Scan the product now!"},
+      }
     }
   },
   methods: {
@@ -25,7 +29,7 @@ export default {
       this.bMoveIcon = !this.bMoveIcon;
     }, 1000);
 
-    console.log(StoreService.getLang());
+    // console.log(StoreService.getLang());
     this.lang = StoreService.getLang();
   },
   beforeDestroy() {
