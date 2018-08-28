@@ -1,5 +1,8 @@
 import { Carousel, Slide } from "@/components/carousel"
 import { ScrollNav, ScrollNavPanel } from "@/components/scrollNav"
+
+import VueBetterScroll from "@/components/vue-better-scroll/VueBetterScroll.vue"
+
 import CustomSelect from "@/components/custom-select"
 import popup from "@/components/popup/Popup.vue"
 import Rate from "@/components/rate/Rate.vue"
@@ -1183,6 +1186,7 @@ export default {
     Slide,
     ScrollNav,
     ScrollNavPanel,
+    VueBetterScroll,
     CustomSelect,
     Rate,
     popup,

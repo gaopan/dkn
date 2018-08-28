@@ -13,6 +13,7 @@
     "animate.css": "^3.5.2",
     "axios": "^0.15.3",
     "babel-polyfill": "^6.26.0",
+    "better-scroll": "^1.12.6",
     "bootstrap-loader": "^2.1.0",
     "bootstrap-select": "^1.12.4",
     "es6-promise-promise": "^1.0.0",
