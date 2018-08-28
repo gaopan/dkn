@@ -14,6 +14,7 @@ import ProductConfig from './product.config.js'
 
 import TimeUtil from "@/utils/datetime-utils.js"
 import TypeChecker from "@/utils/type-checker.js"
+const STOREID = +localStorage.getItem("store-id");
 
 export default {
   name: 'product',
@@ -122,7 +123,8 @@ export default {
       bDescriptionDataLoaded: false,
       disableZHbtn: false,
       showLoader:true,
-      isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)     
+      isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
+
     }
   },
   created() {
@@ -131,11 +133,6 @@ export default {
   mounted() {
     this.$nextTick(() => {
       let doc = document;
-      this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
-      this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
-      this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
-      this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
-      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
 
       this.fieldELeQueried.carouselPagination = doc.querySelector("#carouselPagination");
       this.fieldELeQueried.scrollnavTab = doc.querySelector("#scrollnavTab");
@@ -349,6 +346,7 @@ export default {
           area: "ConversionZone",
           field: "MainPicBlock",
           event: 2,
+          store_id: STOREID,
           stay_time: stayTime
         }
 
@@ -378,6 +376,7 @@ export default {
         area: "ContentZone",
         field: field,
         event: 1,
+        store_id: STOREID,
         stay_time: 0
       }
 
@@ -397,6 +396,7 @@ export default {
           area: "ConversionZone",
           field: "Moreviews",
           event: 1,
+          store_id: STOREID,
           stay_time: 0
         }
 
@@ -413,6 +413,7 @@ export default {
         area: "ConversionZone",
         field: field,
         event: 1,
+        store_id: STOREID,
         stay_time: 0
       }
 
@@ -480,6 +481,7 @@ export default {
           area: "ContentZone",
           field: this.monitorMousemove.scrollTarget,
           event: 2,
+          store_id: STOREID,
           stay_time: stayTime
         }
         ProductApi.postTracking(data).then(res => {
@@ -502,6 +504,7 @@ export default {
           area: "ContentZone",
           field: this.monitorMousemove.scrollTarget,
           event: 2,
+          store_id: STOREID,
           stay_time: stayTime
         }
         // console.log(data)
@@ -527,6 +530,7 @@ export default {
     },
 
     selectProductColor(color, colorIndex) {
+      // this.monitorClick_Color_QR_Select('ColorOption')
       if (color.checked || color.imgUrl == '') return;
 
       this.defaultModelChanged = true;
@@ -747,6 +751,15 @@ export default {
             id: d.id
           })
         })
+        setTimeout(()=>{
+          //get element for tracking
+          let doc = document;
+          this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
+          this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
+          this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
+          this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
+          this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
+        },15)
 
         // this.activeNavIndex = 0;
         this.containerTitle = this.navTabList_[0].label[this.lang];
@@ -755,6 +768,8 @@ export default {
         this.dataGenerator(lang, this.productModelsDatBase, this.productInfoDataDatBase);
 
         this.getQRCode(this.defaultCode[lang].default_model_code, lang)
+
+
 
       }, err => {
 

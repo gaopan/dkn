@@ -57,7 +57,7 @@
 				<span class="product-color-selected">
 					{{pageInfoLabel.colorOption[lang]}}: <span>{{size_image_colorName.colorName}}</span>
 				</span>
-				<ul class="product-color-list clearfix" ref = "ColorOption" @click = "monitorClick_Color_QR_Select('ColorOption')">
+				<ul class="product-color-list clearfix" ref = "ColorOption">
 					<li 
 						class="product-color-item" 
 						:class="{'selected':color.checked,'noBorder':color.imgUrl==''}" 
