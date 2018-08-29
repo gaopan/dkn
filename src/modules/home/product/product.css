@@ -438,6 +438,7 @@
 
 .product-description-wrapper {
   display: inline-block;
+  height: 100%;
 }
 
 .no-product-description {
@@ -533,13 +534,6 @@
    min-height: 881px; 
 }
 
-.panel-cell-wrapper {
-  margin-bottom: 20px;
-  color: #393939;
-  line-height: 1.5;
-  min-width: 350px;
-}
-
 .panel-cell-info-wrapper {
   flex: 1;
   margin-top: 6px;
@@ -625,21 +619,12 @@
   font-size: 24px;
 }
 
-
-.panel-cell-wrapper {
-  margin-right: 300px;
-}
-
-.panel-cell-wrapper p {
-  margin-right: 50px;
-}
-
-.panel-designed-for {
+.designed-for {
   font-size: 40px;
   padding-top: 127px;
 }
 
-.panel-designed-for:after {
+.designed-for:after {
   margin-top: 20px;
   width: 80px;
 }

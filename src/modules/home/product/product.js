@@ -65,7 +65,7 @@ export default {
       initProperties.call(this);
       this.initLanguage();
       initPageData.call(this);
-      // initTimeChecker.call(this);
+      initTimeChecker.call(this);
 
       function initProperties() {
         this.monitorCount = 0;

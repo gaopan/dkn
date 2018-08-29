@@ -1,9 +1,7 @@
 import ProductConfig from '../product.config.js'
-import { ScrollNav, ScrollNavPanel } from "@/components/scrollNav"
 import Popup from "@/components/popup/Popup.vue"
-import Rate from "@/components/rate/Rate.vue"
-import VueBetterScroll from "@/components/vue-better-scroll/VueBetterScroll.vue"
-import BetterScroll from "better-scroll"
+
+import ProductScroller from './product-scroller/ProductScroller.vue'
 
 import ProductApi from "@/api/modules/product/productInfo.js"
 import TimeUtil from "@/utils/datetime-utils.js"
@@ -35,7 +33,7 @@ export default {
       type: Number
     }
   },
-  components: { ScrollNav, ScrollNavPanel, Rate, Popup, VueBetterScroll },
+  components: { Popup, ProductScroller },
   data() {
     return {
       labels: ProductConfig.pageInfoLabel,
@@ -50,7 +48,7 @@ export default {
       containerTitle: null,
       showModal: false,
       fieldELeQueried: {},
-      reviweScrollInstance:null
+      reviweScrollInstance: null
     };
   },
   watch: {
@@ -61,18 +59,18 @@ export default {
         }
       }
     },
-    productReviews:{
-      handler(newV,oldV) {
+    productReviews: {
+      handler(newV, oldV) {
         if (newV) {
           console.log("new review data")
-          if(this.reviweScrollInstance){
+          if (this.reviweScrollInstance) {
             console.log("refresh review")
             this.reviweScrollInstance.refresh();
           }
 
         }
       },
-      deep:true      
+      deep: true
     }
   },
   mounted() {
@@ -133,7 +131,7 @@ export default {
       this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
       this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
       this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
-      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");    
+      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
 
       clearTimeout(DOMLoadTimer)
 
@@ -229,7 +227,7 @@ export default {
     //   this.activeNavIndex = args;
     //   this.containerTitle = this.navTabList_[args].label[this.lang];
     // },
-    activeIndexChange(args){
+    activeIndexChange(args) {
       this.activeNavIndex = args;
       this.containerTitle = this.navTabList_[args].label[this.lang];
     },
@@ -238,35 +236,35 @@ export default {
 
       if (lang == "ZH" && this.defaultLang == "ZH") {
 
-        let rfid_storeId = this.$router.currentRoute.params.rfid +"_" + localStorage.getItem("store-id"),
-            infoStatusStr = localStorage.getItem(rfid_storeId);
-        
+        let rfid_storeId = this.$router.currentRoute.params.rfid + "_" + localStorage.getItem("store-id"),
+          infoStatusStr = localStorage.getItem(rfid_storeId);
+
         //send request before by this rfid_storeId
-        if(infoStatusStr){
-          if(infoStatusStr == "READY"){
+        if (infoStatusStr) {
+          if (infoStatusStr == "READY") {
             this.$emit('change-product-info');
-          }else if(infoStatusStr == "NOT_READY"){
+          } else if (infoStatusStr == "NOT_READY") {
             this.showModal = true;
             this.disableZHbtn = true;
           }
 
-        }else{
+        } else {
           //never send request before by this rfid_storeId
           ProductApi.getProductInfo(this.$route.params.rfid, "ZH", "tw").then(res => {
 
             localStorage.setItem("lang", lang);
             localStorage.setItem(rfid_storeId, "READY");
             this.$emit('change-product-info', res.data);
-            
+
           }, err => {
-            
+
             localStorage.setItem(rfid_storeId, "NOT_READY");
             this.showModal = true;
             this.disableZHbtn = true;
           })
-          
+
         }
-      
+
 
         return;
 
