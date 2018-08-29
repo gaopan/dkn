@@ -87,7 +87,7 @@
 -->      
       <vue-better-scroll :lang = "lang" :list = "navTabList_" :data = "productInfoDataDatBase" :partialData = "productReviews" @activeIndexChange = "activeIndexChange">
         <ul class="scroll-content">
-          <li v-for="(item, index) in navTabList_" :key="index" :id = "item.id" class="scroll-content-cell">
+          <li v-for="(item, index) in navTabList_" :key="index" :id = "item.cellId" class="scroll-content-cell">
             <div 
               class="panel-cell-wrapper " 
               :class="{'panel-designed-for':item.id === 'DesignFor'}" 

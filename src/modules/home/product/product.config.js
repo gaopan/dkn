@@ -1,10 +1,10 @@
 let config = {
   navTabList: [
-    { label: { MY: 'DESIGNED FOR', EN: 'DESIGNED FOR', ZH: "適合在" }, show: true, id: "DesignFor" },
-    { label: { MY: 'PRODUCT BENEFITS', EN: 'PRODUCT BENEFITS', ZH: "產品優點" }, show: true, id: "ProductBenefit" },
-    { label: { MY: 'USER REVIEWS', EN: 'USER REVIEWS', ZH: "使用者回饋" }, show: true, id: "UserReviews" },
-    { label: { MY: 'PRODUCT CONCEPT & TECHNOLOGY', EN: 'PRODUCT CONCEPT & TECHNOLOGY', ZH: "產品細節" }, show: true, id: "ProdConceptTech" },
-    { label: { MY: 'TECHNICAL INFORMATION', EN: 'TECHNICAL INFORMATION', ZH: "產品性能" }, show: true, id: "TechInfo" },
+    { label: { MY: 'DESIGNED FOR', EN: 'DESIGNED FOR', ZH: "適合在" }, show: true, id: "DesignFor",cellId:"DesignForCell" },
+    { label: { MY: 'PRODUCT BENEFITS', EN: 'PRODUCT BENEFITS', ZH: "產品優點" }, show: true, id: "ProductBenefit", cellId: "ProductBenefitCell" },
+    { label: { MY: 'USER REVIEWS', EN: 'USER REVIEWS', ZH: "使用者回饋" }, show: true, id: "UserReviews", cellId: "UserReviewsCell" },
+    { label: { MY: 'PRODUCT CONCEPT & TECHNOLOGY', EN: 'PRODUCT CONCEPT & TECHNOLOGY', ZH: "產品細節" }, show: true, id: "ProdConceptTech", cellId: "ProdConceptTechCell" },
+    { label: { MY: 'TECHNICAL INFORMATION', EN: 'TECHNICAL INFORMATION', ZH: "產品性能" }, show: true, id: "TechInfo", cellId: "TechInfoCell" },
   ],
   pageInfoLabel: {
     itemCode: { MY: "Item code", EN: "Item code", ZH: "貨號" },

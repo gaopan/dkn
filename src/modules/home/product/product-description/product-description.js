@@ -6,9 +6,10 @@ import VueBetterScroll from "@/components/vue-better-scroll/VueBetterScroll.vue"
 import BetterScroll from "better-scroll"
 
 import ProductApi from "@/api/modules/product/productInfo.js"
-import TimeUtil from "@/utils/datetime-utils.js"
 
-const this.$props.storeId = +localStorage.getItem("store-id");
+import TimeUtil from "@/utils/datetime-utils.js"
+import TypeChecker from "@/utils/type-checker.js"
+
 
 export default {
   name: "product-description",
@@ -24,6 +25,9 @@ export default {
     modelCode: {
       type: String
     },
+    itemCode:{
+      type: String
+    },
     lang: {
       type: String
     },
@@ -31,12 +35,6 @@ export default {
       type: String
     },
     country: {
-      type: String
-    },
-    itemCode: {
-      type: String
-    },
-    itemName: {
       type: String
     },
     storeId: {
@@ -58,7 +56,12 @@ export default {
       containerTitle: null,
       showModal: false,
       fieldELeQueried: {},
-      reviweScrollInstance:null
+      itemCodeBySize:null,
+      monitorMousemove: {
+        isMouseMoving: false,
+        scrollTarget: null,
+        movingTime: 0,
+      },      
     };
   },
   watch: {
@@ -69,18 +72,10 @@ export default {
         }
       }
     },
-    productReviews:{
-      handler(newV,oldV) {
-        if (newV) {
-          console.log("new review data")
-          if(this.reviweScrollInstance){
-            console.log("refresh review")
-            this.reviweScrollInstance.refresh();
-          }
-
-        }
-      },
-      deep:true      
+    itemCode: {
+      handler(newV, oldV) {
+        this.itemCodeBySize = newV
+      }
     }
   },
   mounted() {
@@ -91,11 +86,48 @@ export default {
         localStorage.setItem("lang", this.defaultLang);
       }
 
+      let doc = document;
+      this.fieldELeQueried.scrollnavTab = doc.querySelector("#scrollnavTab");      
+
+      //get navTab element Object
+      this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
+      this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
+      this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
+      this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
+      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
+
+      //page count down tracking
+      window.addEventListener("resize", this.monitorUserAction);
+
+      //navTab click tracking
+      if (this.fieldELeQueried.scrollnavTab) this.fieldELeQueried.scrollnavTab.addEventListener("click", this.navMonitorClick);
+
+      //scroll content tracking
+      let leaveEvent = this.isTouch ? "touchend" : "mouseleave",
+          moveEvent = this.isTouch ? "touchmove" : "mousemove";
+
+      this.fieldELeQueried.ScrollnavContent = doc.querySelector("#ScrollnavContent");
+      console.log(this.fieldELeQueried.ScrollnavContent)
+
+      if (this.fieldELeQueried.ScrollnavContent) {
+        this.fieldELeQueried.ScrollnavContent.addEventListener(leaveEvent, this.scrollMonitorMouseleave);
+        this.fieldELeQueried.ScrollnavContent.addEventListener(moveEvent, this.scrollMonitorMousemove);
+        this.fieldELeQueried.ScrollnavContent.addEventListener("mousedown", this.clickScrollArea);
+      } 
+
+      let getScrollEleTimer = setTimeout(()=>{
+
+        clearTimeout(getScrollEleTimer);
+
+      },20)
+
+
     })
   },
   created() {
     let vm = this;
-    // console.log();
+    this.itemCodeBySize = this.$props.itemCode;
+
     if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
     this.bDescriptionDataLoaded = true;
@@ -108,21 +140,10 @@ export default {
     this.navTabList.forEach(d => {
       if (d.show) this.navTabList_.push({
         label: d.label,
-        id: d.id
+        id: d.id,
+        cellId: d.cellId
       })
     })
-    let DOMLoadTimer = setTimeout(() => {
-      //get element for tracking
-      let doc = document;
-      this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
-      this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
-      this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
-      this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
-      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");    
-
-      clearTimeout(DOMLoadTimer)
-
-    }, 15)
 
     // this.activeNavIndex = 0;
     this.containerTitle = this.navTabList_[0].label[this.lang];
@@ -156,26 +177,22 @@ export default {
     }
   },
   beforeDestroy() {
-    if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.removeEventListener("click", this.paginationMonitorClick);
-    if (this.fieldELeQueried.scrollnavTab) this.fieldELeQueried.scrollnavTab.removeEventListener("click", this.navMonitorClick);
-
-    let leaveEvent = this.isTouch ? "touchend" : "mouseleave",
-      downEvent = this.isTouch ? "touchstart" : "mousedown",
-      wheelEvent = this.isTouch ? "touchmove" : "wheel";
-
-    if (this.fieldELeQueried.CarouselWrapper) {
-      this.fieldELeQueried.CarouselWrapper.removeEventListener(leaveEvent, this.carouselMonitorMouseout);
-      this.fieldELeQueried.CarouselWrapper.removeEventListener(downEvent, this.carouselMonitorMousedown);
-    }
-
-    if (this.fieldELeQueried.ScrollnavContent) {
-      this.fieldELeQueried.ScrollnavContent.removeEventListener(leaveEvent, this.scrollMonitorMouseleave);
-      this.fieldELeQueried.ScrollnavContent.removeEventListener(wheelEvent, this.scrollMonitorMousewheel);
-    }
 
     if (this.defaultLang != 'EN') {
       localStorage.setItem("lang", this.defaultLang);
     }
+
+
+    let leaveEvent = this.isTouch ? "touchend" : "mouseleave",
+      moveEvent = this.isTouch ? "touchmove" : "mousemove";
+
+    if (this.fieldELeQueried.scrollnavTab) this.fieldELeQueried.scrollnavTab.removeEventListener("click", this.navMonitorClick);
+
+    if (this.fieldELeQueried.ScrollnavContent) {
+      this.fieldELeQueried.ScrollnavContent.removeEventListener(leaveEvent, this.scrollMonitorMouseleave);
+      this.fieldELeQueried.ScrollnavContent.removeEventListener(moveEvent, this.scrollMonitorMousemove);
+    }
+
   },
   computed: {
     noProductDescription() {
@@ -210,11 +227,7 @@ export default {
         }
       }
     },
-    // activeNavIndexChanged(args) {
-    //   this.activeNavIndex = args;
-    //   this.containerTitle = this.navTabList_[args].label[this.lang];
-    // },
-    activeIndexChange(args){
+    activeIndexChange(args) {
       this.activeNavIndex = args;
       this.containerTitle = this.navTabList_[args].label[this.lang];
     },
@@ -223,35 +236,35 @@ export default {
 
       if (lang == "ZH" && this.defaultLang == "ZH") {
 
-        let rfid_storeId = this.$router.currentRoute.params.rfid +"_" + localStorage.getItem("store-id"),
-            infoStatusStr = localStorage.getItem(rfid_storeId);
-        
+        let rfid_storeId = this.$router.currentRoute.params.rfid + "_" + localStorage.getItem("store-id"),
+          infoStatusStr = localStorage.getItem(rfid_storeId);
+
         //send request before by this rfid_storeId
-        if(infoStatusStr){
-          if(infoStatusStr == "READY"){
+        if (infoStatusStr) {
+          if (infoStatusStr == "READY") {
             this.$emit('change-product-info');
-          }else if(infoStatusStr == "NOT_READY"){
+          } else if (infoStatusStr == "NOT_READY") {
             this.showModal = true;
             this.disableZHbtn = true;
           }
 
-        }else{
+        } else {
           //never send request before by this rfid_storeId
           ProductApi.getProductInfo(this.$route.params.rfid, "ZH", "tw").then(res => {
 
             localStorage.setItem("lang", lang);
             localStorage.setItem(rfid_storeId, "READY");
             this.$emit('change-product-info', res.data);
-            
+
           }, err => {
 
             localStorage.setItem(rfid_storeId, "NOT_READY");
             this.showModal = true;
             this.disableZHbtn = true;
           })
-          
+
         }
-      
+
 
         return;
 
@@ -262,8 +275,118 @@ export default {
 
       }
     },
-    //tracking on navscroll tab
+    scrollMonitorMouseleave(event) {
+      if (this.monitorMousemove.isMouseMoving) {
+
+        let stayTime = +((Date.now() - this.monitorMousemove.movingTime) / 1000).toFixed(2);
+        let data = {
+          item_code: this.itemCodeBySize,
+          item_name: this.productInfoDataDatBase.WebLabel,
+          area: "ContentZone",
+          field: this.monitorMousemove.scrollTarget,
+          event: 2,
+          store_id: this.$props.storeId,
+          stay_time: stayTime
+        }
+        // console.log(data)
+        ProductApi.postTracking(data)
+        // console.log("fetch leave",this.monitorMousemove.scrollTarget)
+        this.monitorMousemove.movingTime = 0;
+        this.monitorMousemove.scrollTarget = null;
+        this.monitorMousemove.isMouseMoving = false;
+      }
+    },
+    // start timer when user click the scroll field
+    clickScrollArea(){
+
+      if (!this.monitorMousemove.isMouseMoving) {
+        this.monitorMousemove.movingTime = Date.now();
+        this.monitorMousemove.isMouseMoving = true;
+        this.monitorMousemove.scrollTarget = this.getTargetField(event);
+      }      
+      // console.log(this.monitorMousemove.scrollTarget)
+    },
+    scrollMonitorMousemove(event) {
+
+      if(this.monitorMousemove.isMouseMoving){
+
+        event = event || window.event;
+
+        let target = this.getTargetField(event);
+
+        //field is changed
+        if (this.monitorMousemove.scrollTarget && this.monitorMousemove.scrollTarget != target) {
+          
+          let stayTime = +((Date.now() - this.monitorMousemove.movingTime) / 1000).toFixed(2);
+          
+          let data = {
+            event: 2,
+            area: "ContentZone",
+            stay_time: stayTime,
+            item_code: this.itemCodeBySize,
+            item_name: this.productInfoDataDatBase.WebLabel,
+            field: this.monitorMousemove.scrollTarget,
+            store_id: this.$props.storeId,
+          }
+
+          ProductApi.postTracking(data)
+          // console.log("fetch move:",this.monitorMousemove.scrollTarget)
+
+          //restart timer when the field changed
+          this.monitorMousemove.movingTime = Date.now();
+        }
+        //the newest field
+        this.monitorMousemove.scrollTarget = target;
+
+      }
+   
+    },
+    getTargetField(event){
+      let target = null,
+          eventTarget = event.target,
+          elementArr = [
+            {
+              element:this.$refs.DesignForBlock,
+              targetName:"DesignForBlock"
+            },{
+              element:this.$refs.ProdBenefitBlock,
+              targetName:"ProdBenefitBlock"
+            },{
+              element:this.$refs.UserReviewsBlock,
+              targetName:"UserReviewsBlock"
+            },{
+              element:this.$refs.TechInfoBlock,
+              targetName:"TechInfoBlock"
+            },{
+              element:this.$refs.ConceptTechBlock,
+              targetName:"ConceptTechBlock"
+            }
+          ];
+
+      elementArr.every(ele=>{
+        let bTarget = getElementTarget(ele.element,eventTarget);
+        if(bTarget){
+          target = ele.targetName
+          return false;
+        }else{
+          return true;
+        }
+      })
+      function getElementTarget(ele,eventTarget){
+        if (ele) {
+          if (TypeChecker.isArray(ele)) {
+            if (ele[0] && ele[0].contains(eventTarget)) return true;
+          } else {
+            if (ele.contains(eventTarget)) return true;
+          }
+        }
+        return false;
+      }  
+
+      return target;      
+    },
     navMonitorClick(event) {
+      // debugger
       event = event || window.event;
       let target = event.target,
         field,
@@ -275,72 +398,16 @@ export default {
       if (target == fieldEle.TechInfo) field = "TechInfo";
 
       let data = {
-        item_code: this.$props.itemCode,
-        item_name: this.$props.itemName,
+        item_code: this.itemCodeBySize,
+        item_name: this.productInfoDataDatBase.WebLabel,
         area: "ContentZone",
         field: field,
         event: 1,
         store_id: this.$props.storeId,
         stay_time: 0
       }
-
-      ProductApi.postTracking(data).then(res => {
-        // console.log(res.data);
-      })
-    },
-    //tracking on pagiantion button
-    paginationMonitorClick(event) {
-
-      event = event || window.event;
-
-      let doc = document;
-      if (event.target == doc.querySelector("#iconDown") || event.target == doc.querySelector("#iconUp")) {
-        let data = {
-          item_code: this.$props.itemCode,
-          item_name: this.$props.itemName,
-          area: "ConversionZone",
-          field: "Moreviews",
-          event: 1,
-          store_id: this.$props.storeId,
-          stay_time: 0
-        }
-
-        ProductApi.postTracking(data).then(res => {
-          // console.log(res.data);
-        })
-      }
-    },
-     //tracking on photo carousel
-    carouselMonitorMousedown() {
-      if (!this.monitorMousemove.carouselClicked) {
-        this.monitorMousemove.carouselClicked = true;
-        this.monitorMousemove.carouselTime = Date.now();
-      }
-    },
-    carouselMonitorMouseout() {
-      if (this.monitorMousemove.carouselClicked) {
-        this.monitorMousemove.carouselClicked = false;
-        let stayTime = +((Date.now() - this.monitorMousemove.carouselTime) / 1000).toFixed(2);
-
-        let data = {
-          item_code: this.$props.itemCode,
-          item_name: this.$props.itemName,
-          area: "ConversionZone",
-          field: "MainPicBlock",
-          event: 2,
-          store_id: this.$props.storeId,
-          stay_time: stayTime
-        }
-
-        // console.log("carousel mouse out", data)
-        ProductApi.postTracking(data).then(res => {
-          // console.log(res.data);
-        })
-        this.monitorMousemove.carouselTime = Date.now();
-
-      }
-
-    },    
-
+      ProductApi.postTracking(data)
+    }
   }
 }
+

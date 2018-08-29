@@ -90,6 +90,15 @@ export default {
       noImage: false,
       navigateToPhoto: 1,
       imageUrl: [],
+      fieldELeQueried:{},
+      monitorMousemove : {
+        carouselClicked: false,
+        carouselTime: 0,
+        scrollNavMousewheel: false,
+        scrollTarget: null,
+        scrollNavTime: 0,
+      },
+      itemName:null,  
     };
   },
   watch: {
@@ -106,12 +115,19 @@ export default {
           this.onPriceInfoReady();
         }
       }
+    },
+    //emit itemCode to product-descrition.js
+    "originalDicountPriceItemcode.itemCode":{
+      handler(newV,oldV){
+        this.$emit("change-item",newV)
+      }
     }
   },
   created() {
     if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
-
+    
+    this.itemName = this.productInfoDataDatBase.WebLabel;
     this.defaultCode[this.lang] = findDefaultCode(this.productInfo.default_model_code, this.productInfo.default_item_code, this.productModelsDatBase);
     this.originalDicountPriceItemcode.itemCode = this.defaultCode[this.lang].default_item_code;
 
@@ -270,10 +286,41 @@ export default {
       return { default_item_code, default_model_code }
     }
   },
+  mounted(){
+    this.$nextTick(()=>{
+      let doc = document;
+
+      let leaveEvent = this.isTouch ? "touchend" : "mouseleave", 
+          downEvent = this.isTouch ? "touchstart" : "mousedown";
+
+      window.addEventListener("resize", this.monitorUserAction)
+
+      this.fieldELeQueried.carouselPagination = doc.querySelector("#carouselPagination");
+      this.fieldELeQueried.CarouselWrapper = doc.querySelector("#CarouselWrapper");
+
+      if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.addEventListener("click", this.paginationMonitorClick);
+     
+      if (this.fieldELeQueried.CarouselWrapper) {
+        this.fieldELeQueried.CarouselWrapper.addEventListener(leaveEvent, this.carouselMonitorMouseout);
+        this.fieldELeQueried.CarouselWrapper.addEventListener(downEvent, this.carouselMonitorMousedown);
+      }
+
+
+    })
+  },
+  beforeDestroy(){
+    if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.removeEventListener("click", this.paginationMonitorClick);
+
+    let leaveEvent = this.isTouch ? "touchend" : "mouseleave", 
+        downEvent = this.isTouch ? "touchstart" : "mousedown";
+
+    if (this.fieldELeQueried.CarouselWrapper) {
+      this.fieldELeQueried.CarouselWrapper.removeEventListener(leaveEvent, this.carouselMonitorMouseout);
+      this.fieldELeQueried.CarouselWrapper.removeEventListener(downEvent, this.carouselMonitorMousedown);
+    }
+
+  },
   computed: {
-    itemName() {
-      return this.productInfoDataDatBase.WebLabel;
-    },
     showOriginalPrice() {
       if (this.bEmptyPrice) return false;
       return (this.originalDicountPriceItemcode.price.off == 100 && this.originalDicountPriceItemcode.itemCode);
@@ -536,13 +583,59 @@ export default {
         area: "ConversionZone",
         field: field,
         event: 1,
-        store_id: this.storeId,
+        store_id: this.$props.storeId,
         stay_time: 0
       }
 
-      ProductApi.postTracking(data).then(res => {
-        // console.log(res.data);
-      })
-    }
+      ProductApi.postTracking(data);
+    },
+    paginationMonitorClick(event) {
+      event = event || window.event;
+
+      let doc = document;
+      if (event.target == doc.querySelector("#iconDown") || event.target == doc.querySelector("#iconUp")) {
+        let data = {
+          item_code: this.originalDicountPriceItemcode.itemCode,
+          item_name: this.itemName,
+          area: "ConversionZone",
+          field: "Moreviews",
+          event: 1,
+          store_id: this.$props.storeId,
+          stay_time: 0
+        }
+
+        ProductApi.postTracking(data);
+      }
+    },
+    carouselMonitorMousedown() {
+      if (!this.monitorMousemove.carouselClicked) {
+        this.monitorMousemove.carouselClicked = true;
+        this.monitorMousemove.carouselTime = Date.now();
+      }
+    },
+    carouselMonitorMouseout() {
+      if (this.monitorMousemove.carouselClicked) {
+        this.monitorMousemove.carouselClicked = false;
+        let stayTime = +((Date.now() - this.monitorMousemove.carouselTime) / 1000).toFixed(2);
+
+        let data = {
+          item_code: this.originalDicountPriceItemcode.itemCode,
+          item_name: this.itemName,
+          area: "ConversionZone",
+          field: "MainPicBlock",
+          event: 2,
+          store_id: this.$props.storeId,
+          stay_time: stayTime
+        }
+
+        // console.log("carousel mouse out", data)
+        ProductApi.postTracking(data)
+
+        this.monitorMousemove.carouselTime = Date.now();
+
+      }
+    },
+  
+          
   }
 }

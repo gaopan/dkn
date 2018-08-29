@@ -62,7 +62,8 @@ export default{
 					probeType:this.$props.probeType,
 					scrollY:this.$props.scrollY,
 					momentum:true,
-					swipeTime:1200,
+					swipeTime:1500,
+					click:true,
 					// observeDOM:false,
 					bounce: {
 					  top: false,
@@ -85,19 +86,18 @@ export default{
 				this.scrollInstance.on("scrollStart",(pos)=>{
 
 					this.scrollTimer = setInterval(()=>{
-						let transformStyle = this.getStyle(this.scrollContentEle,"transform"),
-								transformStyleArr = transformStyle.split(","),
-								translateValue = Math.abs(parseInt(transformStyleArr[transformStyleArr.length-1])),
-								firstCellTop = this.scrollCellsEle[0].getBoundingClientRect().top;
+						// let transformStyle = this.getStyle(this.scrollContentEle,"transform"),
+						// 		transformStyleArr = transformStyle.split(","),
+						// 		translateValue = Math.abs(parseInt(transformStyleArr[transformStyleArr.length-1]));
+								
+						let firstCellTop = this.scrollCellsEle[0].getBoundingClientRect().top;
 						
 						let viewHeight = firstCellTop < this.firstCellTop ? 100:881;
 						this.firstCellTop = firstCellTop;
-						// console.log("contentOffsetTop: ",this.contentOffsetTop)
-						// console.log("======")
+
 						let newActiveIndex = null;
 						for(let i = 0, len = this.scrollCellsEle.length;i < len; i++){
 
-							// console.log("top: ",this.scrollCellsEle[i].getBoundingClientRect().top)
 							if(this.scrollCellsEle[i].getBoundingClientRect().top + viewHeight > this.contentOffsetTop){
 								if(i != this.activeIndex){
 									this.activeIndex = i;
@@ -109,7 +109,6 @@ export default{
 							}		
 
 						}
-						// console.log("======")						
 					},200)
 					
 					this.$emit("scrollStart",pos)
@@ -138,7 +137,7 @@ export default{
 		scrollToTargetContent(item, itemIndex){
 			this.activeIndex = itemIndex;
 			this.$emit("activeIndexChange",itemIndex)
-			this.scrollInstance.scrollToElement("#"+item.id, 500, 0, 0)
+			this.scrollInstance.scrollToElement("#"+item.cellId, 500, 0, 0)
 		},
 
 		refreshScroll(){

@@ -1,7 +1,7 @@
 <template>
 
 	<div class="product-container" ref="container">
-		<product-details v-if="productInfo" :productInfo="productInfo" :priceInfo="priceInfo" :noPriceInfo="noPriceInfo" :stockInfo="stockInfo" :noStockInfo="noStockInfo" :lang="lang" :country="country" :storeId="storeId" @changed-model="changedModel"></product-details>
+		<product-details v-if="productInfo" :productInfo="productInfo" :priceInfo="priceInfo" :noPriceInfo="noPriceInfo" :stockInfo="stockInfo" :noStockInfo="noStockInfo" :lang="lang" :country="country" :storeId="storeId" @changed-model="changedModel" @change-item = "changeItem"></product-details>
 
 		<product-description 
 			v-if="productInfo && userReviewInfo" 
@@ -13,7 +13,6 @@
 			:country="country" 
 			:storeId="storeId" 
 			:itemCode="itemCode" 
-			:itemName="itemName" 
 			@change-product-info="changeProductInfo"
 			>
 				

@@ -32,7 +32,6 @@ export default {
       noPriceInfo: false,
       modelCode: null,
       itemCode:null,
-      itemName:null,
       isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
     };
   },
@@ -67,7 +66,7 @@ export default {
       initProperties.call(this);
       this.initLanguage();
       initPageData.call(this);
-      // initTimeChecker.call(this);
+      initTimeChecker.call(this);
 
       function initProperties() {
         this.monitorCount = 0;
@@ -139,6 +138,9 @@ export default {
     },
     changedModel(args) {
       this.modelCode = args;
+    },
+    changeItem(args){
+      this.itemCode = args;
     },
     monitorUserAction(event) {
       event = event || window.event;
