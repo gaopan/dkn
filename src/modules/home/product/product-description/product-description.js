@@ -8,6 +8,8 @@ import BetterScroll from "better-scroll"
 import ProductApi from "@/api/modules/product/productInfo.js"
 import TimeUtil from "@/utils/datetime-utils.js"
 
+const this.$props.storeId = +localStorage.getItem("store-id");
+
 export default {
   name: "product-description",
   props: {
@@ -29,6 +31,12 @@ export default {
       type: String
     },
     country: {
+      type: String
+    },
+    itemCode: {
+      type: String
+    },
+    itemName: {
       type: String
     },
     storeId: {
@@ -77,29 +85,6 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      let doc = document;
-      let leaveEvent = this.isTouch ? "touchend" : "mouseleave",
-        downEvent = this.isTouch ? "touchstart" : "mousedown",
-        wheelEvent = this.isTouch ? "touchmove" : "wheel";
-
-      this.fieldELeQueried.carouselPagination = doc.querySelector("#carouselPagination");
-      this.fieldELeQueried.scrollnavTab = doc.querySelector("#scrollnavTab");
-
-      this.fieldELeQueried.CarouselWrapper = doc.querySelector("#CarouselWrapper");
-      this.fieldELeQueried.ScrollnavContent = doc.querySelector("#ScrollnavContent");
-
-      if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.addEventListener("click", this.paginationMonitorClick);
-      if (this.fieldELeQueried.scrollnavTab) this.fieldELeQueried.scrollnavTab.addEventListener("click", this.navMonitorClick);
-
-      if (this.fieldELeQueried.CarouselWrapper) {
-        this.fieldELeQueried.CarouselWrapper.addEventListener(leaveEvent, this.carouselMonitorMouseout);
-        this.fieldELeQueried.CarouselWrapper.addEventListener(downEvent, this.carouselMonitorMousedown);
-      }
-
-      if (this.fieldELeQueried.ScrollnavContent) {
-        this.fieldELeQueried.ScrollnavContent.addEventListener(leaveEvent, this.scrollMonitorMouseleave);
-        this.fieldELeQueried.ScrollnavContent.addEventListener(wheelEvent, this.scrollMonitorMousewheel);
-      }
 
       if (this.defaultLang != 'EN') {
         //"ZH"
@@ -259,7 +244,7 @@ export default {
             this.$emit('change-product-info', res.data);
             
           }, err => {
-            
+
             localStorage.setItem(rfid_storeId, "NOT_READY");
             this.showModal = true;
             this.disableZHbtn = true;
@@ -277,5 +262,85 @@ export default {
 
       }
     },
+    //tracking on navscroll tab
+    navMonitorClick(event) {
+      event = event || window.event;
+      let target = event.target,
+        field,
+        fieldEle = this.fieldELeQueried;
+      if (target == fieldEle.DesignFor) field = "DesignFor";
+      if (target == fieldEle.ProductBenefit) field = "ProductBenefit";
+      if (target == fieldEle.UserReviews) field = "UserReviews";
+      if (target == fieldEle.ProdConceptTech) field = "ProdConceptTech";
+      if (target == fieldEle.TechInfo) field = "TechInfo";
+
+      let data = {
+        item_code: this.$props.itemCode,
+        item_name: this.$props.itemName,
+        area: "ContentZone",
+        field: field,
+        event: 1,
+        store_id: this.$props.storeId,
+        stay_time: 0
+      }
+
+      ProductApi.postTracking(data).then(res => {
+        // console.log(res.data);
+      })
+    },
+    //tracking on pagiantion button
+    paginationMonitorClick(event) {
+
+      event = event || window.event;
+
+      let doc = document;
+      if (event.target == doc.querySelector("#iconDown") || event.target == doc.querySelector("#iconUp")) {
+        let data = {
+          item_code: this.$props.itemCode,
+          item_name: this.$props.itemName,
+          area: "ConversionZone",
+          field: "Moreviews",
+          event: 1,
+          store_id: this.$props.storeId,
+          stay_time: 0
+        }
+
+        ProductApi.postTracking(data).then(res => {
+          // console.log(res.data);
+        })
+      }
+    },
+     //tracking on photo carousel
+    carouselMonitorMousedown() {
+      if (!this.monitorMousemove.carouselClicked) {
+        this.monitorMousemove.carouselClicked = true;
+        this.monitorMousemove.carouselTime = Date.now();
+      }
+    },
+    carouselMonitorMouseout() {
+      if (this.monitorMousemove.carouselClicked) {
+        this.monitorMousemove.carouselClicked = false;
+        let stayTime = +((Date.now() - this.monitorMousemove.carouselTime) / 1000).toFixed(2);
+
+        let data = {
+          item_code: this.$props.itemCode,
+          item_name: this.$props.itemName,
+          area: "ConversionZone",
+          field: "MainPicBlock",
+          event: 2,
+          store_id: this.$props.storeId,
+          stay_time: stayTime
+        }
+
+        // console.log("carousel mouse out", data)
+        ProductApi.postTracking(data).then(res => {
+          // console.log(res.data);
+        })
+        this.monitorMousemove.carouselTime = Date.now();
+
+      }
+
+    },    
+
   }
 }

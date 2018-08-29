@@ -31,6 +31,8 @@ export default {
       priceInfo: null,
       noPriceInfo: false,
       modelCode: null,
+      itemCode:null,
+      itemName:null,
       isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
     };
   },
