@@ -1,0 +1,122 @@
+.product-scroller {
+  /*height: 878px;*/
+
+
+  height: 858px;
+  overflow: hidden;
+  margin-top: 96px;
+  position: relative;
+
+  * {
+  	box-sizing: border-box;
+  }
+}
+
+.product-scroller-content {}
+
+.product-scroller-item {
+  margin-bottom: 20px;
+  color: #393939;
+  line-height: 1.5;
+  min-width: 350px;
+  padding-bottom: 100px;
+  /*min-height: 878px;*/
+  min-height: 858px;
+  margin-right: 300px;
+
+  p {
+    margin-right: 50px;
+  }
+}
+
+.product-scroller-nav {
+  position: absolute;
+  z-index: 1;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  list-style: none;
+  border-left: 1px rgb(225, 225, 225) solid;
+  padding-left: 10px;
+  bottom: 86px;
+  right: 100px;
+  font-size: 20px;
+
+  &>li {
+    position: relative;
+    cursor: pointer;
+
+    &>span {
+      margin-bottom: 20px;
+      width: 100px;
+      display: inline-block;
+    }
+
+    &>span:before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 100%;
+      display: inline-block;
+      border: 2px solid #dfdfdf;
+      position: absolute;
+      left: -16px;
+      top: 20%;
+      background-color: white;
+      z-index: 1;
+    }
+
+    &>span.active:before {
+      background-color: #393939;
+      border: 2px solid black;
+    }
+  }
+
+  &>li:first {
+    padding-left: 0;
+  }
+
+  &>li.current {
+    color: #393939;
+    font-weight: bold;
+    &>i {
+      width: 16px;
+      height: inherit;
+      position: absolute;
+      top: 0;
+      left: 0.5px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  &>li:first-child>span:after {
+    width: 1px;
+    display: inline-block;
+    position: absolute;
+    left: -11px;
+    z-index: 1;
+    content: "";
+    height: 100%;
+    background-color: #fafafa;
+    height: 13px;
+    top: -5px;
+  }
+  &>li:last-child>span:after {
+    width: 1px;
+    display: inline-block;
+    position: absolute;
+    left: -11px;
+    z-index: 1;
+    content: "";
+    height: 100%;
+    background-color: #fafafa;
+    height: 48px;
+    top: 20px;
+  }
+}
+
+/*.user-reviews-scroller{
+  height: 778px;
+  overflow:hidden;
+}
+*/

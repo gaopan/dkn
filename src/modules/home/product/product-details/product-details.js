@@ -99,6 +99,7 @@ export default {
         scrollNavTime: 0,
       },
       itemName:null,  
+      isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
     };
   },
   watch: {

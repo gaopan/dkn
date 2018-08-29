@@ -46,7 +46,7 @@ export default {
   },
   
   postTracking(data){
-    if(!data.item_code)return Promise.resolve();
+    if(!data.item_code||!data.field)return Promise.resolve();
     let url = `http://13.229.158.94/api/tracking/save`;
     let form = [];
 
