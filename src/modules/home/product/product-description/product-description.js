@@ -110,6 +110,7 @@ export default {
   },
   created() {
     let vm = this;
+    // console.log();
     if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
     this.bDescriptionDataLoaded = true;
@@ -236,17 +237,44 @@ export default {
       if (this.lang == lang || this.disableZHbtn) return;
 
       if (lang == "ZH" && this.defaultLang == "ZH") {
-        ProductApi.getProductInfo(this.$route.params.rfid, "ZH", "tw").then(res => {
-          localStorage.setItem("lang", lang);
-          this.$emit('change-product-info', res.data);
-        }, err => {
-          this.showModal = true;
-          this.disableZHbtn = true;
-        })
+
+        let rfid_storeId = this.$router.currentRoute.params.rfid +"_" + localStorage.getItem("store-id"),
+            infoStatusStr = localStorage.getItem(rfid_storeId);
+        
+        //send request before by this rfid_storeId
+        if(infoStatusStr){
+          if(infoStatusStr == "READY"){
+            this.$emit('change-product-info');
+          }else if(infoStatusStr == "NOT_READY"){
+            this.showModal = true;
+            this.disableZHbtn = true;
+          }
+
+        }else{
+          //never send request before by this rfid_storeId
+          ProductApi.getProductInfo(this.$route.params.rfid, "ZH", "tw").then(res => {
+
+            localStorage.setItem("lang", lang);
+            localStorage.setItem(rfid_storeId, "READY");
+            this.$emit('change-product-info', res.data);
+            
+          }, err => {
+            
+            localStorage.setItem(rfid_storeId, "NOT_READY");
+            this.showModal = true;
+            this.disableZHbtn = true;
+          })
+          
+        }
+      
+
         return;
+
       } else {
+
         localStorage.setItem("lang", lang);
         this.$emit('change-product-info');
+
       }
     },
   }

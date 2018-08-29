@@ -62,6 +62,7 @@ export default{
 					probeType:this.$props.probeType,
 					scrollY:this.$props.scrollY,
 					momentum:true,
+					swipeTime:1200,
 					// observeDOM:false,
 					bounce: {
 					  top: false,
@@ -137,41 +138,34 @@ export default{
 		scrollToTargetContent(item, itemIndex){
 			this.activeIndex = itemIndex;
 			this.$emit("activeIndexChange",itemIndex)
-			this.scrollInstance.scrollToElement("#"+item.id, 1000, 0, 0)
-		}
+			this.scrollInstance.scrollToElement("#"+item.id, 500, 0, 0)
+		},
 
-	},
-	watch:{
-		data:{
-			handler:function(newV,oldV){
-				let timer = setTimeout(()=>{
-					if(!!this.scrollInstance){
-						this.scrollInstance.refresh()
-					}
-					clearTimeout(timer)
-				},this.refreshDely)
-			},
-			deep:true
-		},
-		partialData:{
-			handler:function(newV,oldV){
-				
-				let timer = setTimeout(()=>{
-					if(!!this.scrollInstance){
-						this.scrollInstance.refresh()
-					}
-					clearTimeout(timer)
-				},this.refreshDely)
-			},
-			deep:true
-		},
-		activeIndex(newV,oldV){
+		refreshScroll(){
 			let timer = setTimeout(()=>{
 				if(!!this.scrollInstance){
 					this.scrollInstance.refresh()
 				}
 				clearTimeout(timer)
 			},this.refreshDely)			
+		}
+
+	},
+	watch:{
+		data:{
+			handler:function(newV,oldV){
+				this.refreshScroll();
+			},
+			deep:true
+		},
+		partialData:{
+			handler:function(newV,oldV){
+				this.refreshScroll();
+			},
+			deep:true
+		},
+		activeIndex(newV,oldV){
+			this.refreshScroll();		
 		}
 	}
 }
