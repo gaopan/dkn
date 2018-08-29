@@ -276,6 +276,8 @@ export default {
       this.offset =  Math.min(this.carouselHeight * (this.$props.navigateTo-1), this.maxOffset)
     }
 
+    this.slideCount = this.imageUrl.length;
+
   },
 
   beforeDestroy() {

@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="isActive" ref="velmld"  class="velmld-overlay" :class="{ 'velmld-full-screen': isFullScreen }">
+    <div v-show="isActive" ref="velmld"  class="velmld-overlay" :class="{ 'velmld-full-screen': isFullScreen }">
       <div class="velmld-spinner">
         <!-- <slot name="default">
           <component :is="spinner" :color="spinnerColor"></component>
