@@ -32,9 +32,9 @@ export default {
     defaultLang: {
       type: String
     },
-    country: {
-      type: String
-    },
+    // country: {
+    //   type: String
+    // },
     storeId: {
       type: Number
     }
@@ -63,7 +63,12 @@ export default {
         isMobileTouching: false,
         mobileMovingTime: 0,
       }, 
-      dataForMouseMonitor:null     
+      dataForMouseMonitor:null,
+      dataLoaded:{
+        ZH:false,
+        EN:false,
+        MY:false,
+      }     
     };
   },
   watch: {
@@ -74,18 +79,47 @@ export default {
         }
       }
     },
+
     itemCode: {
       handler(newV, oldV) {
         this.itemCodeBySize = newV;
         this.dataForMouseMonitor.item_code =newV;
       }
+    },
+
+    productInfo:{
+      handler(newV, oldV) {
+        if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
+        if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
+
+        this.dataForMouseMonitor.item_name = this.productInfoDataDatBase.WebLabel;
+
+        this.checkNavPanelDisplay(this.productInfoDataDatBase)
+
+        //get product description list
+        this.navTabList_ = [];
+        this.navTabList.forEach(d => {
+          if (d.show) this.navTabList_.push({
+            label: d.label,
+            id: d.id,
+            cellId: d.cellId
+          })
+        })
+
+        // this.activeNavIndex = 0;
+        this.containerTitle = this.navTabList_[this.activeNavIndex].label[this.lang];
+      },
+      deep:true      
+    },
+
+    defaultLang(newV, oldV){
+      if (this.defaultLang != 'EN')localStorage.setItem("lang", this.defaultLang);     
     }
   },
   mounted() {
     this.$nextTick(() => {
 
       if (this.defaultLang != 'EN') {
-        //"ZH"
         localStorage.setItem("lang", this.defaultLang);
       }
 
@@ -129,7 +163,7 @@ export default {
   created() {
     let vm = this;
     this.itemCodeBySize = this.$props.itemCode;
-
+    this.dataLoaded[this.lang] = true;
 
     if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
@@ -143,7 +177,7 @@ export default {
     }
 
     //show or hide the tab  
-    checkNavPanelDisplay.call(this, this.productInfoDataDatBase)
+    this.checkNavPanelDisplay(this.productInfoDataDatBase)
 
     //get product description list
     this.navTabList_ = [];
@@ -159,34 +193,6 @@ export default {
     // this.activeNavIndex = 0;
     this.containerTitle = this.navTabList_[0].label[this.lang];
 
-    function checkNavPanelDisplay(productInfoData) {
-
-      let bTechInfo = !!(productInfoData.Functionalities && productInfoData.Functionalities.length),
-
-        bProductConcept = !!productInfoData.MaintenanceAdv ||
-        !!productInfoData.StorageAdv ||
-        !!productInfoData.UsageRestriction,
-
-        bBenefits = !!(productInfoData.Benefits && productInfoData.Benefits.length),
-
-        bDesignedFor = !!productInfoData.DesignedFor || !!productInfoData.Catchline;
-      // bUserView = !!(reviewsDataBase&&reviewsDataBase.length); 
-
-      showNavTab(bDesignedFor, "DesignFor")
-      showNavTab(bBenefits, "ProductBenefit")
-      showNavTab(bProductConcept, "ProdConceptTech")
-      showNavTab(bTechInfo, "TechInfo")
-    }
-
-    function showNavTab(bShow, id) {
-      vm.navTabList.every(d => {
-        if (d.id == id) {
-          d.show = bShow;
-          return false;
-        }
-        return true;
-      })
-    }
   },
   beforeDestroy() {
 
@@ -216,7 +222,37 @@ export default {
     }
   },
   methods: {
+
+    checkNavPanelDisplay(productInfoData) {
+      let vm = this;
+      let bTechInfo = !!(productInfoData.Functionalities && productInfoData.Functionalities.length),
+
+        bProductConcept = !!productInfoData.MaintenanceAdv ||
+        !!productInfoData.StorageAdv ||
+        !!productInfoData.UsageRestriction,
+
+        bBenefits = !!(productInfoData.Benefits && productInfoData.Benefits.length),
+
+        bDesignedFor = !!productInfoData.DesignedFor || !!productInfoData.Catchline;
+      // bUserView = !!(reviewsDataBase&&reviewsDataBase.length); 
+
+      showNavTab(bDesignedFor, "DesignFor")
+      showNavTab(bBenefits, "ProductBenefit")
+      showNavTab(bProductConcept, "ProdConceptTech")
+      showNavTab(bTechInfo, "TechInfo")
+
+      function showNavTab(bShow, id) {
+        vm.navTabList.every(d => {
+          if (d.id == id) {
+            d.show = bShow;
+            return false;
+          }
+          return true;
+        })
+      }      
+    },    
     tabIndexUpdate(index){
+      this.activeNavIndex = index;      
       this.containerTitle = this.navTabList_[index].label[this.lang];
     },
     onModelCode() {
@@ -247,33 +283,30 @@ export default {
       }
     },
 
-    activeIndexChange(args) {
-      this.activeNavIndex = args;
-      this.containerTitle = this.navTabList_[args].label[this.lang];
-    },
     chooseLang(lang) {
+      // debugger
       if (this.lang == lang || this.disableZHbtn) return;
 
       if (lang == "ZH" && this.defaultLang == "ZH") {
 
         let rfid_storeId = this.$router.currentRoute.params.rfid + "_" + localStorage.getItem("store-id"),
-          infoStatusStr = localStorage.getItem(rfid_storeId);
+            infoStatusStr = localStorage.getItem(rfid_storeId);
 
         //send request before by this rfid_storeId
-        if (infoStatusStr) {
+        if (infoStatusStr) { //deep_false
           if (infoStatusStr == "READY") {
-            this.$emit('change-product-info');
+            this.$emit('change-product-info',{ lang:lang,load:false });
           }else{
             this.showModal = true;
             this.disableZHbtn = true;
           }
-        } else {
+        } else { //deep_true
           //never send request before by this rfid_storeId
           ProductApi.getProductInfo(this.$route.params.rfid, "ZH", "tw").then(res => {
 
             localStorage.setItem("lang", lang);
             localStorage.setItem(rfid_storeId, "READY");
-            this.$emit('change-product-info', res.data);
+            this.$emit('change-product-info',{ lang:lang,load:true,data:res.data });
 
           }, err => {
 
@@ -281,17 +314,23 @@ export default {
             this.showModal = true;
             this.disableZHbtn = true;
           })
-
         }
 
         return;
 
-      } else {
+      } else if(lang == "EN"){
 
+        if(this.dataLoaded[lang]){
+          this.$emit('change-product-info',{ lang:lang,load:false });
+        }else{
+          this.$emit('change-product-info',{ lang:lang,load:true });
+        }        
         localStorage.setItem("lang", lang);
-        this.$emit('change-product-info');
-
       }
+
+      //mark: data by this language loaded
+      this.dataLoaded[lang] = true
+
     },
     scrollMonitorMouseleave(event) {
       if (this.monitorDescription.isMouseMoving) {

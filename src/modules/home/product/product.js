@@ -16,12 +16,10 @@ const STOREID = +localStorage.getItem("store-id");
 
 export default {
   name: 'product',
-  data() {
-    return {
-      lang: null,
-      storeId: STOREID,
-      monitorCount: 0,
-      showLoader: false,
+  data(){
+
+    let dataProto = {
+     
       productInfo: null,
       noProductInfo: false,
       userReviewInfo: null,
@@ -31,12 +29,30 @@ export default {
       priceInfo: null,
       noPriceInfo: false,
       modelCode: null,
-      itemCode:null,
+      itemCode:null,      
+    }
+    return {
+      lang: "",
+      storeId: STOREID,
+      showLoader: false,
+      monitorCount:0,
+      intervalTimer:null,
+      defaultLang:null,
+      AllLangDataBase:{
+        ZH:Object.assign({},dataProto),
+        EN:Object.assign({},dataProto),
+        MY:Object.assign({},dataProto),
+      },
+      dataLoaded:{
+        ZH:false,
+        EN:false,
+        MY:false,
+      },
       isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
     };
   },
   created() {
-    this.init();
+    this.init(true);
   },
   mounted() {
     this.$nextTick(() => {
@@ -55,61 +71,75 @@ export default {
   components: { ElementLoading, ProductDetails, ProductDescription },
   watch: {
     '$route.params.rfid': function() {
-      this.init();
+      this.init(true);
     }
   },
   methods: {
-    init() {
+    init(deep) {
       let vm = this;
+      // console.log(this)
       this.rfid = this.$router.currentRoute.params.rfid;
+      this.initLanguage(deep);
 
-      initProperties.call(this);
-      this.initLanguage();
-      initPageData.call(this);
+      initProperties.call(this, this.lang, deep);
+      initPageData.call(this, this.lang, deep);
       initTimeChecker.call(this);
 
-      function initProperties() {
-        this.monitorCount = 0;
-        this.showLoader = false;
-        this.productInfo = null;
-        this.noProductInfo = false;
-        this.userReviewInfo = null;
-        this.noUserReviewInfo = false;
-        this.stockInfo = null;
-        this.noStockInfo = false;
-        this.priceInfo = null;
-        this.noPriceInfo = false;
-        this.itemCode = null;
+      function initProperties(lang,deep) {
+        this.AllLangDataBase[lang].modelCode =  null;
+        this.AllLangDataBase[lang].itemCode = null;
+
+        if(!deep)return;
+        this.AllLangDataBase[lang].productInfo = null;
+        this.AllLangDataBase[lang].noProductInfo = false;
+        this.AllLangDataBase[lang].userReviewInfo = null;
+        this.AllLangDataBase[lang].noUserReviewInfo = false;
+        this.AllLangDataBase[lang].stockInfo = null;
+        this.AllLangDataBase[lang].noStockInfo = false;
+        this.AllLangDataBase[lang].priceInfo = null;
+        this.AllLangDataBase[lang].noPriceInfo = false;
       }
 
-      function initPageData() {
+      function initPageData(lang,deep) {
         this.showLoader = true;
-        var productInfoPromise = ProductApi.getProductInfo(this.rfid, this.lang, this.country).then(res => {
+        if(!this.AllLangDataBase[lang].productInfo||deep){
+          var productInfoPromise = ProductApi.getProductInfo(this.rfid, this.lang, this.country).then(res => {
+            this.showLoader = false;
+            this.AllLangDataBase[lang].productInfo = res.data;
+          }, err => {
+            this.AllLangDataBase[lang].noProductInfo = true;
+            this.$router.push('/error');
+          })
+        }else{
           this.showLoader = false;
-          this.productInfo = res.data;
-        }, err => {
-          this.noProductInfo = true;
-          this.$router.push('/error');
-        })
+        }
 
-        var userReviewPromise = ProductApi.getUserReview(this.rfid, this.lang, this.country).then(res => {
-          this.userReviewInfo = res.data;
-        }, err => {
-          this.noUserReviewInfo = true;
-        })
+        if(!this.AllLangDataBase[lang].userReviewInfo||deep){
+          var userReviewPromise = ProductApi.getUserReview(this.rfid, this.lang, this.country).then(res => {
+            this.AllLangDataBase[lang].userReviewInfo = res.data;
+          }, err => {
+            this.AllLangDataBase[lang].noUserReviewInfo = true;
+          })        
+        }
 
-        var stockPromise = ProductApi.getStock(this.rfid, this.storeId, this.lang, this.country).then(res => {
-          this.stockInfo = res.data;
-        }, err => {
-          this.noStockInfo = true;
-        })
+        if(!this.AllLangDataBase[lang].stockInfo||deep){
+          var stockPromise = ProductApi.getStock(this.rfid, this.storeId, this.lang, this.country).then(res => {
+            this.AllLangDataBase[lang].stockInfo = res.data;
+          }, err => {
+            this.AllLangDataBase[lang].noStockInfo = true;
+          })
+          
+        }
 
-        var pricePromise = ProductApi.getPrice(this.rfid, this.storeId, this.lang, this.country).then(res => {
-          this.priceInfo = res.data;
-          this.noPriceInfo = false;
-        }, err => {
-          this.noPriceInfo = true;
-        })
+        if(!this.AllLangDataBase[lang].stockInfo||deep){
+          var pricePromise = ProductApi.getPrice(this.rfid, this.storeId, this.lang, this.country).then(res => {
+            this.AllLangDataBase[lang].priceInfo = res.data;
+            this.AllLangDataBase[lang].noPriceInfo = false;
+            // console.log(lang)
+          }, err => {
+            this.AllLangDataBase[lang].noPriceInfo = true;
+          })
+        }
       }
 
       function initTimeChecker() {
@@ -127,7 +157,8 @@ export default {
         }, 1000);
       }
     },
-    initLanguage() {
+    initLanguage(deep) {
+      if(!deep)return;
       this.defaultLang = StoreService.getLang();
       if (this.defaultLang == 'EN') {
         this.lang = "MY";
@@ -138,17 +169,20 @@ export default {
       this.country = this.defaultLang == "ZH" ? "tw" : "my";
     },
     changedModel(args) {
-      this.modelCode = args;
+      this.AllLangDataBase[this.lang].modelCode = args;
     },
     changeItem(args){
-      this.itemCode = args;
+      this.AllLangDataBase[this.lang].itemCode = args;
     },
     monitorUserAction(event) {
       event = event || window.event;
       this.monitorCount = 0;
     },
     changeProductInfo(args) {
-      this.init();
+      this.lang = args.lang;
+      this.init(false);
+      console.log(this.lang)
+      // this.dataLoaded[lang] = true;
     }
   },
   beforeDestroy() {

@@ -4,6 +4,73 @@ import ProductApi from "@/api/modules/product/productInfo.js"
 import { Carousel, Slide } from "@/components/carousel"
 import CustomSelect from "@/components/custom-select"
 
+let dataProperty = {
+    labels: ProductConfig.pageInfoLabel,
+    productInfoDataDatBase: {},
+    productInfoDataDatBase: {},
+    defaultCode: {
+      other: {
+        default_item_code: null,
+        default_model_code: null
+      }
+    },
+    noQRCode: true,
+    QRCodeSrc: null,
+    priceUnit: null,
+    originalDicountPriceItemcode: {
+      // stock: 0,
+      itemCode: "",
+      price: {
+        original: {
+          int: "0",
+          decimal: ".00"
+        },
+        discount: {
+          int: "0",
+          decimal: ".00"
+        },
+        off: 100
+      }
+    },
+    priceRange: {
+      max: {
+        int: "0",
+        decimal: ".00"
+      },
+      min: {
+        int: "0",
+        decimal: ".00"
+      },
+    },
+    sizeSelected: {
+      label: null,
+      stock: null,
+      value: null
+    },
+    size_image_colorName: {
+      colorName: null,
+      videosAndImages: [],
+      sizeOptions: []
+    },
+    bEmptyPrice: true,
+    bShowShadow: false,
+    bShowQRCode: false,
+    colorOptions: [],
+    noImage: false,
+    navigateToPhoto: 1,
+    imageUrl: [],
+    fieldELeQueried:{},
+    defaultModelChanged:false,
+    monitorMousemove : {
+      carouselClicked: false,
+      carouselTime: 0,
+      scrollNavMousewheel: false,
+      scrollTarget: null,
+      scrollNavTime: 0,
+    },
+    itemName:null,  
+    isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)  
+}
 export default {
   name: 'product-details',
   props: {
@@ -26,97 +93,93 @@ export default {
     lang: {
       type: String
     },
-    country: {
-      type: String
-    },
+    // country: {
+    //   type: String
+    // },
     storeId: {
       type: Number
     }
   },
   components: { Carousel, Slide, CustomSelect },
   data() {
-    return {
-      labels: ProductConfig.pageInfoLabel,
-      productInfoDataDatBase: {},
-      productInfoDataDatBase: {},
-      defaultCode: {
-        other: {
-          default_item_code: null,
-          default_model_code: null
-        }
-      },
-      noQRCode: true,
-      QRCodeSrc: null,
-      priceUnit: null,
-      originalDicountPriceItemcode: {
-        // stock: 0,
-        itemCode: "",
-        price: {
-          original: {
-            int: "0",
-            decimal: ".00"
-          },
-          discount: {
-            int: "0",
-            decimal: ".00"
-          },
-          off: 100
-        }
-      },
-      priceRange: {
-        max: {
-          int: "0",
-          decimal: ".00"
-        },
-        min: {
-          int: "0",
-          decimal: ".00"
-        },
-      },
-      sizeSelected: {
-        label: null,
-        stock: null,
-        value: null
-      },
-      size_image_colorName: {
-        colorName: null,
-        videosAndImages: [],
-        sizeOptions: []
-      },
-      bEmptyPrice: true,
-      bShowShadow: false,
-      bShowQRCode: false,
-      colorOptions: [],
-      noImage: false,
-      navigateToPhoto: 1,
-      imageUrl: [],
-      fieldELeQueried:{},
-      monitorMousemove : {
-        carouselClicked: false,
-        carouselTime: 0,
-        scrollNavMousewheel: false,
-        scrollTarget: null,
-        scrollNavTime: 0,
-      },
-      itemName:null,  
-      isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
-    };
+    return Object.assign({},dataProperty);
   },
   watch: {
+    productInfo:{
+      handler(val) {
+        if (val) {
+          this.defaultCode= {
+            other: {
+              default_item_code: null,
+              default_model_code: null
+            }
+          }
+
+          if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
+          if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
+          
+          this.itemName = this.productInfoDataDatBase.WebLabel;
+          this.defaultCode[this.lang] = this.findDefaultCode(this.productInfo.default_model_code, this.productInfo.default_item_code, this.productModelsDatBase);
+          this.originalDicountPriceItemcode.itemCode = this.defaultCode[this.lang].default_item_code;
+
+          this.$emit('changed-model', this.defaultCode[this.lang].default_model_code);
+
+          this.getQRCode(this.defaultCode[this.lang].default_model_code, this.lang);
+
+          this.dataGenerator(this.lang, this.productModelsDatBase, this.productInfoDataDatBase);
+
+        }
+      },
+      deep:true
+    },
     stockInfo: {
       handler(val) {
         if (val) {
           this.onStockInfoReady();
         }
-      }
+      },
+      deep:true
     },
     priceInfo: {
       handler(val) {
         if (val) {
+          this.defaultModelChanged = false;
+     
+          this.originalDicountPriceItemcode.price = {
+            original: {
+              int: "0",
+              decimal: ".00"
+            },
+            discount: {
+              int: "0",
+              decimal: ".00"
+            },
+            off: 100
+          }  
+
+          this.priceRange = {
+            max: {
+              int: "0",
+              decimal: ".00"
+            },
+            min: {
+              int: "0",
+              decimal: ".00"
+            },
+          }          
+
           this.onPriceInfoReady();
         }
-      }
+      },
+      deep:true
     },
+    // lang(newV,oldV){
+    //   for(let i in dataProperty){
+    //     if(dataProperty.hasOwnProperty(i)){
+    //       this[i] = dataProperty[i];
+    //     }
+    //   }
+    // },
     //emit itemCode to product-descrition.js
     "originalDicountPriceItemcode.itemCode":{
       handler(newV,oldV){
@@ -125,18 +188,19 @@ export default {
     }
   },
   created() {
+    console.log(this)
     if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
     
     this.itemName = this.productInfoDataDatBase.WebLabel;
-    this.defaultCode[this.lang] = findDefaultCode(this.productInfo.default_model_code, this.productInfo.default_item_code, this.productModelsDatBase);
+    this.defaultCode[this.lang] = this.findDefaultCode(this.productInfo.default_model_code, this.productInfo.default_item_code, this.productModelsDatBase);
     this.originalDicountPriceItemcode.itemCode = this.defaultCode[this.lang].default_item_code;
 
     this.$emit('changed-model', this.defaultCode[this.lang].default_model_code);
 
     this.getQRCode(this.defaultCode[this.lang].default_model_code, this.lang);
 
-    dataGenerator.call(this, this.lang, this.productModelsDatBase, this.productInfoDataDatBase);
+    this.dataGenerator(this.lang, this.productModelsDatBase, this.productInfoDataDatBase);
 
     if (this.stockInfo) {
       this.onStockInfoReady();
@@ -146,7 +210,109 @@ export default {
       this.onPriceInfoReady();
     }
 
-    function makeProductInfoDataByColor(data, defaultModelCode, lang) {
+  },
+  mounted(){
+    this.$nextTick(()=>{
+      let doc = document;
+
+      let leaveEvent = this.isTouch ? "touchend" : "mouseleave", 
+          downEvent = this.isTouch ? "touchstart" : "mousedown";
+
+      window.addEventListener("resize", this.monitorUserAction)
+
+      this.fieldELeQueried.carouselPagination = doc.querySelector("#carouselPagination");
+      this.fieldELeQueried.CarouselWrapper = doc.querySelector("#CarouselWrapper");
+
+      if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.addEventListener("click", this.paginationMonitorClick);
+     
+      if (this.fieldELeQueried.CarouselWrapper) {
+        this.fieldELeQueried.CarouselWrapper.addEventListener(leaveEvent, this.carouselMonitorMouseout);
+        this.fieldELeQueried.CarouselWrapper.addEventListener(downEvent, this.carouselMonitorMousedown);
+      }
+
+
+    })
+  },
+  beforeDestroy(){
+    if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.removeEventListener("click", this.paginationMonitorClick);
+
+    let leaveEvent = this.isTouch ? "touchend" : "mouseleave", 
+        downEvent = this.isTouch ? "touchstart" : "mousedown";
+
+    if (this.fieldELeQueried.CarouselWrapper) {
+      this.fieldELeQueried.CarouselWrapper.removeEventListener(leaveEvent, this.carouselMonitorMouseout);
+      this.fieldELeQueried.CarouselWrapper.removeEventListener(downEvent, this.carouselMonitorMousedown);
+    }
+
+  },
+  computed: {
+    showOriginalPrice() {
+      if (this.bEmptyPrice) return false;
+      return (this.originalDicountPriceItemcode.price.off == 100 && this.originalDicountPriceItemcode.itemCode);
+    },
+    showDiscountPrice() {
+      if (this.bEmptyPrice) return false;
+      return (this.originalDicountPriceItemcode.price.off !== 100 && this.originalDicountPriceItemcode.itemCode);
+    },
+    showRangePrice() {
+      if (this.bEmptyPrice) return false;
+      let default_model_code = !!this.defaultCode.other.default_model_code ? this.defaultCode.other.default_model_code : this.defaultCode[this.lang].default_model_code;
+      //user selected another color duration data was loading.
+
+      if (this.defaultModelChanged && !this.defaultCode.other.default_item_code) {
+        return true;
+      } else {
+        return !this.originalDicountPriceItemcode.itemCode && default_model_code;
+      }
+    }
+  },
+  methods: {
+    findDefaultCode(model_code, item_code, modelsDatBase) {
+      let default_item_code, default_model_code;
+      if (modelsDatBase.length) {
+        modelsDatBase.every((model, modelIndex) => {
+          if (model.ModelCode == model_code) {
+            default_model_code = model.ModelCode;
+            model.items.every(item => {
+              if (item.ItemCode == item_code) {
+                default_item_code = item_code;
+                return false;
+              }
+              return true;
+            })
+            return false
+          }
+          return true;
+        })
+        if (typeof default_model_code == "undefined") {
+          modelsDatBase.every((model, modelIndex) => {
+            if (model.ModelCode) {
+              default_model_code = model.ModelCode;
+              return false;
+            }
+            return true;
+          })
+        }
+        if (typeof default_item_code == "undefined") {
+          modelsDatBase.every((model, modelIndex) => {
+            if (model.ModelCode == default_model_code) {
+              model.items.every(item => {
+                if (item.ItemCode) {
+                  default_item_code = item.ItemCode;
+                  return false;
+                }
+                return true;
+              })
+              return false;
+            }
+            return true;
+          })
+        }
+      }
+      return { default_item_code, default_model_code }
+    },  
+
+    makeProductInfoDataByColor(data, defaultModelCode, lang) {
       let productAllInfoByColor = [],
         colorOptions = [];
 
@@ -206,11 +372,11 @@ export default {
         productAllInfoByColor,
         colorOptions
       }
-    }
+    },
 
-    function dataGenerator(lang, productModelsDatBase, productInfoData) {
+    dataGenerator(lang, productModelsDatBase, productInfoData) {
       if (productModelsDatBase.length) {
-        let model = makeProductInfoDataByColor(productModelsDatBase, this.defaultCode[lang].default_model_code, lang);
+        let model = this.makeProductInfoDataByColor(productModelsDatBase, this.defaultCode[lang].default_model_code, lang);
 
         this.productAllInfoByColor = model.productAllInfoByColor;
         this.colorOptions = model.colorOptions;
@@ -240,109 +406,7 @@ export default {
           this.colorOptions.push(obj);
         }
       }
-    }
-
-    function findDefaultCode(model_code, item_code, modelsDatBase) {
-      let default_item_code, default_model_code;
-      if (modelsDatBase.length) {
-        modelsDatBase.every((model, modelIndex) => {
-          if (model.ModelCode == model_code) {
-            default_model_code = model.ModelCode;
-            model.items.every(item => {
-              if (item.ItemCode == item_code) {
-                default_item_code = item_code;
-                return false;
-              }
-              return true;
-            })
-            return false
-          }
-          return true;
-        })
-        if (typeof default_model_code == "undefined") {
-          modelsDatBase.every((model, modelIndex) => {
-            if (model.ModelCode) {
-              default_model_code = model.ModelCode;
-              return false;
-            }
-            return true;
-          })
-        }
-        if (typeof default_item_code == "undefined") {
-          modelsDatBase.every((model, modelIndex) => {
-            if (model.ModelCode == default_model_code) {
-              model.items.every(item => {
-                if (item.ItemCode) {
-                  default_item_code = item.ItemCode;
-                  return false;
-                }
-                return true;
-              })
-              return false;
-            }
-            return true;
-          })
-        }
-      }
-      return { default_item_code, default_model_code }
-    }
-  },
-  mounted(){
-    this.$nextTick(()=>{
-      let doc = document;
-
-      let leaveEvent = this.isTouch ? "touchend" : "mouseleave", 
-          downEvent = this.isTouch ? "touchstart" : "mousedown";
-
-      window.addEventListener("resize", this.monitorUserAction)
-
-      this.fieldELeQueried.carouselPagination = doc.querySelector("#carouselPagination");
-      this.fieldELeQueried.CarouselWrapper = doc.querySelector("#CarouselWrapper");
-
-      if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.addEventListener("click", this.paginationMonitorClick);
-     
-      if (this.fieldELeQueried.CarouselWrapper) {
-        this.fieldELeQueried.CarouselWrapper.addEventListener(leaveEvent, this.carouselMonitorMouseout);
-        this.fieldELeQueried.CarouselWrapper.addEventListener(downEvent, this.carouselMonitorMousedown);
-      }
-
-
-    })
-  },
-  beforeDestroy(){
-    if (this.fieldELeQueried.carouselPagination) this.fieldELeQueried.carouselPagination.removeEventListener("click", this.paginationMonitorClick);
-
-    let leaveEvent = this.isTouch ? "touchend" : "mouseleave", 
-        downEvent = this.isTouch ? "touchstart" : "mousedown";
-
-    if (this.fieldELeQueried.CarouselWrapper) {
-      this.fieldELeQueried.CarouselWrapper.removeEventListener(leaveEvent, this.carouselMonitorMouseout);
-      this.fieldELeQueried.CarouselWrapper.removeEventListener(downEvent, this.carouselMonitorMousedown);
-    }
-
-  },
-  computed: {
-    showOriginalPrice() {
-      if (this.bEmptyPrice) return false;
-      return (this.originalDicountPriceItemcode.price.off == 100 && this.originalDicountPriceItemcode.itemCode);
     },
-    showDiscountPrice() {
-      if (this.bEmptyPrice) return false;
-      return (this.originalDicountPriceItemcode.price.off !== 100 && this.originalDicountPriceItemcode.itemCode);
-    },
-    showRangePrice() {
-      if (this.bEmptyPrice) return false;
-      let default_model_code = !!this.defaultCode.other.default_model_code ? this.defaultCode.other.default_model_code : this.defaultCode[this.lang].default_model_code;
-      //user selected another color duration data was loading.
-
-      if (this.defaultModelChanged && !this.defaultCode.other.default_item_code) {
-        return true;
-      } else {
-        return !this.originalDicountPriceItemcode.itemCode && default_model_code;
-      }
-    }
-  },
-  methods: {
     getSizeLabel(productModelsDatBase, stockDataBase, default_model_code, defaultItemCode) {
       let sizeSelected = {};
 
