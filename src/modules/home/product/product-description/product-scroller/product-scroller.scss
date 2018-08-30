@@ -88,7 +88,8 @@
     }
   }
   &>li:first-child{
-    margin-top:-10px;
+    margin-top:-23px;
+
   }
   &>li:last-child:before {
     content: "";
@@ -106,10 +107,3 @@
   background-color: #393939;
   border: 2px solid black;
 }
-
-
-/*.user-reviews-scroller{
-  height: 778px;
-  overflow:hidden;
-}
-*/

@@ -76,6 +76,7 @@ export default {
     });
 
     this.scroll.on("scroll", (pos) => {
+      console.log(-pos.y)
       calCurrentBlock.call(this, -pos.y);
     });
 
@@ -84,12 +85,13 @@ export default {
         this.sticking = false;
         return;
       }
-      calBlockToStick.call(this, -pos.y, this.scroll.directionY);
+      // calBlockToStick.call(this, -pos.y, this.scroll.directionY);
     });
 
     function calCurrentBlock(y) {
       let theIndex = -1;
       this.blocks.every((block, index) => {
+          console.log(block.y - marginBottom + block.height)
         if (block.y - marginBottom < y && y < block.y - marginBottom + block.height) {
           theIndex = index;
           return false;
@@ -105,16 +107,17 @@ export default {
     function calBlockToStick(y, directionY) {
       let theIndex = -1, stickingBottom = false;
       this.blocks.every((block, index) => {
-      	if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > wrapperHeight / 5) {
+      	if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > wrapperHeight / (this.blocks.length)) {
           theIndex = index - 1;
           this.sticking = true;
           return false;
         }
-        if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > 0 && block.y - y < wrapperHeight / 5) {
+        if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > 0 && block.y - y < wrapperHeight / (this.blocks.length)) {
           theIndex = index;
           this.sticking = true;
           return false;
         }
+
         if (directionY == 1 && block.height == wrapperHeight) {
           if (y - block.y > paddingBottom && y < block.y - marginBottom + block.height && index < this.blocks.length - 1) {
             theIndex = index + 1;
@@ -157,19 +160,25 @@ export default {
   created(){
     let contentId = [];
     this.navList.forEach(d=>{
-      contentId.push(d);
+      contentId.push(d.id);
     })
-    if(contentId.includes("DesignFor"))this.bDesignFor = true;
-    if(contentId.includes("ProductBenefit"))this.bProductBenefit = true;
-    if(contentId.includes("UserReviews"))this.bUserReviews = true;
-    if(contentId.includes("ProdConceptTech"))this.bProdConceptTech = true;
-    if(contentId.includes("TechInfo"))this.bTechInfo = true;
+
+    this.bDesignFor = contentId.includes("DesignFor")?true:false;
+    this.bProductBenefit = contentId.includes("ProductBenefit")?true:false;
+    this.bUserReviews = contentId.includes("UserReviews")?true:false;
+    this.bProdConceptTech = contentId.includes("ProdConceptTech") ? true : false;
+    this.bTechInfo = contentId.includes("TechInfo") ? true :false;
+
+
+
   },
   methods: {
     toIndex(i) {
       this.activeIndex = i;
       this.$emit("tab-index-update",i)
+      // item.id
       this.scroll.scrollTo(0, -this.blocks[i].y, 500, 'bounce');
+      // this.scroll.scrollToElement("#"+this.blocks[i].id, 500, 0,0)
     },
     initBlocks() {
       let designForElem = this.$refs.DesignForBlock,
@@ -179,28 +188,81 @@ export default {
         techInfoElem = this.$refs.TechInfoBlock;
       let marginBottom = 20,
         paddingBottom = 100;
+      
+      this.displayAdaptor = [{
+        element:designForElem,
+        show:this.bDesignFor,
+        id:"DesignFor"
+      },{
+        element:prodBenefitElem,
+        show:this.bProductBenefit,
+        id:"ProductBenefit"
+      },{
+        element:userReviewsElem,
+        show:this.bUserReviews,
+        id:"UserReviews"
+      },{
+        element:conceptTechElem,
+        show:this.bProdConceptTech,
+        id:"ProdConceptTech"
+      },{
+        element:techInfoElem,
+        show:this.bTechInfo,
+        id:"TechInfo"
+      }]
 
-      this.blocks = [{
-        y: 0,
-        elem: designForElem,
-        height: designForElem.clientHeight,
-      }, {
-        y: designForElem.clientHeight + marginBottom,
-        elem: prodBenefitElem,
-        height: prodBenefitElem.clientHeight
-      }, {
-        y: designForElem.clientHeight + prodBenefitElem.clientHeight + marginBottom * 2,
-        elem: userReviewsElem,
-        height: userReviewsElem.clientHeight
-      }, {
-        y: designForElem.clientHeight + prodBenefitElem.clientHeight + userReviewsElem.clientHeight + marginBottom * 3,
-        elem: conceptTechElem,
-        height: conceptTechElem.clientHeight
-      }, {
-        y: designForElem.clientHeight + prodBenefitElem.clientHeight + userReviewsElem.clientHeight + conceptTechElem.clientHeight + marginBottom * 4,
-        elem: techInfoElem,
-        height: techInfoElem.clientHeight
-      }];
+      let displayedElement = this.displayAdaptor.filter(d=>d.show);
+      
+      this.blocks = [];
+      displayedElement.forEach((d,i)=>{
+        if(i===0){
+          this.blocks.push({
+            y: 0,
+            elem: d.element,
+            height: d.element.clientHeight,
+            id:d.id
+          })
+        }else{
+          let y = 0;
+          displayedElement.forEach((d_,i_)=>{
+            if(i_ <= i){
+              y += d_.element.clientHeight;
+            }
+          })
+          y += marginBottom*i/* + paddingBottom*i*/;
+
+          this.blocks.push({
+            y: y,
+            elem: d.element,
+            height: d.element.clientHeight,
+            id:d.id
+          })
+
+        }
+      })
+
+      console.log(this.blocks)
+      // this.blocks = [{
+      //   y: 0,
+      //   elem: designForElem,
+      //   // height: designForElem.clientHeight,
+      // }, {
+      //   y: designForElem.clientHeight + marginBottom,
+      //   elem: prodBenefitElem,
+      //   height: prodBenefitElem.clientHeight
+      // }, {
+      //   y: designForElem.clientHeight + prodBenefitElem.clientHeight + marginBottom * 2,
+      //   elem: userReviewsElem,
+      //   height: userReviewsElem.clientHeight
+      // }, {
+      //   y: designForElem.clientHeight + prodBenefitElem.clientHeight + userReviewsElem.clientHeight + marginBottom * 3,
+      //   elem: conceptTechElem,
+      //   height: conceptTechElem.clientHeight
+      // }, {
+      //   y: designForElem.clientHeight + prodBenefitElem.clientHeight + userReviewsElem.clientHeight + conceptTechElem.clientHeight + marginBottom * 4,
+      //   elem: techInfoElem,
+      //   height: techInfoElem.clientHeight
+      // }];
     }
   }
 
