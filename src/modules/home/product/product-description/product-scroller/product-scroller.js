@@ -103,7 +103,7 @@ export default {
     }
 
     function calBlockToStick(y, directionY) {
-      let theIndex = -1;
+      let theIndex = -1, stickingBottom = false;
       this.blocks.every((block, index) => {
       	if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > wrapperHeight / 5) {
           theIndex = index - 1;
@@ -115,22 +115,42 @@ export default {
           this.sticking = true;
           return false;
         }
-        if (directionY == 1 && y - block.y > paddingBottom && y < block.y - marginBottom + block.height) {
-          if (index < this.blocks.length - 1) {
+        if (directionY == 1 && block.height == wrapperHeight) {
+          if (y - block.y > paddingBottom && y < block.y - marginBottom + block.height && index < this.blocks.length - 1) {
             theIndex = index + 1;
             this.sticking = true;
             return false;
           } 
+          if(y - block.y < paddingBottom && y - block.y > 0) {
+          	theIndex = index;
+          	this.sticking = true;
+          	return false;
+          }
+        } 
+        if(directionY == 1 && block.height > wrapperHeight) {
+        	if(y - block.y > block.height - wrapperHeight + paddingBottom && y < block.y - marginBottom + block.height && index < this.blocks.length - 1) {
+        		theIndex = index + 1;
+        		this.sticking = true;
+        		return false;
+        	}
+        	if(y - block.y > block.height - wrapperHeight && y - block.y < block.height - wrapperHeight + paddingBottom) {
+        		this.sticking = true;
+        		stickingBottom = true;
+        		theIndex = index;
+        	}
         }
         return true;
       });
       if (theIndex > -1 && theIndex != this.activeIndex) {
         this.activeIndex = theIndex;
-        console.log(theIndex)
         this.$emit("tab-index-update",theIndex)
       }
       if(this.sticking) {
-      	this.scroll.scrollTo(0, -this.blocks[theIndex].y, 500, 'bounce');
+      	if(stickingBottom) {
+      		this.scroll.scrollTo(0, -(this.blocks[theIndex].y + this.blocks[theIndex].height - wrapperHeight), 500, 'bounce');
+      	} else {
+      		this.scroll.scrollTo(0, -this.blocks[theIndex].y, 500, 'bounce');
+      	}
       }
     }
   },
