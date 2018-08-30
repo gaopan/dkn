@@ -76,7 +76,6 @@ export default {
     });
 
     this.scroll.on("scroll", (pos) => {
-      console.log(-pos.y)
       calCurrentBlock.call(this, -pos.y);
     });
 
@@ -85,13 +84,12 @@ export default {
         this.sticking = false;
         return;
       }
-      // calBlockToStick.call(this, -pos.y, this.scroll.directionY);
+      calBlockToStick.call(this, -pos.y, this.scroll.directionY);
     });
 
     function calCurrentBlock(y) {
       let theIndex = -1;
       this.blocks.every((block, index) => {
-          console.log(block.y - marginBottom + block.height)
         if (block.y - marginBottom < y && y < block.y - marginBottom + block.height) {
           theIndex = index;
           return false;
@@ -107,17 +105,16 @@ export default {
     function calBlockToStick(y, directionY) {
       let theIndex = -1, stickingBottom = false;
       this.blocks.every((block, index) => {
-      	if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > wrapperHeight / (this.blocks.length)) {
+      	if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > wrapperHeight / 5) {
           theIndex = index - 1;
           this.sticking = true;
           return false;
         }
-        if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > 0 && block.y - y < wrapperHeight / (this.blocks.length)) {
+        if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > 0 && block.y - y < wrapperHeight / 5) {
           theIndex = index;
           this.sticking = true;
           return false;
         }
-
         if (directionY == 1 && block.height == wrapperHeight) {
           if (y - block.y > paddingBottom && y < block.y - marginBottom + block.height && index < this.blocks.length - 1) {
             theIndex = index + 1;
@@ -176,9 +173,7 @@ export default {
     toIndex(i) {
       this.activeIndex = i;
       this.$emit("tab-index-update",i)
-      // item.id
       this.scroll.scrollTo(0, -this.blocks[i].y, 500, 'bounce');
-      // this.scroll.scrollToElement("#"+this.blocks[i].id, 500, 0,0)
     },
     initBlocks() {
       let designForElem = this.$refs.DesignForBlock,
@@ -212,7 +207,7 @@ export default {
       }]
 
       let displayedElement = this.displayAdaptor.filter(d=>d.show);
-      
+
       this.blocks = [];
       displayedElement.forEach((d,i)=>{
         if(i===0){
@@ -225,7 +220,7 @@ export default {
         }else{
           let y = 0;
           displayedElement.forEach((d_,i_)=>{
-            if(i_ <= i){
+            if(i_ < i){
               y += d_.element.clientHeight;
             }
           })
@@ -240,12 +235,11 @@ export default {
 
         }
       })
-
-      console.log(this.blocks)
+      
       // this.blocks = [{
       //   y: 0,
       //   elem: designForElem,
-      //   // height: designForElem.clientHeight,
+      //   height: designForElem.clientHeight,
       // }, {
       //   y: designForElem.clientHeight + marginBottom,
       //   elem: prodBenefitElem,

@@ -79,7 +79,7 @@ export default {
       let vm = this;
       // console.log(this)
       this.rfid = this.$router.currentRoute.params.rfid;
-      this.rfid = 3583788199311;
+      // this.rfid = 3583788199311;
       this.initLanguage(deep);
 
       initProperties.call(this, this.lang, deep);
