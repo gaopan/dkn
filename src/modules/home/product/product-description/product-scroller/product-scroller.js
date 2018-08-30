@@ -40,13 +40,8 @@ export default {
       handler() {
         this.$nextTick(() => {
           this.scroll.refresh();
-          // if(!this.scrollUserReviews){
-          //    this.initScrollUserReviews();           
-          // }else{
-          //   this.scrollUserReviews.refresh();
-            
-          // }
           this.initBlocks();
+          this.scroll.scrollTo(0, -this.blocks[this.activeIndex].y, 0, 'bounce');
         });
       }
     },
@@ -54,13 +49,8 @@ export default {
       handler() {
         this.$nextTick(() => {
           this.scroll.refresh();
-          // if(!this.scrollUserReviews){
-          //  this.initScrollUserReviews()
-          // }else{
-          //   this.scrollUserReviews.refresh();
-            
-          // }
           this.initBlocks();
+          this.scroll.scrollTo(0, -this.blocks[this.activeIndex].y, 0, 'bounce');
         });
       }
     }
@@ -125,7 +115,7 @@ export default {
           this.sticking = true;
           return false;
         }
-        if (directionY == 1 && y - block.y > wrapperHeight / 3 && y < block.y - marginBottom + block.height) {
+        if (directionY == 1 && y - block.y > paddingBottom && y < block.y - marginBottom + block.height) {
           if (index < this.blocks.length - 1) {
             theIndex = index + 1;
             this.sticking = true;
@@ -191,21 +181,6 @@ export default {
         elem: techInfoElem,
         height: techInfoElem.clientHeight
       }];
-    },
-    initScrollUserReviews(){
-       this.scrollUserReviews = new BScroll(document.querySelector(".user-reviews-scroller"), {
-        scrollY: true,
-        click: true,
-        stopPropagation: true,
-        probeType: 2,
-        bounce: {
-          top: true,
-          bottom: true,
-          left: false,
-          right: false,
-          bounceTime: 800
-        }
-      });       
     }
   }
 
