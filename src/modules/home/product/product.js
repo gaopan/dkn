@@ -79,6 +79,7 @@ export default {
         this.noStockInfo = false;
         this.priceInfo = null;
         this.noPriceInfo = false;
+        this.itemCode = null;
       }
 
       function initPageData() {

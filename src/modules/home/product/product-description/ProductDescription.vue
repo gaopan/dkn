@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <product-scroller v-if="productInfoDataDatBase" :productInfoDSM="productInfoDataDatBase" :productReviews="productReviews" :lang="lang" :navList="navTabList_" :productScore="productScore"></product-scroller>
+      <product-scroller v-if="productInfoDataDatBase" :productInfoDSM="productInfoDataDatBase" :productReviews="productReviews" :lang="lang" :navList="navTabList_" :productScore="productScore" @tab-index-update = "tabIndexUpdate"></product-scroller>
 
     </section>
     

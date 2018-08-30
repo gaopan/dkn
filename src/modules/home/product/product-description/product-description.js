@@ -216,6 +216,9 @@ export default {
     }
   },
   methods: {
+    tabIndexUpdate(index){
+      this.containerTitle = this.navTabList_[index].label[this.lang];
+    },
     onModelCode() {
       let reviewData = this.userReviewInfo[this.modelCode];
       let obj = makeUserReviewData(reviewData);

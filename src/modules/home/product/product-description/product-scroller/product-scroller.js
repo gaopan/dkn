@@ -108,6 +108,7 @@ export default {
       });
       if (theIndex > -1 && theIndex != this.activeIndex) {
         this.activeIndex = theIndex;
+        this.$emit("tab-index-update",theIndex)
       }
     }
 
@@ -135,6 +136,8 @@ export default {
       });
       if (theIndex > -1 && theIndex != this.activeIndex) {
         this.activeIndex = theIndex;
+        console.log(theIndex)
+        this.$emit("tab-index-update",theIndex)
       }
       if(this.sticking) {
       	this.scroll.scrollTo(0, -this.blocks[theIndex].y, 500, 'bounce');
@@ -155,6 +158,7 @@ export default {
   methods: {
     toIndex(i) {
       this.activeIndex = i;
+      this.$emit("tab-index-update",i)
       this.scroll.scrollTo(0, -this.blocks[i].y, 500, 'bounce');
     },
     initBlocks() {
