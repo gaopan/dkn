@@ -82,8 +82,10 @@ export default {
 
     itemCode: {
       handler(newV, oldV) {
-        this.itemCodeBySize = newV;
-        this.dataForMouseMonitor.item_code =newV;
+        if(newV){
+          this.itemCodeBySize = newV;
+          this.dataForMouseMonitor.item_code =newV;
+        }
       }
     },
 
@@ -113,7 +115,8 @@ export default {
     },
 
     defaultLang(newV, oldV){
-      if (this.defaultLang != 'EN')localStorage.setItem("lang", this.defaultLang);     
+
+      if (newV&&this.defaultLang != 'EN')localStorage.setItem("lang", this.defaultLang);     
     }
   },
   mounted() {
@@ -169,7 +172,7 @@ export default {
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
 
     this.dataForMouseMonitor = {
-      item_code: this.itemCodeBySize,
+      item_code: this.$props.itemCode,
       item_name: this.productInfoDataDatBase.WebLabel,
       area: "ContentZone",
       event: 2,
@@ -339,9 +342,8 @@ export default {
 
         let data = Object.assign({},{ field:this.monitorDescription.scrollTarget,stay_time: stayTime}, this.dataForMouseMonitor)
 
-        // console.log(data)
         ProductApi.postTracking(data)
-        console.log("fetch leave",this.monitorDescription.scrollTarget)
+        // console.log("fetch leave",this.monitorDescription.scrollTarget,data)
         this.monitorDescription.movingTime = 0;
         this.monitorDescription.scrollTarget = null;
         this.monitorDescription.isMouseMoving = false;
@@ -379,7 +381,6 @@ export default {
           let data = Object.assign({},{ field:this.monitorDescription.mobileTouchTarget,stay_time: stayTime}, this.dataForMouseMonitor)
 
           ProductApi.postTracking(data)
-          console.log("out description",data)
           //end touching on description
           this.monitorDescription.isMobileTouching = false;
         }else{
@@ -390,7 +391,6 @@ export default {
           let data = Object.assign({},{ field:newTarget,stay_time: stayTime}, this.dataForMouseMonitor)
 
           ProductApi.postTracking(data);
-          console.log("in description",data)
           this.monitorDescription.mobileTouchTarget = newTarget
           this.monitorDescription.mobileMovingTime = Date.now();
         }
@@ -413,7 +413,7 @@ export default {
           let data = Object.assign({},{ field:this.monitorDescription.scrollTarget,stay_time: stayTime}, this.dataForMouseMonitor)
 
           ProductApi.postTracking(data)
-          console.log("fetch move:",this.monitorDescription.scrollTarget)
+          // console.log("fetch move:",this.monitorDescription.scrollTarget,data)
 
           //restart timer when the field changed
           this.monitorDescription.movingTime = Date.now();
@@ -481,7 +481,7 @@ export default {
       if (target == fieldEle.TechInfo) field = "TechInfo";
 
       let data = {
-        item_code: this.itemCodeBySize,
+        item_code: this.$props.itemCode,
         item_name: this.productInfoDataDatBase.WebLabel,
         area: "ContentZone",
         field: field,

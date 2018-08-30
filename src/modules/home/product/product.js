@@ -86,10 +86,10 @@ export default {
       initTimeChecker.call(this);
 
       function initProperties(lang,deep) {
-        this.AllLangDataBase[lang].modelCode =  null;
-        this.AllLangDataBase[lang].itemCode = null;
 
         if(!deep)return;
+        this.AllLangDataBase[lang].modelCode = null;
+        this.AllLangDataBase[lang].itemCode = null;
         this.AllLangDataBase[lang].productInfo = null;
         this.AllLangDataBase[lang].noProductInfo = false;
         this.AllLangDataBase[lang].userReviewInfo = null;
@@ -172,6 +172,7 @@ export default {
       this.AllLangDataBase[this.lang].modelCode = args;
     },
     changeItem(args){
+      console.log("changeItem in product",args)
       this.AllLangDataBase[this.lang].itemCode = args;
     },
     monitorUserAction(event) {
@@ -181,8 +182,6 @@ export default {
     changeProductInfo(args) {
       this.lang = args.lang;
       this.init(false);
-      console.log(this.lang)
-      // this.dataLoaded[lang] = true;
     }
   },
   beforeDestroy() {

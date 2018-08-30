@@ -188,13 +188,14 @@ export default {
     }
   },
   created() {
-    console.log(this)
     if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
     
     this.itemName = this.productInfoDataDatBase.WebLabel;
     this.defaultCode[this.lang] = this.findDefaultCode(this.productInfo.default_model_code, this.productInfo.default_item_code, this.productModelsDatBase);
     this.originalDicountPriceItemcode.itemCode = this.defaultCode[this.lang].default_item_code;
+    
+    this.$emit("change-item",this.originalDicountPriceItemcode.itemCode)
 
     this.$emit('changed-model', this.defaultCode[this.lang].default_model_code);
 
@@ -462,7 +463,8 @@ export default {
 
       this.defaultCode.other.default_item_code = null;
       this.originalDicountPriceItemcode.itemCode = null;
-
+      this.$emit("change-item",this.originalDicountPriceItemcode.itemCode)
+      
       this.defaultCode.other.default_model_code = color.modelCode;
 
       //user select color item while data was loading
@@ -534,6 +536,7 @@ export default {
 
       this.defaultCode.other.default_item_code = args.itemCode;
       this.originalDicountPriceItemcode.itemCode = args.itemCode;
+      this.$emit("change-item",this.originalDicountPriceItemcode.itemCode)
 
       //prevent before price returned
       if (Object.keys(this.priceInfo).length) {
@@ -633,6 +636,7 @@ export default {
         this.defaultCode[this.lang].default_model_code,
         this.defaultCode[this.lang].default_item_code
       );
+
 
       this.productAllInfoByColor.forEach(info => {
         info.sizeOptions.forEach(size => {

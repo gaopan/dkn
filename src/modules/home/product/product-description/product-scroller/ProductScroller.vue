@@ -63,7 +63,10 @@
     </div>
     <ul class="product-scroller-nav">
       <li v-for="(item, i) in navList" :key="i" :class="{current: activeIndex===i}" :ref="'navItem_'+i" @click="toIndex(i)">
-        <span :id="item.id" :class="{'active':activeIndex === i}">{{item.label[lang]}}</span>
+        <span :id="item.id">
+          <em class="list-item-circle" :class="{'active':activeIndex === i}"></em>
+          {{item.label[lang]}}
+        </span>
       </li>
     </ul>
   </div>
