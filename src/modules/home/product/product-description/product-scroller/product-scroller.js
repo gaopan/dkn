@@ -28,11 +28,11 @@ export default {
     return {
       activeIndex: 0,
       labels: ProductConfig.pageInfoLabel,
-      bDesignFor:true,
-      bProductBenefit:true,
-      bUserReviews:true,
-      bProdConceptTech:true,
-      bTechInfo:true      
+      bDesignFor: true,
+      bProductBenefit: true,
+      bUserReviews: true,
+      bProdConceptTech: true,
+      bTechInfo: true
     }
   },
   watch: {
@@ -98,19 +98,20 @@ export default {
       });
       if (theIndex > -1 && theIndex != this.activeIndex) {
         this.activeIndex = theIndex;
-        this.$emit("tab-index-update",theIndex)
+        this.$emit("tab-index-update", theIndex)
       }
     }
 
     function calBlockToStick(y, directionY) {
-      let theIndex = -1, stickingBottom = false;
+      let theIndex = -1,
+        stickingBottom = false;
       this.blocks.every((block, index) => {
-      	if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > wrapperHeight / 5) {
+        if (directionY == -1 && index > 0 && this.blocks[index - 1].y - marginBottom < y && block.y - y > wrapperHeight / 5) {
           theIndex = index - 1;
           this.sticking = true;
           return false;
         }
-        if (directionY == -1 && index > 0 && this.blocks[index -1].y - marginBottom < y && block.y - y > 0 && block.y - y < wrapperHeight / 5) {
+        if (directionY == -1 && index > 0 && this.blocks[index - 1].y - marginBottom < y && block.y - y > 0 && block.y - y < wrapperHeight / 5) {
           theIndex = index;
           this.sticking = true;
           return false;
@@ -120,59 +121,69 @@ export default {
             theIndex = index + 1;
             this.sticking = true;
             return false;
-          } 
-          if(y - block.y < paddingBottom && y - block.y > 0) {
-          	theIndex = index;
-          	this.sticking = true;
-          	return false;
           }
-        } 
-        if(directionY == 1 && block.height > wrapperHeight) {
-        	if(y - block.y > block.height - wrapperHeight + paddingBottom && y < block.y - marginBottom + block.height && index < this.blocks.length - 1) {
-        		theIndex = index + 1;
-        		this.sticking = true;
-        		return false;
-        	}
-        	if(y - block.y > block.height - wrapperHeight && y - block.y < block.height - wrapperHeight + paddingBottom) {
-        		this.sticking = true;
-        		stickingBottom = true;
-        		theIndex = index;
-        	}
+          if (y - block.y < paddingBottom && y - block.y > 0) {
+            theIndex = index;
+            this.sticking = true;
+            return false;
+          }
+        }
+        if (directionY == 1 && block.height > wrapperHeight) {
+          if (y - block.y > block.height - wrapperHeight + paddingBottom && y < block.y - marginBottom + block.height && index < this.blocks.length - 1) {
+            theIndex = index + 1;
+            this.sticking = true;
+            return false;
+          }
+          if (y - block.y > block.height - wrapperHeight && y - block.y < block.height - wrapperHeight + paddingBottom) {
+            this.sticking = true;
+            stickingBottom = true;
+            theIndex = index;
+          }
         }
         return true;
       });
       if (theIndex > -1 && theIndex != this.activeIndex) {
         this.activeIndex = theIndex;
-        this.$emit("tab-index-update",theIndex)
+        this.$emit("tab-index-update", theIndex)
       }
-      if(this.sticking) {
-      	if(stickingBottom) {
-      		this.scroll.scrollTo(0, -(this.blocks[theIndex].y + this.blocks[theIndex].height - wrapperHeight), 500, 'bounce');
-      	} else {
-      		this.scroll.scrollTo(0, -this.blocks[theIndex].y, 500, 'bounce');
-      	}
+      if (this.sticking) {
+        if (stickingBottom) {
+          this.scroll.scrollTo(0, -(this.blocks[theIndex].y + this.blocks[theIndex].height - wrapperHeight), 500, 'bounce');
+        } else {
+          this.scroll.scrollTo(0, -this.blocks[theIndex].y, 500, 'bounce');
+        }
       }
     }
   },
-  created(){
+  created() {
     let contentId = [];
-    this.navList.forEach(d=>{
+    this.navList.forEach(d => {
       contentId.push(d.id);
     })
 
-    this.bDesignFor = contentId.includes("DesignFor")?true:false;
-    this.bProductBenefit = contentId.includes("ProductBenefit")?true:false;
-    this.bUserReviews = contentId.includes("UserReviews")?true:false;
-    this.bProdConceptTech = contentId.includes("ProdConceptTech") ? true : false;
-    this.bTechInfo = contentId.includes("TechInfo") ? true :false;
+    this.bDesignFor = includes(contentId, "DesignFor") ? true : false;
+    this.bProductBenefit = includes(contentId, "ProductBenefit") ? true : false;
+    this.bUserReviews = includes(contentId, "UserReviews") ? true : false;
+    this.bProdConceptTech = includes(contentId, "ProdConceptTech") ? true : false;
+    this.bTechInfo = includes(contentId, "TechInfo") ? true : false;
 
-
+    function includes(list, item) {
+      let res = false;
+      for (let i = 0; i < list.length; i++) {
+        let theItem = list[i];
+        if (theItem == item) {
+          res = true;
+          break;
+        }
+      }
+      return res;
+    }
 
   },
   methods: {
     toIndex(i) {
       this.activeIndex = i;
-      this.$emit("tab-index-update",i)
+      this.$emit("tab-index-update", i)
       this.scroll.scrollTo(0, -this.blocks[i].y, 500, 'bounce');
     },
     initBlocks() {
@@ -183,59 +194,61 @@ export default {
         techInfoElem = this.$refs.TechInfoBlock;
       let marginBottom = 20,
         paddingBottom = 100;
-      
+
       this.displayAdaptor = [{
-        element:designForElem,
-        show:this.bDesignFor,
-        id:"DesignFor"
-      },{
-        element:prodBenefitElem,
-        show:this.bProductBenefit,
-        id:"ProductBenefit"
-      },{
-        element:userReviewsElem,
-        show:this.bUserReviews,
-        id:"UserReviews"
-      },{
-        element:conceptTechElem,
-        show:this.bProdConceptTech,
-        id:"ProdConceptTech"
-      },{
-        element:techInfoElem,
-        show:this.bTechInfo,
-        id:"TechInfo"
+        element: designForElem,
+        show: this.bDesignFor,
+        id: "DesignFor"
+      }, {
+        element: prodBenefitElem,
+        show: this.bProductBenefit,
+        id: "ProductBenefit"
+      }, {
+        element: userReviewsElem,
+        show: this.bUserReviews,
+        id: "UserReviews"
+      }, {
+        element: conceptTechElem,
+        show: this.bProdConceptTech,
+        id: "ProdConceptTech"
+      }, {
+        element: techInfoElem,
+        show: this.bTechInfo,
+        id: "TechInfo"
       }]
 
-      let displayedElement = this.displayAdaptor.filter(d=>d.show);
+      let displayedElement = filter(this.displayAdaptor, function(item){
+      	return item.show;
+      });
 
       this.blocks = [];
-      displayedElement.forEach((d,i)=>{
-        if(i===0){
+      displayedElement.forEach((d, i) => {
+        if (i === 0) {
           this.blocks.push({
             y: 0,
             elem: d.element,
             height: d.element.clientHeight,
-            id:d.id
+            id: d.id
           })
-        }else{
+        } else {
           let y = 0;
-          displayedElement.forEach((d_,i_)=>{
-            if(i_ < i){
+          displayedElement.forEach((d_, i_) => {
+            if (i_ < i) {
               y += d_.element.clientHeight;
             }
           })
-          y += marginBottom*i/* + paddingBottom*i*/;
+          y += marginBottom * i /* + paddingBottom*i*/ ;
 
           this.blocks.push({
             y: y,
             elem: d.element,
             height: d.element.clientHeight,
-            id:d.id
+            id: d.id
           })
 
         }
       })
-      
+
       // this.blocks = [{
       //   y: 0,
       //   elem: designForElem,
@@ -257,6 +270,17 @@ export default {
       //   elem: techInfoElem,
       //   height: techInfoElem.clientHeight
       // }];
+
+      function filter(list, fnCheck){
+      	let res = [];
+      	for(let i = 0; i< list.length; i++) {
+      		let item = list[i];
+      		if(fnCheck(item)) {
+      			res.push(item);
+      		}
+      	}
+      	return res;
+      }
     }
   }
 
