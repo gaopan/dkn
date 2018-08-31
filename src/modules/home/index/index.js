@@ -1,4 +1,4 @@
-import StoreService from '@/services/store-services.js'
+import TokenService from '@/services/token-services.js'
 
 export default {
   name: "product-index",
@@ -29,8 +29,8 @@ export default {
       this.bMoveIcon = !this.bMoveIcon;
     }, 1000);
 
-    // console.log(StoreService.getLang());
-    this.lang = StoreService.getLang();
+    // console.log(TokenService.getLang());
+    this.lang = TokenService.getLang();
   },
   beforeDestroy() {
     clearInterval(this.intervalTimer);

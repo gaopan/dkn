@@ -2,7 +2,7 @@ import { axios, axiosHelper } from '@/api/api-config.js'
 import MockData from './mockData.js'
 
 let instance = axiosHelper.createAxios({
-  baseURL: 'http://13.229.158.94/api/',
+  baseURL: 'https://product-scanner.decathlon.com/api/',
   timeout: 300000
 })
 let storeIdKey = 'store-id'

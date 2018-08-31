@@ -16,6 +16,12 @@ let routerTable = {
       components: {
         default: () => import('@/modules/home/init/Init.vue')
       }
+    }, {
+      path: 'login',
+      name: 'Home Login',
+      components: {
+        default: () => import('@/modules/home/login/Login.vue')
+      },
     },{
       path: 'index',
       name: 'Home Index',

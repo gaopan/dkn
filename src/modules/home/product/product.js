@@ -1,4 +1,4 @@
-import StoreService from '@/services/store-services.js'
+import TokenService from '@/services/token-services.js'
 import CommonUtils from '@/utils/common-utils.js'
 
 import ElementLoading from '@/components/loader/loader.vue'
@@ -12,7 +12,7 @@ import ProductConfig from './product.config.js'
 import TimeUtil from "@/utils/datetime-utils.js"
 import TypeChecker from "@/utils/type-checker.js"
 
-const STOREID = +localStorage.getItem("store-id");
+const STOREID = TokenService.getStoreId();
 
 export default {
   name: 'product',
@@ -159,7 +159,7 @@ export default {
     },
     initLanguage(deep) {
       if(!deep)return;
-      this.defaultLang = StoreService.getLang();
+      this.defaultLang = TokenService.getLang();
       if (this.defaultLang == 'EN') {
         this.lang = "MY";
       } else {

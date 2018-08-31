@@ -26,8 +26,11 @@ let axiosHelper = {
       instance.interceptors.response.use(function(res) {
         return res;
       }, function(err) {
-        // routerInstance.push("/error")
-        return Promise.reject(err);
+        if(err.response.status == 401) {
+          routerInstance.replace('/login');
+        } else {
+          return Promise.reject(err);
+        }
       });
       return instance;
     }
