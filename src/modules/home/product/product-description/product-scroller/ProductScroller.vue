@@ -14,8 +14,10 @@
           <p class="benefits-points-content">{{benefit.text}}</p>
         </div>
       </div>
+
       <!-- UserReviewsBlock -->
       <div class="product-scroller-item product-scorce"  v-if = "bUserReviews" id = "UserReviews" ref="UserReviewsBlock">
+        
         <div class="product-scorce-wrapper">
           <rate :rate="productScore"></rate>
           <span class="user-review-count" v-if="lang=='EN'||lang=='MY'">
@@ -69,6 +71,7 @@
         </div>
       </div>
     </div>
+
     <ul class="product-scroller-nav">
       <li v-for="(item, i) in navList" :key="i" :class="{current: activeIndex===i}" :ref="'navItem_'+i" @click="toIndex(i)">
         <span :id="item.id">
