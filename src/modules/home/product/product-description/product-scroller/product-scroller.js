@@ -66,6 +66,7 @@ export default {
       scrollY: true,
       click: true,
       probeType: 2,
+      momentum: false,
       bounce: {
         top: true,
         bottom: true,
@@ -248,28 +249,6 @@ export default {
 
         }
       })
-
-      // this.blocks = [{
-      //   y: 0,
-      //   elem: designForElem,
-      //   height: designForElem.clientHeight,
-      // }, {
-      //   y: designForElem.clientHeight + marginBottom,
-      //   elem: prodBenefitElem,
-      //   height: prodBenefitElem.clientHeight
-      // }, {
-      //   y: designForElem.clientHeight + prodBenefitElem.clientHeight + marginBottom * 2,
-      //   elem: userReviewsElem,
-      //   height: userReviewsElem.clientHeight
-      // }, {
-      //   y: designForElem.clientHeight + prodBenefitElem.clientHeight + userReviewsElem.clientHeight + marginBottom * 3,
-      //   elem: conceptTechElem,
-      //   height: conceptTechElem.clientHeight
-      // }, {
-      //   y: designForElem.clientHeight + prodBenefitElem.clientHeight + userReviewsElem.clientHeight + conceptTechElem.clientHeight + marginBottom * 4,
-      //   elem: techInfoElem,
-      //   height: techInfoElem.clientHeight
-      // }];
 
       function filter(list, fnCheck){
       	let res = [];
