@@ -9,6 +9,7 @@
           <div class="info-bottom"></div>
         </div>
         <div class="product-price-mark">
+
           <div class="product-with-discount" v-if="showDiscountPrice">
             <span class="product-price-discount">
 								<span>{{priceUnit}}</span>
@@ -23,17 +24,26 @@
             <span class="price-discount-off">{{originalDicountPriceItemcode.price.off}}%off</span>
             </span>
           </div>
+
           <div class="product-without-discount" v-if="showRangePrice">
-            <span class="product-price-noDiscount">
-								<span class="range-symbol">{{priceUnit}}</span>
-            <span class="range-price-integer">{{priceRange.min.int}}</span>
-            <span class="range-price-decimal" v-if="priceUnit=='$'">{{priceRange.min.decimal}}</span>
-            <span>-</span>
-            <span class="range-symbol"><span>{{priceUnit}}</span></span>
-            <span class="range-price-integer">{{priceRange.max.int}}</span>
-            <span class="range-price-decimal" v-if="priceUnit=='$'">{{priceRange.max.decimal}}</span>
+            <span class="product-price-noDiscount" v-if = "priceRange.min.int===priceRange.max.int && priceRange.min.decimal===priceRange.max.decimal">
+                  <span class="range-price-same">{{priceUnit}}</span>
+                  <span class="range-price-same">{{priceRange.min.int}}</span>
+                  <span class="range-price-same" v-if="priceUnit=='$'">{{priceRange.min.decimal}}</span>              
             </span>
+
+            <span class="product-price-noDiscount" v-else>
+  							<span class="range-symbol">{{priceUnit}}</span>
+                <span class="range-price-integer">{{priceRange.min.int}}</span>
+                <span class="range-price-decimal" v-if="priceUnit=='$'">{{priceRange.min.decimal}}</span>
+                <span>-</span>
+                <span class="range-symbol"><span>{{priceUnit}}</span></span>
+                <span class="range-price-integer">{{priceRange.max.int}}</span>
+                <span class="range-price-decimal" v-if="priceUnit=='$'">{{priceRange.max.decimal}}</span>
+            </span>
+
           </div>
+
           <div class="product-without-discount" v-if="showOriginalPrice">
             <span class="product-price-noDiscount">
 								<span>{{priceUnit}}</span>
