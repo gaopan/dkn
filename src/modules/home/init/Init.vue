@@ -3,7 +3,7 @@
 		<form>
 		<div class="title">Store ID:</div>
 		<div class="input-wrapper">
-			<input name="storeId" v-model="storeId" placeholder="" @keydown = "inputStoreId"/>
+			<input name="storeId" v-model="storeId" placeholder="" type="number" @keydown = "inputStoreId"/>
 		</div>
 		<div class="btn-wrapper">
 			<button type="button" @click="inited">GO</button>
