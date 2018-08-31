@@ -1,17 +1,21 @@
 <template>
   <div class="product-scroller" ref="wrapper">
     <div class="product-scroller-content">
+      <!-- DesignForBlock -->
       <div class="product-scroller-item designed-for" v-if = "bDesignFor" id = "DesignFor" ref="DesignForBlock">
         <p>{{productInfoDSM.DesignaedFor}}</p>
         <p>{{productInfoDSM.Catchline}}</p>
       </div>
-      <div class="product-scroller-item product-benefits" id = "ProductBenefit" ref="ProdBenefitBlock">
+      
+      <!-- ProdBenefitBlock -->
+      <div class="product-scroller-item product-benefits" v-if ="bProductBenefit" id = "ProductBenefit"  ref="ProdBenefitBlock">
         <div class="product-benefits-item" :class="{'marginBottom0': benefitIndex == productInfoDSM.Benefits.length-1}" v-for="(benefit,benefitIndex) in productInfoDSM.Benefits">
           <p class="benefits-points">{{benefit.label}}</p>
           <p class="benefits-points-content">{{benefit.text}}</p>
         </div>
       </div>
-      <div class="product-scroller-item product-scorce" v-if ="bProductBenefit" id = "UserReviews" ref="UserReviewsBlock">
+      <!-- UserReviewsBlock -->
+      <div class="product-scroller-item product-scorce"  v-if = "bUserReviews" id = "UserReviews" ref="UserReviewsBlock">
         <div class="product-scorce-wrapper">
           <rate :rate="productScore"></rate>
           <span class="user-review-count" v-if="lang=='EN'||lang=='MY'">
@@ -24,7 +28,7 @@
 
         <div class="user-reviews-scroller">
           <div class="user-reviews-wrapper">
-            <div class="user-reviews-items user-review-content" v-if = "bUserReviews" v-for="(review,reviewIndex) in productReviews">
+            <div class="user-reviews-items user-review-content" v-for="(review,reviewIndex) in productReviews">
               <div class="review-created-on">
                 <p>
                   <span class="review-created-date">{{review.published_at}}</span>
@@ -40,6 +44,8 @@
           </div>
         </div>
       </div>
+
+      <!-- ConceptTechBlock -->
       <div class="product-scroller-item product-tech" v-if = "bProdConceptTech" id = "ProdConceptTech" ref="ConceptTechBlock">
         <div class="product-conpcept-wrapper" v-show="!!productInfoDSM.MaintenanceAdv">
           <p class="product-conpcept-title">{{labels.maintenanceAdv[lang]}}</p>
@@ -54,6 +60,8 @@
           <p class="product-conpcept-content">{{productInfoDSM.UsageRestriction}}</p>
         </div>
       </div>
+
+      <!-- TechInfoBlock -->
       <div class="product-scroller-item tech-information" v-if = "bTechInfo" id = "TechInfo" ref="TechInfoBlock">
         <div class="information-wrapper" v-for="(Functionality,FunctionalityIndex) in productInfoDSM.Functionalities">
           <p class="information-queation">{{Functionality.label}}</p>

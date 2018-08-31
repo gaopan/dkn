@@ -43,6 +43,8 @@ export default{
 
 	},
 	watch:{
-
+    '$route.params.rfid': function(newV,oldV) {
+      this.$router.push('/product/' + newV);
+    }
 	}
 }
