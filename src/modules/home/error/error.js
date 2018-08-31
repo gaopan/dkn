@@ -37,14 +37,12 @@ export default{
 		},1000) 
 	},
 	beforeDestroy(){
-
+		clearInterval(this.timer);
 	},
 	methods:{
 
 	},
 	watch:{
-    '$route.params.rfid': function(newV,oldV) {
-      this.$router.push('/product/' + newV);
-    }
+
 	}
 }
