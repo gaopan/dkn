@@ -323,11 +323,11 @@ export default {
           sizeOptions = [],
           productColorChecked = d.ModelCode === defaultModelCode ? true : false;
 
-        if (d.Videos && d.Videos.length) {
-          d.Videos.forEach(d => {
-            videos.push({ type: "vedio", url: d.link });
-          })
-        }
+        // if (d.Videos && d.Videos.length) {
+        //   d.Videos.forEach(d => {
+        //     videos.push({ type: "vedio", url: d.link });
+        //   })
+        // }
 
         if (d.Images && d.Images.length) {
           d.Images.forEach(d => {
@@ -355,7 +355,7 @@ export default {
         productAllInfoByColor.push({
           colorName: colorName,
           modelCode: d.ModelCode,
-          videosAndImages: [...videos, ...images],
+          videosAndImages: images,
           sizeOptions: sizeOptions
         })
 

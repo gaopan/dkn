@@ -72,8 +72,9 @@
     <div class="product-photo-carousel" ref="MainPicBlock">
       <carousel :per-page="1" :imageUrl="imageUrl" :noImage="noImage" :lang="lang" :navigateTo="navigateToPhoto" @pageChange="pageChange">
         <slide v-for="(img,imgIndex) in imageUrl">
-          <img :src="img.url" width="100%" height="100%" v-if="img.type == 'img'" style="cursor: pointer;" />
-          <iframe :src="img.url" width="100%" height="100%" v-if="img.type == 'vedio'"></iframe>
+          <img :src="img.url" width="100%" height="100%" style="cursor: pointer;" />
+          <!-- <img :src="img.url" width="100%" height="100%" v-if="img.type == 'img'" style="cursor: pointer;" /> -->
+          <!-- <iframe :src="img.url" width="100%" height="100%" v-if="img.type == 'vedio'"></iframe> -->
         </slide>
       </carousel>
     </div>
