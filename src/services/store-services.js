@@ -7,7 +7,9 @@ const mapping = {
   1639: 'ZH',
   666: 'ZH',
   2002: 'EN',
-  1600: 'EN'
+  1600: 'EN',
+  1999: 'EN',
+  2000: 'EN'
 };
 
 let _storeId = null;
