@@ -31,7 +31,9 @@ export default {
     let token = localStorage.getItem(storageKey);
     if(TypeChecker.isString(token)) {
       _token = JSON.parse(token);
-      axios.common.headers['Authorization'] = 'Basic ' + _token.token;
+      // axios.common.headers['Authorization'] = 'Basic ' + _token.token;
+      axios.defaults.headers.common['Authorization'] = 'Basic ' + _token.token;
+      
       return token;
     }
     return null;

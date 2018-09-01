@@ -13,7 +13,7 @@ import TimeUtil from "@/utils/datetime-utils.js"
 import TypeChecker from "@/utils/type-checker.js"
 
 const STOREID = TokenService.getStoreId();
-
+console.log(STOREID)
 export default {
   name: 'product',
   data(){
@@ -52,7 +52,7 @@ export default {
     };
   },
   created() {
-    this.init(true);
+    this.init("createVue");
   },
   mounted() {
     this.$nextTick(() => {
@@ -71,39 +71,65 @@ export default {
   components: { ElementLoading, ProductDetails, ProductDescription },
   watch: {
     '$route.params.rfid': function() {
-      this.init(true);
+      this.init("scanRfid");
     }
   },
   methods: {
-    init(deep) {
+    init(behavior) {
       let vm = this;
       // console.log(this)
       this.rfid = this.$router.currentRoute.params.rfid;
-      this.initLanguage(deep);
+      if(behavior == "scanRfid"|| behavior == "createVue")this.initLanguage();
 
-      initProperties.call(this, this.lang, deep);
-      initPageData.call(this, this.lang, deep);
+      initProperties.call(this, this.lang);
+      initPageData.call(this, this.lang);
       initTimeChecker.call(this);
 
-      function initProperties(lang,deep) {
+      function initProperties(lang,behavior) {
+        //clear all data when user scan new QR code
+        if(behavior == "scanRfid"){
 
-        if(!deep)return;
-        this.AllLangDataBase[lang].modelCode = null;
-        this.AllLangDataBase[lang].itemCode = null;
-        this.AllLangDataBase[lang].productInfo = null;
-        this.AllLangDataBase[lang].noProductInfo = false;
-        this.AllLangDataBase[lang].userReviewInfo = null;
-        this.AllLangDataBase[lang].noUserReviewInfo = false;
-        this.AllLangDataBase[lang].stockInfo = null;
-        this.AllLangDataBase[lang].noStockInfo = false;
-        this.AllLangDataBase[lang].priceInfo = null;
-        this.AllLangDataBase[lang].noPriceInfo = false;
+          let dataProto = {
+            productInfo: null,
+            noProductInfo: false,
+            userReviewInfo: null,
+            noUserReviewInfo: false,
+            stockInfo: null,
+            noStockInfo: false,
+            priceInfo: null,
+            noPriceInfo: false,
+            modelCode: null,
+            itemCode:null     
+          }   
+
+          this.AllLangDataBase = {
+            ZH:Object.assign({},dataProto),
+            EN:Object.assign({},dataProto),
+            MY:Object.assign({},dataProto)
+          } 
+
+        }
+
+        // if(behavior == "changeLang"){
+        //   if(this.AllLangDataBase[lang].productInfo)
+        //   this.AllLangDataBase[lang].modelCode = null;
+        //   this.AllLangDataBase[lang].itemCode = null;
+        //   this.AllLangDataBase[lang].productInfo = null;
+        //   this.AllLangDataBase[lang].noProductInfo = false;
+        //   this.AllLangDataBase[lang].userReviewInfo = null;
+        //   this.AllLangDataBase[lang].noUserReviewInfo = false;
+        //   this.AllLangDataBase[lang].stockInfo = null;
+        //   this.AllLangDataBase[lang].noStockInfo = false;
+        //   this.AllLangDataBase[lang].priceInfo = null;
+        //   this.AllLangDataBase[lang].noPriceInfo = false;
+        // }
       }
 
-      function initPageData(lang,deep) {
+      function initPageData(lang) {
         this.showLoader = true;
-        if(!this.AllLangDataBase[lang].productInfo||deep){
+        if(!this.AllLangDataBase[lang].productInfo){
           var productInfoPromise = ProductApi.getProductInfo(this.rfid, this.lang, this.country).then(res => {
+            console.log(res.data)
             this.showLoader = false;
             this.AllLangDataBase[lang].productInfo = res.data;
           }, err => {
@@ -114,7 +140,7 @@ export default {
           this.showLoader = false;
         }
 
-        if(!this.AllLangDataBase[lang].userReviewInfo||deep){
+        if(!this.AllLangDataBase[lang].userReviewInfo){
           var userReviewPromise = ProductApi.getUserReview(this.rfid, this.lang, this.country).then(res => {
             this.AllLangDataBase[lang].userReviewInfo = res.data;
           }, err => {
@@ -122,7 +148,7 @@ export default {
           })        
         }
 
-        if(!this.AllLangDataBase[lang].stockInfo||deep){
+        if(!this.AllLangDataBase[lang].stockInfo){
           var stockPromise = ProductApi.getStock(this.rfid, this.storeId, this.lang, this.country).then(res => {
             this.AllLangDataBase[lang].stockInfo = res.data;
           }, err => {
@@ -131,11 +157,10 @@ export default {
           
         }
 
-        if(!this.AllLangDataBase[lang].stockInfo||deep){
+        if(!this.AllLangDataBase[lang].priceInfo){
           var pricePromise = ProductApi.getPrice(this.rfid, this.storeId, this.lang, this.country).then(res => {
             this.AllLangDataBase[lang].priceInfo = res.data;
             this.AllLangDataBase[lang].noPriceInfo = false;
-            // console.log(lang)
           }, err => {
             this.AllLangDataBase[lang].noPriceInfo = true;
           })
@@ -157,8 +182,7 @@ export default {
         }, 1000);
       }
     },
-    initLanguage(deep) {
-      if(!deep)return;
+    initLanguage() {
       this.defaultLang = TokenService.getLang();
       if (this.defaultLang == 'EN') {
         this.lang = "MY";
@@ -181,7 +205,7 @@ export default {
     },
     changeProductInfo(args) {
       this.lang = args.lang;
-      this.init(false);
+      this.init("changeLang");
     }
   },
   beforeDestroy() {

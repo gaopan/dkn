@@ -13,6 +13,7 @@
 			:defaultLang="defaultLang" 
 			:country="country" 
 			:storeId="storeId" 
+			:rfid = "rfid"
 			@change-product-info="changeProductInfo"
 			>
 				

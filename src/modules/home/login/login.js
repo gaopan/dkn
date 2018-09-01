@@ -12,7 +12,10 @@ export default {
 	methods: {
 		login(){
 			IndexApi.login(this.name, this.password).then(res => {
-				axios.common.headers['Authorization'] = 'Basic ' + res.data.token;
+				// debugger
+				// axios.common.headers['Authorization'] = 'Basic ' + res.data.token;		
+				console.log(res)	
+				axios.defaults.headers.common['Authorization'] = 'Basic ' + res.data.token;
 				TokenService.setToken({
 					storeId: this.name,
 					token: res.data.token

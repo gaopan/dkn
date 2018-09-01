@@ -4,6 +4,7 @@ import Popup from "@/components/popup/Popup.vue"
 import ProductScroller from './product-scroller/ProductScroller.vue'
 
 import ProductApi from "@/api/modules/product/productInfo.js"
+import TokenService from '@/services/token-services.js'
 
 import TimeUtil from "@/utils/datetime-utils.js"
 import TypeChecker from "@/utils/type-checker.js"
@@ -37,7 +38,8 @@ export default {
     // },
     storeId: {
       type: Number
-    }
+    },
+    rfid:String
   },
   components: { Popup, ProductScroller },
   data() {
@@ -68,10 +70,19 @@ export default {
         ZH:false,
         EN:false,
         MY:false,
-      }     
+      },
+      rfid_storeId:null    
     };
   },
   watch: {
+    rfid:{
+      handler(val) {
+        if (val) {
+          localStorage.setItem(this.rfid_storeId,null);
+          this.rfid_storeId = this.$router.currentRoute.params.rfid + "_" + TokenService.getStoreId();
+        }
+      }      
+    },
     modelCode: {
       handler(val) {
         if (val) {
@@ -164,6 +175,9 @@ export default {
     })
   },
   created() {
+
+    this.rfid_storeId = this.$router.currentRoute.params.rfid + "_" + TokenService.getStoreId();
+
     let vm = this;
     this.itemCodeBySize = this.$props.itemCode;
     this.dataLoaded[this.lang] = true;
@@ -292,8 +306,7 @@ export default {
 
       if (lang == "ZH" && this.defaultLang == "ZH") {
 
-        let rfid_storeId = this.$router.currentRoute.params.rfid + "_" + localStorage.getItem("store-id"),
-            infoStatusStr = localStorage.getItem(rfid_storeId);
+        let infoStatusStr = localStorage.getItem(this.rfid_storeId);
 
         //send request before by this rfid_storeId
         if (infoStatusStr) { //deep_false

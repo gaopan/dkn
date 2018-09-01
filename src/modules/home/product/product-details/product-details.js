@@ -119,6 +119,7 @@ export default {
           if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
           
           this.itemName = this.productInfoDataDatBase.WebLabel;
+
           this.defaultCode[this.lang] = this.findDefaultCode(this.productInfo.default_model_code, this.productInfo.default_item_code, this.productModelsDatBase);
           this.originalDicountPriceItemcode.itemCode = this.defaultCode[this.lang].default_item_code;
 
@@ -135,7 +136,10 @@ export default {
     stockInfo: {
       handler(val) {
         if (val) {
-          this.onStockInfoReady();
+          let timer = setTimeout(()=>{
+            this.onStockInfoReady();
+            clearTimeout(timer);
+          },20)
         }
       },
       deep:true
@@ -167,8 +171,10 @@ export default {
               decimal: ".00"
             },
           }          
-
-          this.onPriceInfoReady();
+          let timer = setTimeout(()=>{
+            this.onPriceInfoReady();
+            clearTimeout(timer);
+          },20)
         }
       },
       deep:true
@@ -433,7 +439,7 @@ export default {
       let countru_QR = lang == "MY" ? "my" : "tw"
       ProductApi.getQrcode(modelCode, countru_QR).then(res => {
         this.QRCodeSrc = res.data;
-        this.noQRCode = res.data ? false : true;
+        this.noQRCode = !!res.data ? false : true;
       }, err => {
         this.noQRCode = true;
       })
@@ -465,19 +471,25 @@ export default {
       this.originalDicountPriceItemcode.itemCode = null;
       this.$emit("change-item",this.originalDicountPriceItemcode.itemCode)
       
+      //new model code
       this.defaultCode.other.default_model_code = color.modelCode;
 
       //user select color item while data was loading
       this.bEmptyPrice = false;
 
+      //get the range of price by the new color
       this.priceRange = this.getRangePrice(this.priceInfo, color.modelCode);
 
+      //remove the QR code picture
       this.QRCodeSrc = null;
 
+      //remove the select label
       this.sizeSelected = { label: null, value: null, stock: null }
 
+      //skip to the first picture 
       this.navigateToPhoto = 1;
 
+      //get new size option,new image url,new color name by the new mode code
       this.productAllInfoByColor.every((d, modelsIndex) => {
         if (d.modelCode == color.modelCode) {
 
@@ -490,6 +502,7 @@ export default {
         return true;
       })
 
+      //update QR code
       let countru_QR = this.lang == "MY" ? "my" : "tw"
       ProductApi.getQrcode(color.modelCode, countru_QR).then(res => {
         this.QRCodeSrc = res.data;
@@ -498,6 +511,7 @@ export default {
         this.noQRCode = true;
       })
     },
+
     getRangePrice(priceInfo, modelCode) {
       let priceRange = {
         max: {
@@ -536,6 +550,7 @@ export default {
 
       this.defaultCode.other.default_item_code = args.itemCode;
       this.originalDicountPriceItemcode.itemCode = args.itemCode;
+      
       this.$emit("change-item",this.originalDicountPriceItemcode.itemCode)
 
       //prevent before price returned

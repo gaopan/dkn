@@ -47,7 +47,7 @@ export default {
 
   postTracking(data) {
     if (!data.item_code || !data.field) return Promise.resolve();
-    let url = `http://13.229.158.94/api/tracking/save`;
+    let url = `https://product-scanner.decathlon.com/api/tracking/save`;
     let form = [];
 
     for (let key in data) {
