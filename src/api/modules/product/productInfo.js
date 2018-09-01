@@ -22,8 +22,8 @@ export default {
   getStock(ean, storeId, lang, country) {
     let lang_ = lang == "ZH" ? "zh" : "en";
     let url = `stock/ean/${ean}/store_id/${storeId}/lang/${lang_}/country/${country}`
-    return instance.get(url)
     // return Promise.resolve({data:{"272640":11,"2046935":25,"272636":27,"2046934":20,"328449":17,"2046933":15}})
+    return instance.get(url)
   },
 
   getUserReview(ean, lang, country) {
@@ -39,8 +39,8 @@ export default {
     let lang_ = lang == "ZH" ? "zh" : "en";
     let url = `price/ean/${ean}/store_id/${storeId}/lang/${lang_}/country/${country}`;
 
-    return instance.get(url)
     // return Promise.resolve({data:{"currency":"TWD","items":{"272636":{"sale_price":"859.00","strikeout_price":"999.00"},"2046934":{"sale_price":"859.00","strikeout_price":"999.00"},"328449":{"sale_price":"859.00","strikeout_price":"999.00"},"2046933":{"sale_price":"859.00","strikeout_price":"999.00"},"272640":{"sale_price":"859.00","strikeout_price":"999.00"},"2046935":{"sale_price":"859.00","strikeout_price":"999.00"}},"models":{"8304664":{"price":"859.00"},"8315702":{"price":"859.00"},"8304667":{"price":"859.00"}}}})
+    return instance.get(url)
   },
 
   getQrcode(modelCode, country) {
@@ -49,6 +49,7 @@ export default {
   },
 
   postTracking(data) {
+    console.log(data)
     if (!data.item_code || !data.field) return Promise.resolve();
     let url = `https://product-scanner.decathlon.com/api/tracking/save`;
     let form = [];
