@@ -97,7 +97,7 @@ export default {
     //   type: String
     // },
     storeId: {
-      type: Number
+      type:  [String,Number]
     }
   },
   components: { Carousel, Slide, CustomSelect },

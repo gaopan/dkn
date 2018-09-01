@@ -2,13 +2,13 @@
   <div class="product-scroller" ref="wrapper">
     <div class="product-scroller-content">
       <!-- DesignForBlock -->
-      <div class="product-scroller-item designed-for" v-if = "bDesignFor" id = "DesignFor" ref="DesignForBlock">
+      <div class="product-scroller-item designed-for" v-if = "bDesignFor" id = "DesignForCell" ref="DesignForBlock">
         <p>{{productInfoDSM.DesignaedFor}}</p>
         <p>{{productInfoDSM.Catchline}}</p>
       </div>
       
       <!-- ProdBenefitBlock -->
-      <div class="product-scroller-item product-benefits" v-if ="bProductBenefit" id = "ProductBenefit"  ref="ProdBenefitBlock">
+      <div class="product-scroller-item product-benefits" v-if ="bProductBenefit" id = "ProductBenefitCell"  ref="ProdBenefitBlock">
         <div class="product-benefits-item" :class="{'marginBottom0': benefitIndex == productInfoDSM.Benefits.length-1}" v-for="(benefit,benefitIndex) in productInfoDSM.Benefits">
           <p class="benefits-points">{{benefit.label}}</p>
           <p class="benefits-points-content">{{benefit.text}}</p>
@@ -16,7 +16,7 @@
       </div>
 
       <!-- UserReviewsBlock -->
-      <div class="product-scroller-item product-scorce"  v-if = "bUserReviews" id = "UserReviews" ref="UserReviewsBlock">
+      <div class="product-scroller-item product-scorce"  v-if = "bUserReviews" id = "UserReviewsCell" ref="UserReviewsBlock">
         
         <div class="product-scorce-wrapper">
           <rate :rate="productScore"></rate>
@@ -48,7 +48,7 @@
       </div>
 
       <!-- ConceptTechBlock -->
-      <div class="product-scroller-item product-tech" v-if = "bProdConceptTech" id = "ProdConceptTech" ref="ConceptTechBlock">
+      <div class="product-scroller-item product-tech" v-if = "bProdConceptTech" id = "ProdConceptTechCell" ref="ConceptTechBlock">
         <div class="product-conpcept-wrapper" v-show="!!productInfoDSM.MaintenanceAdv">
           <p class="product-conpcept-title">{{labels.maintenanceAdv[lang]}}</p>
           <p class="product-conpcept-content">{{productInfoDSM.MaintenanceAdv}}</p>
@@ -64,7 +64,7 @@
       </div>
 
       <!-- TechInfoBlock -->
-      <div class="product-scroller-item tech-information" v-if = "bTechInfo" id = "TechInfo" ref="TechInfoBlock">
+      <div class="product-scroller-item tech-information" v-if = "bTechInfo" id = "TechInfoCell" ref="TechInfoBlock">
         <div class="information-wrapper" v-for="(Functionality,FunctionalityIndex) in productInfoDSM.Functionalities">
           <p class="information-queation">{{Functionality.label}}</p>
           <p class="information-answer">{{Functionality.text}}</p>

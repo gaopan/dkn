@@ -37,9 +37,9 @@ export default {
     //   type: String
     // },
     storeId: {
-      type: Number
+      type: [String,Number]
     },
-    rfid:String
+    rfid:[String,Number]
   },
   components: { Popup, ProductScroller },
   data() {
@@ -78,6 +78,14 @@ export default {
     rfid:{
       handler(val) {
         if (val) {
+          
+          this.dataLoaded = {
+            ZH:false,
+            EN:false,
+            MY:false,
+          }
+
+          this.disableZHbtn = false;
           localStorage.setItem(this.rfid_storeId,null);
           this.rfid_storeId = this.$router.currentRoute.params.rfid + "_" + TokenService.getStoreId();
         }
@@ -143,11 +151,11 @@ export default {
       this.fieldELeQueried.ScrollnavContent = doc.querySelector(".product-scroller");
 
       //get navTab element Object
-      this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
-      this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
-      this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
-      this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
-      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
+      this.fieldELeQueried.DesignFor = doc.querySelector("#DesignForCell");
+      this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefitCell");
+      this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviewsCell");
+      this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTechCell");
+      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfoCell");
 
       this.fieldELeQueried.DesignForBlock = doc.querySelector(".designed-for"); 
       this.fieldELeQueried.ProdBenefitBlock = doc.querySelector(".product-benefits");

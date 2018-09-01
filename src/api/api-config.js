@@ -21,7 +21,8 @@ let axiosHelper = {
     if (obj.baseURL) {
       let instance = axios.create({
         baseURL: obj.baseURL,
-        timeout: obj.timeout ? obj.timeout : 30000
+        timeout: obj.timeout ? obj.timeout : 30000,
+        withCredentials: true
       });
       instance.interceptors.response.use(function(res) {
         return res;
