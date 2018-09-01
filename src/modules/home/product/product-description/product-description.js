@@ -33,9 +33,6 @@ export default {
     defaultLang: {
       type: String
     },
-    // country: {
-    //   type: String
-    // },
     storeId: {
       type: [String,Number]
     },
@@ -317,14 +314,14 @@ export default {
         let infoStatusStr = localStorage.getItem(this.rfid_storeId);
 
         //send request before by this rfid_storeId
-        if (infoStatusStr) { //deep_false
+        if (infoStatusStr) { 
           if (infoStatusStr == "READY") {
             this.$emit('change-product-info',{ lang:lang,load:false });
           }else{
             this.showModal = true;
             this.disableZHbtn = true;
           }
-        } else { //deep_true
+        } else { 
           //never send request before by this rfid_storeId
           ProductApi.getProductInfo(this.$route.params.rfid, "ZH", "tw").then(res => {
 
