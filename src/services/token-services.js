@@ -35,13 +35,14 @@ export default {
       // axios.common.headers['Authorization'] = 'Basic ' + _token.token;
       axios.defaults.headers.common['Authorization'] = 'Basic ' + _token.token;
       
-      return token;
+      //To fix that unable to get the storeId
+      return _token;
+      // return token;
     }
     return null;
   },
   getStoreId(){
     let token = this.getToken();
-
     if(token && token.storeId) return token.storeId;
 
     return null;

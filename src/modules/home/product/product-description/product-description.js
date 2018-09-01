@@ -148,17 +148,18 @@ export default {
       this.fieldELeQueried.ScrollnavContent = doc.querySelector(".product-scroller");
 
       //get navTab element Object
-      this.fieldELeQueried.DesignFor = doc.querySelector("#DesignForCell");
-      this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefitCell");
-      this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviewsCell");
-      this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTechCell");
-      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfoCell");
+      this.fieldELeQueried.DesignFor = doc.querySelector("#DesignFor");
+      this.fieldELeQueried.ProductBenefit = doc.querySelector("#ProductBenefit");
+      this.fieldELeQueried.UserReviews = doc.querySelector("#UserReviews");
+      this.fieldELeQueried.ProdConceptTech = doc.querySelector("#ProdConceptTech");
+      this.fieldELeQueried.TechInfo = doc.querySelector("#TechInfo");
 
-      this.fieldELeQueried.DesignForBlock = doc.querySelector(".designed-for"); 
-      this.fieldELeQueried.ProdBenefitBlock = doc.querySelector(".product-benefits");
-      this.fieldELeQueried.UserReviewsBlock = doc.querySelector(".product-scorce");
-      this.fieldELeQueried.TechInfoBlock = doc.querySelector(".product-tech");
-      this.fieldELeQueried.ConceptTechBlock = doc.querySelector(".tech-information");
+      //get descroption content block
+      this.fieldELeQueried.DesignForBlock = doc.querySelector("#DesignForCell"); 
+      this.fieldELeQueried.ProdBenefitBlock = doc.querySelector("#ProductBenefitCell");
+      this.fieldELeQueried.UserReviewsBlock = doc.querySelector("#UserReviewsCell");
+      this.fieldELeQueried.TechInfoBlock = doc.querySelector("#ProdConceptTechCell");
+      this.fieldELeQueried.ConceptTechBlock = doc.querySelector("#TechInfoCell");
       //page count down tracking
       window.addEventListener("resize", this.monitorUserAction);
 
