@@ -53,6 +53,14 @@ export default {
   },
   created() {
     this.init("createVue");
+
+    //remove rfid_storeId In Storage tp prevent Cache
+    let rfid_storeId = this.$router.currentRoute.params.rfid + "_" + TokenService.getStoreId();
+    let rfid_storeIdInStorage = localStorage.getItem(this.$router.currentRoute.params.rfid + "_" + TokenService.getStoreId());      
+    if(rfid_storeIdInStorage){
+      localStorage.removeItem(rfid_storeId);      
+    }
+
   },
   mounted() {
     this.$nextTick(() => {
@@ -77,17 +85,17 @@ export default {
   methods: {
     init(behavior) {
       let vm = this;
-      // console.log(this)
+      console.log(behavior)
       this.rfid = this.$router.currentRoute.params.rfid;
       if(behavior == "scanRfid"|| behavior == "createVue")this.initLanguage();
 
-      initProperties.call(this, this.lang);
-      initPageData.call(this, this.lang);
+      initProperties.call(this, this.lang, behavior);
+      initPageData.call(this, this.lang, behavior);
       initTimeChecker.call(this);
 
       function initProperties(lang,behavior) {
         //clear all data when user scan new QR code
-        if(behavior == "scanRfid"){
+        if(behavior == "scanRfid"||behavior == "createVue"){
 
           let dataProto = {
             productInfo: null,
@@ -125,11 +133,10 @@ export default {
         // }
       }
 
-      function initPageData(lang) {
+      function initPageData(lang,behavior) {
         this.showLoader = true;
-        if(!this.AllLangDataBase[lang].productInfo){
+        if(!this.AllLangDataBase[lang].productInfo || behavior == "scanRfid" || behavior == "createVue"){
           var productInfoPromise = ProductApi.getProductInfo(this.rfid, this.lang, this.country).then(res => {
-            console.log(res.data)
             this.showLoader = false;
             this.AllLangDataBase[lang].productInfo = res.data;
           }, err => {
@@ -140,7 +147,7 @@ export default {
           this.showLoader = false;
         }
 
-        if(!this.AllLangDataBase[lang].userReviewInfo){
+        if(!this.AllLangDataBase[lang].userReviewInfo || behavior == "scanRfid" || behavior == "createVue"){
           var userReviewPromise = ProductApi.getUserReview(this.rfid, this.lang, this.country).then(res => {
             this.AllLangDataBase[lang].userReviewInfo = res.data;
           }, err => {
@@ -148,7 +155,7 @@ export default {
           })        
         }
 
-        if(!this.AllLangDataBase[lang].stockInfo){
+        if(!this.AllLangDataBase[lang].stockInfo || behavior == "scanRfid" || behavior == "createVue"){
           var stockPromise = ProductApi.getStock(this.rfid, this.storeId, this.lang, this.country).then(res => {
             this.AllLangDataBase[lang].stockInfo = res.data;
           }, err => {
@@ -157,7 +164,7 @@ export default {
           
         }
 
-        if(!this.AllLangDataBase[lang].priceInfo){
+        if(!this.AllLangDataBase[lang].priceInfo || behavior == "scanRfid" || behavior == "createVue"){
           var pricePromise = ProductApi.getPrice(this.rfid, this.storeId, this.lang, this.country).then(res => {
             this.AllLangDataBase[lang].priceInfo = res.data;
             this.AllLangDataBase[lang].noPriceInfo = false;
@@ -184,19 +191,20 @@ export default {
     },
     initLanguage() {
       this.defaultLang = TokenService.getLang();
+
       if (this.defaultLang == 'EN') {
         this.lang = "MY";
       } else {
-        let langInLocal = localStorage.getItem("lang");
-        this.lang = !!langInLocal ? langInLocal : this.defaultLang;
+        this.lang = "ZH";
       }
+      console.log(this.lang)
       this.country = this.defaultLang == "ZH" ? "tw" : "my";
     },
     changedModel(args) {
       this.AllLangDataBase[this.lang].modelCode = args;
     },
     changeItem(args){
-      console.log("changeItem in product",args)
+      // console.log("changeItem in product",args)
       this.AllLangDataBase[this.lang].itemCode = args;
     },
     monitorUserAction(event) {
@@ -209,6 +217,7 @@ export default {
     }
   },
   beforeDestroy() {
+    // debugger
     window.removeEventListener("resize", this.monitorUserAction)
 
     if (this.isTouch) {
@@ -220,5 +229,6 @@ export default {
       this.$refs.container.removeEventListener("wheel", this.monitorUserAction)
     }
     clearInterval(this.intervalTimer);
+
   }
 }

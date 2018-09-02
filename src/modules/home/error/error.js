@@ -42,7 +42,6 @@ export default{
 	methods:{
 
 	},
-	watch:{
-
-	}
+  watch: {
+  }
 }

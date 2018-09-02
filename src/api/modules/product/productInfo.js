@@ -14,6 +14,7 @@ let storeIdKey = 'store-id'
 // item_code\item_name\area\field\event\stay_time
 export default {
   getProductInfo(ean, lang, country) {
+    console.log(lang)
     let lang_ = lang == "ZH" ? "zh" : "en";
     let url = `productInfo/ean/${ean}/lang/${lang_}/country/${country}`;
     return instance.get(url)  
