@@ -12,8 +12,6 @@ import ProductConfig from './product.config.js'
 import TimeUtil from "@/utils/datetime-utils.js"
 import TypeChecker from "@/utils/type-checker.js"
 
-const STOREID = TokenService.getStoreId();
-console.log(STOREID)
 export default {
   name: 'product',
   data(){
@@ -33,7 +31,8 @@ export default {
     }
     return {
       lang: "",
-      storeId: STOREID,
+      storeId: TokenService.getStoreId(),
+
       showLoader: false,
       monitorCount:0,
       intervalTimer:null,
@@ -55,8 +54,8 @@ export default {
     this.init("createVue");
 
     //remove rfid_storeId In Storage tp prevent Cache
-    let rfid_storeId = this.$router.currentRoute.params.rfid + "_" + TokenService.getStoreId();
-    let rfid_storeIdInStorage = localStorage.getItem(this.$router.currentRoute.params.rfid + "_" + TokenService.getStoreId());      
+    let rfid_storeId = this.$router.currentRoute.params.rfid + "_" + this.storeId;
+    let rfid_storeIdInStorage = localStorage.getItem(this.$router.currentRoute.params.rfid + "_" + this.storeId);      
     if(rfid_storeIdInStorage){
       localStorage.removeItem(rfid_storeId);      
     }

@@ -105,6 +105,11 @@ export default {
     return Object.assign({},dataProperty);
   },
   watch: {
+    noPriceInfo(newV,oldV){
+      if(newV){
+        this.bEmptyPrice = true;
+      }
+    },
     productInfo:{
       handler(val) {
         if (val) {
@@ -149,28 +154,28 @@ export default {
         if (val) {
           this.defaultModelChanged = false;
      
-          this.originalDicountPriceItemcode.price = {
-            original: {
-              int: "0",
-              decimal: ".00"
-            },
-            discount: {
-              int: "0",
-              decimal: ".00"
-            },
-            off: 100
-          }  
+          // this.originalDicountPriceItemcode.price = {
+          //   original: {
+          //     int: "0",
+          //     decimal: ".00"
+          //   },
+          //   discount: {
+          //     int: "0",
+          //     decimal: ".00"
+          //   },
+          //   off: 100
+          // }  
 
-          this.priceRange = {
-            max: {
-              int: "0",
-              decimal: ".00"
-            },
-            min: {
-              int: "0",
-              decimal: ".00"
-            },
-          }          
+          // this.priceRange = {
+          //   max: {
+          //     int: "0",
+          //     decimal: ".00"
+          //   },
+          //   min: {
+          //     int: "0",
+          //     decimal: ".00"
+          //   },
+          // }          
           let timer = setTimeout(()=>{
             this.onPriceInfoReady();
             clearTimeout(timer);

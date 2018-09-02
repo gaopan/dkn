@@ -27,6 +27,7 @@ export default {
     localStorage.removeItem(storageKey);
   },
   getToken(){
+
     if(_token) return _token;
     let token = localStorage.getItem(storageKey);
     if(TypeChecker.isString(token)) {
