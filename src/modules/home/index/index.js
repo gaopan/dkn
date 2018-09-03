@@ -15,14 +15,14 @@ export default {
     }
   },
   methods: {
-    redirection() {
+    // redirection() {
 
-      this.bRedirection = true;
-      let timer = setTimeout(() => {
-        clearTimeout(timer);
-        this.$router.push("/product/3608459664568")
-      }, 510)
-    }
+    //   this.bRedirection = true;
+    //   let timer = setTimeout(() => {
+    //     clearTimeout(timer);
+    //     this.$router.push("/product/3608459664568")
+    //   }, 510)
+    // }
   },
   created() {
     this.intervalTimer = setInterval(() => {
@@ -32,6 +32,14 @@ export default {
     // console.log(TokenService.getLang());
     this.lang = TokenService.getLang();
   },
+
+  beforeRouteLeave(to,from,next){
+    this.bRedirection = true;
+    setTimeout(()=>{
+      next();
+    },510)
+  },
+
   beforeDestroy() {
     clearInterval(this.intervalTimer);
   }
