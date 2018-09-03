@@ -6,11 +6,13 @@ export default {
 	data(){
 		return {
 			name: '',
-			password: ''
+			password: '',
+			loginFailed:false
 		};
 	},
 	methods: {
 		login(){
+			this.loginFailed = false;
 			IndexApi.login(this.name, this.password).then(res => {
 				// axios.common.headers['Authorization'] = 'Basic ' + res.data.token;		
 				axios.defaults.headers.common['Authorization'] = 'Basic ' + res.data.token;
@@ -19,6 +21,9 @@ export default {
 					token: res.data.token
 				});
 				this.$router.push('/index');
+			},
+			err=>{
+				this.loginFailed = true;
 			});
 		}
 	}
