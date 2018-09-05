@@ -84,7 +84,6 @@ export default {
   methods: {
     init(behavior) {
       let vm = this;
-      console.log(behavior)
       this.rfid = this.$router.currentRoute.params.rfid;
       if(behavior == "scanRfid"|| behavior == "createVue")this.initLanguage();
 
@@ -196,14 +195,12 @@ export default {
       } else {
         this.lang = "ZH";
       }
-      console.log(this.lang)
       this.country = this.defaultLang == "ZH" ? "tw" : "my";
     },
     changedModel(args) {
       this.AllLangDataBase[this.lang].modelCode = args;
     },
     changeItem(args){
-      // console.log("changeItem in product",args)
       this.AllLangDataBase[this.lang].itemCode = args;
     },
     monitorUserAction(event) {

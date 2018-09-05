@@ -14,7 +14,6 @@ let storeIdKey = 'store-id'
 // item_code\item_name\area\field\event\stay_time
 export default {
   getProductInfo(ean, lang, country) {
-    console.log(lang)
     let lang_ = lang == "ZH" ? "zh" : "en";
     let url = `productInfo/ean/${ean}/lang/${lang_}/country/${country}`;
 
@@ -52,7 +51,6 @@ export default {
   },
 
   postTracking(data) {
-    console.log(data)
     if (!data.item_code || !data.field) return Promise.resolve();
     let url = `https://product-scanner.decathlon.com/api/tracking/save`;
     let form = [];

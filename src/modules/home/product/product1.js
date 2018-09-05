@@ -727,7 +727,7 @@ export default {
         this.defaultCode[lang] = findDefaultCode(res.data.default_model_code,res.data.default_item_code,this.productModelsDatBase);
 
         this.original_dicount_price_itemcode.itemCode = this.defaultCode[lang].default_item_code;
-        console.log(this.defaultCode[lang])
+        // console.log(this.defaultCode[lang])
 
         //bDescriptionDataLoaded——show description title
         this.bDescriptionDataLoaded = true;
