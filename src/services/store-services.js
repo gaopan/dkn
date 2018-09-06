@@ -4,6 +4,7 @@ import shared from '@/shared.js'
 
 const storageKey = 'store-id';
 const mapping = {
+  1292: 'ZH',
   1639: 'ZH',
   666: 'ZH',
   2002: 'EN',
