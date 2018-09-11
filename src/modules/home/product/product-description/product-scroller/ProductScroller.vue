@@ -42,6 +42,10 @@
                 <p class="">{{review.title}}</p>
                 <p class="">{{review.body}}</p>
               </div>
+              <div class="product-answer" v-if = "review.answer">
+                <h5 class="title">回复：</h5>
+                <p class="content" v-html = "review.answer?review.answer.body||'' : ''"></p>
+              </div>
             </div>
           </div>
         </div>

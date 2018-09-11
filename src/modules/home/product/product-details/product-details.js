@@ -207,7 +207,7 @@ export default {
     this.originalDicountPriceItemcode.itemCode = this.defaultCode[this.lang].default_item_code;
     
     this.$emit("change-item",this.originalDicountPriceItemcode.itemCode)
-
+    
     this.$emit('changed-model', this.defaultCode[this.lang].default_model_code);
 
     this.getQRCode(this.defaultCode[this.lang].default_model_code, this.lang);
@@ -605,7 +605,7 @@ export default {
       }
     },
     divideFloat(float) {
-      let floatIndex = float.indexOf("."),
+      /*let floatIndex = float.indexOf("."),
         dividedFloat = {};
       if (floatIndex >= 0) {
         dividedFloat.int = float.substr(0, floatIndex)
@@ -614,7 +614,20 @@ export default {
         dividedFloat.int = float;
         dividedFloat.decimal = ".00";
       }
+      return dividedFloat;*/
+
+      let dividedFloat = {};
+
+      float += "";
+
+      dividedFloat.int = float.replace(/,/g , "");
+
+      dividedFloat.decimal = ".00";
+
       return dividedFloat;
+
+
+
     },
     onPriceInfoReady() {
       this.priceUnit = this.priceInfo.currency == "TWD" ? "NT$" : "$";

@@ -80,7 +80,7 @@ export default {
     modelCode: {
       handler(val) {
         if (val) {
-          this.onModelCode();
+          this.onModelCode(this.modelCode);
         }
       }
     },
@@ -179,6 +179,10 @@ export default {
     if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
 
+    if(this.modelCode){
+      this.onModelCode(this.modelCode);
+    }
+
     this.dataForMouseMonitor = {
       item_code: this.$props.itemCode,
       item_name: this.productInfoDataDatBase.WebLabel,
@@ -266,8 +270,8 @@ export default {
       this.activeNavIndex = index;      
       this.containerTitle = this.navTabList_[index].label[this.lang];
     },
-    onModelCode() {
-      let reviewData = this.userReviewInfo[this.modelCode];
+    onModelCode(modelCode) {
+      let reviewData = this.userReviewInfo[modelCode];
       let obj = makeUserReviewData(reviewData);
       this.productReviews = obj.productReviews;
       this.productScore = obj.productScore;
