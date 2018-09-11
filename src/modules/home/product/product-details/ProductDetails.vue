@@ -51,7 +51,7 @@
             <span class="product-price-decimal" v-if="priceUnit=='$'">{{originalDicountPriceItemcode.price.original.decimal}}</span>
             </span>
           </div>
-          <div class="empty-price-label" v-if="bEmptyPrice"></div>
+          <div class="empty-price-label" v-if="bEmptyPrice||noPriceInfo"></div>
           <!-- <p style="color: red">{{bEmptyPrice}}</p> -->
         </div>
       </div>

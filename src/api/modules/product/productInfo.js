@@ -16,6 +16,7 @@ export default {
   getProductInfo(ean, lang, country) {
     let lang_ = lang == "ZH" ? "zh" : "en";
     let url = `productInfo/ean/${ean}/lang/${lang_}/country/${country}`;
+
     return instance.get(url)  
   },
 
@@ -29,6 +30,7 @@ export default {
 
     let lang_ = lang == "ZH" ? "zh" : "en";
     let url = `voice/ean/${ean}/lang/${lang_}/country/${country}`;
+    
     return instance.get(url)
   },
 
@@ -41,6 +43,7 @@ export default {
 
   getQrcode(modelCode, country) {
     let url = `qrcode/model_code/${modelCode}/country/${country}`;
+
     return instance.get(url)
   },
 

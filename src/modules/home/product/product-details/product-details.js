@@ -259,15 +259,15 @@ export default {
   },
   computed: {
     showOriginalPrice() {
-      if (this.bEmptyPrice) return false;
+      if (this.bEmptyPrice||this.noPriceInfo) return false;
       return (this.originalDicountPriceItemcode.price.off == 100 && this.originalDicountPriceItemcode.itemCode);
     },
     showDiscountPrice() {
-      if (this.bEmptyPrice) return false;
+      if (this.bEmptyPrice||this.noPriceInfo) return false;
       return (this.originalDicountPriceItemcode.price.off !== 100 && this.originalDicountPriceItemcode.itemCode);
     },
     showRangePrice() {
-      if (this.bEmptyPrice) return false;
+      if (this.bEmptyPrice||this.noPriceInfo) return false;
       let default_model_code = !!this.defaultCode.other.default_model_code ? this.defaultCode.other.default_model_code : this.defaultCode[this.lang].default_model_code;
       //user selected another color duration data was loading.
 
@@ -528,7 +528,7 @@ export default {
           decimal: ".00"
         }
       };
-      if (Object.keys(priceInfo).length) {
+      if (priceInfo&&Object.keys(priceInfo).length) {
         let priceRangeData = priceInfo.models[modelCode];
 
         if (!priceRangeData) {
