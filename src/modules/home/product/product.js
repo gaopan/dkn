@@ -143,6 +143,8 @@ export default {
           })
         }else{
           this.showLoader = false;
+          // setTimeout(()=>{
+          // },1000)
         }
 
         if(!this.AllLangDataBase[lang].userReviewInfo || behavior == "scanRfid" || behavior == "createVue"){

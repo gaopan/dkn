@@ -119,6 +119,19 @@ export default {
       deep:true      
     },
 
+    //fix:
+    //if there is only one mode, 
+    //when the Chinese review and English are both in the local and user change the language, 
+    //the reviews will be not changed accordingly.
+    userReviewInfo:{
+      handler(val) {
+        if (val) {
+          this.onModelCode(this.modelCode);
+        }
+      },
+      deep:true
+    },
+
     defaultLang(newV, oldV){
 
       if (newV&&this.defaultLang != 'EN')localStorage.setItem("lang", this.defaultLang);     

@@ -39,8 +39,8 @@
                 <p><span v-if="lang == 'EN'||lang == 'MY'">On </span>{{productInfoDSM.WebLabel}}</p>
               </div>
               <div class="review-content">
-                <p class="">{{review.title}}</p>
-                <p class="">{{review.body}}</p>
+                <p v-html = "review.title||''"></p>
+                <p v-html = "review.body||''"></p>
               </div>
               <div class="product-answer" v-if = "review.answer">
                 <h5 class="title">{{lang == 'EN' ? "Reply" : "回復"}}：</h5>
