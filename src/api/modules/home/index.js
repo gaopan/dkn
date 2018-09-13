@@ -13,6 +13,7 @@ export default {
       method: 'post',
       url: url,
       data: form,
+      withCredentials: true,
       config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     });
   }
