@@ -23,8 +23,9 @@ export default{
       // this.lang = this.defaultLang;
       this.lang = "MY";
     } else {
-      let langInLocal = localStorage.getItem("lang");
-      this.lang = !!langInLocal ? langInLocal:"EN";
+    	this.lang = "ZH";
+      // let langInLocal = localStorage.getItem("lang");
+      // this.lang = !!langInLocal ? langInLocal:"EN";
     }
 		
 		this.timer = setInterval(()=>{
