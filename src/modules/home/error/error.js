@@ -1,11 +1,10 @@
-import StoreService from '@/services/store-services.js'
+import TokenService from '@/services/token-services.js'
 
 export default{
 	name:"error-page",
 	data(){
 		return{
 			countdown:10,
-			defaultLang:null,
 			lang:null,
 			timer:null,
       pageInfoLabel: {
@@ -17,16 +16,9 @@ export default{
 		}
 	},
 	created(){
-    this.defaultLang = StoreService.getLang();
+    let defaultLang = TokenService.getLang();
 
-    if (this.defaultLang == 'EN') {
-      // this.lang = this.defaultLang;
-      this.lang = "MY";
-    } else {
-    	this.lang = "ZH";
-      // let langInLocal = localStorage.getItem("lang");
-      // this.lang = !!langInLocal ? langInLocal:"EN";
-    }
+    this.lang = defaultLang == 'EN' ? "MY" : "ZH";
 		
 		this.timer = setInterval(()=>{
 			if(this.countdown == 0){

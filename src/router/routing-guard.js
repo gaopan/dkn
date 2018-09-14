@@ -3,7 +3,6 @@
  *  
  */
 import TypeChecker from '../utils/type-checker.js'
-// import StoreService from '@/services/store-services.js'
 import TokenService from '@/services/token-services.js'
 
 function componentRule(to, from, next) {

@@ -11,12 +11,6 @@ let routerTable = {
         import ('@/modules/home/Home.vue')
     },
     children: [{
-      path: 'init',
-      name: 'Home Init',
-      components: {
-        default: () => import('@/modules/home/init/Init.vue')
-      }
-    }, {
       path: 'login',
       name: 'Home Login',
       components: {
