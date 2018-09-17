@@ -17,9 +17,9 @@
             <span class="product-price-decimal" v-if="priceUnit=='RM'">{{originalDicountPriceItemcode.price.discount.decimal}}</span>
             </span>
             <span class="price-original-off">
-                <span class="product-price-original">
-                  {{priceUnit}} {{originalDicountPriceItemcode.price.original.int}}
-                  <span v-if = "priceUnit=='RM'">{{originalDicountPriceItemcode.price.original.decimal}}</span>
+								<span class="product-price-original">
+									{{priceUnit}} {{originalDicountPriceItemcode.price.original.int}}
+									<span v-if = "priceUnit=='RM'">{{originalDicountPriceItemcode.price.original.decimal}}</span>
             </span>
             <span class="price-discount-off">{{originalDicountPriceItemcode.price.off}}%off</span>
             </span>
