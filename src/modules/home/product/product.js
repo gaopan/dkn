@@ -180,7 +180,7 @@ export default {
           this.intervalTimer = null;
         }
         this.intervalTimer = setInterval(function() {
-          if (vm.monitorCount === 3 * 60 - 1) {
+          if (vm.monitorCount === 1 * 60 - 1) {
             clearInterval(vm.intervalTimer);
             vm.$router.push("/index")
           } else {

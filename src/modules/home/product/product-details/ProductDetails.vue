@@ -12,14 +12,14 @@
 
           <div class="product-with-discount" v-if="showDiscountPrice">
             <span class="product-price-discount">
-								<span>{{priceUnit}}</span>
+                <span>{{priceUnit}}</span>
             <span class="product-price-integer">{{originalDicountPriceItemcode.price.discount.int}}</span>
-            <span class="product-price-decimal" v-if="priceUnit=='$'">{{originalDicountPriceItemcode.price.discount.decimal}}</span>
+            <span class="product-price-decimal" v-if="priceUnit=='RM'">{{originalDicountPriceItemcode.price.discount.decimal}}</span>
             </span>
             <span class="price-original-off">
-								<span class="product-price-original">
-									{{priceUnit}} {{originalDicountPriceItemcode.price.original.int}}
-									<span v-if = "priceUnit=='$'">{{originalDicountPriceItemcode.price.original.decimal}}</span>
+                <span class="product-price-original">
+                  {{priceUnit}} {{originalDicountPriceItemcode.price.original.int}}
+                  <span v-if = "priceUnit=='RM'">{{originalDicountPriceItemcode.price.original.decimal}}</span>
             </span>
             <span class="price-discount-off">{{originalDicountPriceItemcode.price.off}}%off</span>
             </span>
@@ -29,26 +29,26 @@
             <span class="product-price-noDiscount" v-if = "priceRange.min.int===priceRange.max.int && priceRange.min.decimal===priceRange.max.decimal">
                   <span class="range-price-same">{{priceUnit}}</span>
                   <span class="range-price-same">{{priceRange.min.int}}</span>
-                  <span class="range-price-same" v-if="priceUnit=='$'">{{priceRange.min.decimal}}</span>              
+                  <span class="range-price-same" v-if="priceUnit=='RM'">{{priceRange.min.decimal}}</span>              
             </span>
 
             <span class="product-price-noDiscount" v-else>
-  							<span class="range-symbol">{{priceUnit}}</span>
+                <span class="range-symbol">{{priceUnit}}</span>
                 <span class="range-price-integer">{{priceRange.min.int}}</span>
-                <span class="range-price-decimal" v-if="priceUnit=='$'">{{priceRange.min.decimal}}</span>
+                <span class="range-price-decimal" v-if="priceUnit=='RM'">{{priceRange.min.decimal}}</span>
                 <span>-</span>
                 <span class="range-symbol"><span>{{priceUnit}}</span></span>
                 <span class="range-price-integer">{{priceRange.max.int}}</span>
-                <span class="range-price-decimal" v-if="priceUnit=='$'">{{priceRange.max.decimal}}</span>
+                <span class="range-price-decimal" v-if="priceUnit=='RM'">{{priceRange.max.decimal}}</span>
             </span>
 
           </div>
 
           <div class="product-without-discount" v-if="showOriginalPrice">
             <span class="product-price-noDiscount">
-								<span>{{priceUnit}}</span>
+                <span>{{priceUnit}}</span>
             <span class="product-price-integer">{{originalDicountPriceItemcode.price.original.int}}</span>
-            <span class="product-price-decimal" v-if="priceUnit=='$'">{{originalDicountPriceItemcode.price.original.decimal}}</span>
+            <span class="product-price-decimal" v-if="priceUnit=='RM'">{{originalDicountPriceItemcode.price.original.decimal}}</span>
             </span>
           </div>
           <div class="empty-price-label" v-if="bEmptyPrice||noPriceInfo"></div>
@@ -62,7 +62,7 @@
     <!-- select different colors of product  -->
     <div class="product-color-option">
       <span class="product-color-selected">
-					{{labels.colorOption[lang]}}: <span>{{size_image_colorName.colorName}}</span>
+          {{labels.colorOption[lang]}}: <span>{{size_image_colorName.colorName}}</span>
       </span>
       <ul class="product-color-list clearfix" ref="ColorOption">
         <li class="product-color-item" :class="{'selected':color.checked,'noBorder':color.imgUrl==''}" v-for="(color,colorIndex) in colorOptions" @click="selectProductColor(color,colorIndex)">
@@ -90,7 +90,7 @@
     </div>
     <div class="product-size-option">
       <span class="size-label">
-					<span class="size-mark">{{labels.size[lang]}}</span>
+          <span class="size-mark">{{labels.size[lang]}}</span>
       <!-- <span class="size-access">{{labels.stock[lang]}}{{productStock <= 0 ? labels.outOfStock[lang]:labels.inStock[lang]}}</span> -->
       </span>
       <div class="product-size-wrapper">
@@ -102,10 +102,10 @@
         <div class="no-QR-code" v-if="noQRCode"></div>
         <div v-else class="product-dimensional-code" id="QRCodeWrapper" :class="{'zIndex1': bShowQRCode}" ref="QRcode" @click="monitorClickColorQRSelect('QRcode')">
           <i :class='{
-									"icon-QR_code":!bShowQRCode,
-									"icon-close":bShowQRCode,
-								}' id="QRCodeIcon" @click="toggleQRCode">
-						</i>
+                  "icon-QR_code":!bShowQRCode,
+                  "icon-close":bShowQRCode,
+                }' id="QRCodeIcon" @click="toggleQRCode">
+            </i>
           <div class="product-QR-code" v-show="bShowQRCode">
             <p>{{labels.QRTip[lang]}}</p>
             <div class="QR-code-img">
@@ -113,12 +113,12 @@
             </div>
           </div>
           <span class="code-tip" :class="{'code-tip-en':lang == 'EN'||lang == 'MY','code-tip-zh':lang == 'ZH'}" v-show="!bShowQRCode">
-							{{labels.QRCode[lang]}}
-						</span>
+              {{labels.QRCode[lang]}}
+            </span>
         </div>
       </div>
     </div>
-    <div class="product-shadow" id="ProductShadow" v-show="bShowShadow||bShowQRCode"></div>
+    <div class="product-shadow" id="ProductShadow" v-show="bShowShadow||bShowQRCode" :style = "{'paddingBottom':shadowPaddingB}"></div>
   </section>
 </template>
 <script src="./product-details.js"></script>

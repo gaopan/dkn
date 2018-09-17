@@ -17,6 +17,7 @@ let dataProperty = {
     noQRCode: true,
     QRCodeSrc: null,
     priceUnit: null,
+    shadowPaddingB:null,
     originalDicountPriceItemcode: {
       // stock: 0,
       itemCode: "",
@@ -454,13 +455,24 @@ export default {
     },
     toggleQRCode() {
       if (this.QRCodeSrc == null) return;
+
+      if(!this.bShowQRCode){
+        this.shadowPaddingB = this.getShadowBottom();
+      }
+
       this.bShowQRCode = !this.bShowQRCode;
       let ProductShadow = document.querySelector("#ProductShadow");
+
+      
       if (this.bShowQRCode) {
         ProductShadow.addEventListener("click", this.fnBlur, false)
       } else {
         ProductShadow.removeEventListener("click", this.fnBlur, false)
       }
+    },
+    fnBlur(){
+      this.bShowQRCode = false;
+      ProductShadow.removeEventListener("click", this.fnBlur, false);
     },
     selectProductColor(color, colorIndex) {
       if (color.checked || color.imgUrl == '') return;
@@ -557,7 +569,7 @@ export default {
       this.originalDicountPriceItemcode.itemCode = args.itemCode;
       
       this.$emit("change-item",this.originalDicountPriceItemcode.itemCode)
-
+      
       //prevent before price returned
       if (Object.keys(this.priceInfo).length) {
         let price = this.priceInfo.items[args.itemCode];
@@ -571,7 +583,14 @@ export default {
       }
     },
     showSizeMenu(args) {
+      if(args){
+        this.shadowPaddingB = this.getShadowBottom();
+      }
+
       this.bShowShadow = args;
+    },
+    getShadowBottom(){
+      return $(document).height() - this.$refs.SizeOption.offsetTop - this.$refs.SizeOption.offsetHeight - 6 + 'px';
     },
     calculateDiscount(pricesObj) {
       let original = {
@@ -605,16 +624,6 @@ export default {
       }
     },
     divideFloat(float) {
-      /*let floatIndex = float.indexOf("."),
-        dividedFloat = {};
-      if (floatIndex >= 0) {
-        dividedFloat.int = float.substr(0, floatIndex)
-        dividedFloat.decimal = float.substr(floatIndex, float.length);
-      } else {
-        dividedFloat.int = float;
-        dividedFloat.decimal = ".00";
-      }
-      return dividedFloat;*/
 
       let dividedFloat = {};
 
@@ -626,11 +635,9 @@ export default {
 
       return dividedFloat;
 
-
-
     },
     onPriceInfoReady() {
-      this.priceUnit = this.priceInfo.currency == "TWD" ? "NT$" : "$";
+      this.priceUnit = this.priceInfo.currency == "TWD" ? "NT$" : "RM";
       let priceItems = Object.keys(this.priceInfo);
       if (priceItems.length == 0) this.$router.push("/error");
 

@@ -20,15 +20,4 @@
   </div>
 </template>
 <script src="./login.js"></script>
-<style type="text/css">
-  .error-message{
-    font-size: 16px;
-    margin-bottom: 10px;
-    height: 16px;
-  }
-  .error-mark{
-    color: red;
-    margin-right: 10px;
-    font-weight: bold;
-  }
-</style>
+<style lang="scss" src="./login.scss"></style>
