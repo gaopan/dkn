@@ -591,7 +591,7 @@ export default {
     },
     getShadowBottom(){
       return $(document).height() - this.$refs.SizeOption.offsetTop - this.$refs.SizeOption.offsetHeight - 6 + 'px';
-    },
+   },
     calculateDiscount(pricesObj) {
       let original = {
           int: "0",

@@ -18,11 +18,6 @@ function routingGuard(to, from, next) {
     return;
   }
 
-  // let storeId = StoreService.getStoreId();
-  // if(!storeId && to.fullPath != '/init') {
-  // 	next({path: '/init'});
-  // 	return;
-  // }
 
   let token = TokenService.getToken();
   if(!token && to.fullPath != '/login') {
