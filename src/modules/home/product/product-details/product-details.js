@@ -185,13 +185,7 @@ export default {
       },
       deep:true
     },
-    // lang(newV,oldV){
-    //   for(let i in dataProperty){
-    //     if(dataProperty.hasOwnProperty(i)){
-    //       this[i] = dataProperty[i];
-    //     }
-    //   }
-    // },
+
     //emit itemCode to product-descrition.js
     "originalDicountPriceItemcode.itemCode":{
       handler(newV,oldV){

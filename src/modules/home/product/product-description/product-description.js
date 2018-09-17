@@ -18,7 +18,6 @@ export default {
       required: true
     },
     userReviewInfo: {
-      type: Object,
       required: true
     },
     modelCode: {
@@ -123,6 +122,7 @@ export default {
     //if there is only one mode, 
     //when the Chinese review and English are both in the local and user change the language, 
     //the reviews will be not changed accordingly.
+
     userReviewInfo:{
       handler(val) {
         if (val) {
@@ -192,9 +192,9 @@ export default {
     if (this.productInfo.dsm) this.productInfoDataDatBase = this.productInfo.dsm;
     if (this.productInfo.models) this.productModelsDatBase = this.productInfo.models;
 
-    if(this.modelCode){
-      this.onModelCode(this.modelCode);
-    }
+    // if(this.modelCode){
+    // }
+    this.onModelCode(this.modelCode);
 
     this.dataForMouseMonitor = {
       item_code: this.$props.itemCode,
@@ -284,8 +284,21 @@ export default {
       this.containerTitle = this.navTabList_[index].label[this.lang];
     },
     onModelCode(modelCode) {
-      let reviewData = this.userReviewInfo[modelCode];
+
+      //# Change Request
+      //show the description of product once the description is fetched
+      
+      let reviews = null;
+
+      if(!this.userReviewInfo){
+        reviews = {};
+      }else{
+        reviews = this.userReviewInfo;
+      }
+
+      let reviewData = reviews[modelCode]||[];
       let obj = makeUserReviewData(reviewData);
+
       this.productReviews = obj.productReviews;
       this.productScore = obj.productScore;
 
@@ -309,6 +322,7 @@ export default {
           }
         }
       }
+
     },
 
     chooseLang(lang) {

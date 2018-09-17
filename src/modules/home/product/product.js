@@ -149,6 +149,7 @@ export default {
 
         if(!this.AllLangDataBase[lang].userReviewInfo || behavior == "scanRfid" || behavior == "createVue"){
           var userReviewPromise = ProductApi.getUserReview(this.rfid, this.lang, this.country).then(res => {
+            // console.log("fetch userReviewInfo")
             this.AllLangDataBase[lang].userReviewInfo = res.data;
           }, err => {
             this.AllLangDataBase[lang].noUserReviewInfo = true;
