@@ -12,7 +12,7 @@ let storeIdKey = 'store-id'
 // voice/ean/3608459729250/lang/en/country/my、/lang/zh/country/tw、/lang/en/country/tw
 // price/ean/3608459729250/store_id/666/lang/en/country/my、/lang/en/country/tw、/666/lang/zh/country/tw
 // item_code\item_name\area\field\event\stay_time
-
+//3608439622045  3608419309188  3608439626715  3608419390438
 export default {
   getProductInfo(ean, lang, country) {
     let lang_ = lang == "ZH" ? "zh" : "en";

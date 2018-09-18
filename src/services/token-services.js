@@ -5,6 +5,7 @@ import axios from 'axios'
 
 const storageKey = 'product-scanner-token-storage-id';
 const mapping = {
+  988: 'ZH',
   1292: 'ZH',
   1639: 'ZH',
   666: 'ZH',
