@@ -131,7 +131,7 @@ export default {
 
           this.$emit('changed-model', this.defaultCode[this.lang].default_model_code);
 
-          this.getQRCode(this.defaultCode[this.lang].default_model_code, this.lang);
+          this.getQRCode(this.defaultCode[this.lang].default_model_code, this.$props.storeId, this.lang);
 
           this.dataGenerator(this.lang, this.productModelsDatBase, this.productInfoDataDatBase);
 
@@ -205,7 +205,7 @@ export default {
     
     this.$emit('changed-model', this.defaultCode[this.lang].default_model_code);
 
-    this.getQRCode(this.defaultCode[this.lang].default_model_code, this.lang);
+    this.getQRCode(this.defaultCode[this.lang].default_model_code, this.$props.storeId, this.lang);
 
     this.dataGenerator(this.lang, this.productModelsDatBase, this.productInfoDataDatBase);
 
@@ -435,9 +435,9 @@ export default {
       })
       return sizeSelected;
     },
-    getQRCode(modelCode, lang) {
+    getQRCode(modelCode, storeId,lang) {
       let countru_QR = lang == "MY" ? "my" : "tw"
-      ProductApi.getQrcode(modelCode, countru_QR).then(res => {
+      ProductApi.getQrcode(modelCode, storeId, countru_QR).then(res => {
         this.QRCodeSrc = res.data;
         this.noQRCode = !!res.data ? false : true;
       }, err => {

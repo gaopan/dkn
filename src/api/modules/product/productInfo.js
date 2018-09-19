@@ -43,8 +43,8 @@ export default {
     return instance.get(url)
   },
 
-  getQrcode(modelCode, country) {
-    let url = `qrcode/model_code/${modelCode}/country/${country}`;
+  getQrcode(modelCode, storeId, country) {
+    let url = `qrcode/model_code/${modelCode}/country/${country}/store_id/${storeId}`;
     return instance.get(url)
   },
 
