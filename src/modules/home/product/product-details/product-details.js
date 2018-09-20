@@ -514,13 +514,8 @@ export default {
       })
 
       //update QR code
-      let countru_QR = this.lang == "MY" ? "my" : "tw"
-      ProductApi.getQrcode(color.modelCode, countru_QR).then(res => {
-        this.QRCodeSrc = res.data;
-        this.noQRCode = res.data ? false : true;
-      }, err => {
-        this.noQRCode = true;
-      })
+      this.getQRCode(color.modelCode, this.$props.storeId, this.lang)
+
     },
 
     getRangePrice(priceInfo, modelCode) {
