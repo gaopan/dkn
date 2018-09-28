@@ -65,7 +65,7 @@
           {{labels.colorOption[lang]}}: <span>{{size_image_colorName.colorName}}</span>
       </span>
       <ul class="product-color-list clearfix" ref="ColorOption">
-        <li class="product-color-item" :class="{'selected':color.checked,'noBorder':color.imgUrl==''}" v-for="(color,colorIndex) in colorOptions" @click="selectProductColor(color,colorIndex)">
+        <li class="product-color-item" :class="{'selected':color.checked,'noBorder':color.imgUrl==''}" v-for="(color,colorIndex) in colorOptions" @click="selectProductColor(color,colorIndex);monitorClickColorQRSelect('ColorOption')">
           <div class="no-icon-image" v-if="color.imgUrl==''"></div>
           <div class="icon-image" v-else-if="color.imgUrl=='NONE'">
             <span>{{color.colorName}}</span>

@@ -373,6 +373,8 @@ export default {
 
         let data = Object.assign({},{ field:this.monitorDescription.scrollTarget,stay_time: stayTime}, this.dataForMouseMonitor)
 
+        data.item_code = this.$props.itemCode||this.$props.modelCode;
+
         ProductApi.postTracking(data)
         // console.log("fetch leave",this.monitorDescription.scrollTarget,data)
         this.monitorDescription.movingTime = 0;
@@ -410,6 +412,8 @@ export default {
           let stayTime = +((Date.now() - this.monitorDescription.mobileMovingTime) / 1000).toFixed(2);
           
           let data = Object.assign({},{ field:this.monitorDescription.mobileTouchTarget,stay_time: stayTime}, this.dataForMouseMonitor)
+          
+          data.item_code = this.$props.itemCode||this.$props.modelCode;
 
           ProductApi.postTracking(data)
           //end touching on description
@@ -420,6 +424,8 @@ export default {
           let stayTime = +((Date.now() - this.monitorDescription.mobileMovingTime) / 1000).toFixed(2);
           
           let data = Object.assign({},{ field:newTarget,stay_time: stayTime}, this.dataForMouseMonitor)
+          
+          data.item_code = this.$props.itemCode||this.$props.modelCode;
 
           ProductApi.postTracking(data);
           this.monitorDescription.mobileTouchTarget = newTarget
@@ -442,6 +448,8 @@ export default {
           let stayTime = +((Date.now() - this.monitorDescription.movingTime) / 1000).toFixed(2);
           
           let data = Object.assign({},{ field:this.monitorDescription.scrollTarget,stay_time: stayTime}, this.dataForMouseMonitor)
+          
+          data.item_code = this.$props.itemCode||this.$props.modelCode;
 
           ProductApi.postTracking(data)
           // console.log("fetch move:",this.monitorDescription.scrollTarget,data)
@@ -512,7 +520,7 @@ export default {
       if (target == fieldEle.TechInfo) field = "TechInfo";
 
       let data = {
-        item_code: this.$props.itemCode,
+        item_code:  this.$props.itemCode||this.$props.modelCode,
         item_name: this.productInfoDataDatBase.WebLabel,
         area: "ContentZone",
         field: field,
@@ -520,7 +528,7 @@ export default {
         store_id: this.$props.storeId,
         stay_time: 0
       }
-
+      
       ProductApi.postTracking(data)
     }
   }

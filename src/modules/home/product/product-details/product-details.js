@@ -514,8 +514,7 @@ export default {
       })
 
       //update QR code
-      this.getQRCode(color.modelCode, this.$props.storeId, this.lang)
-
+      this.getQRCode(color.modelCode, this.$props.storeId, this.lang)     
     },
 
     getRangePrice(priceInfo, modelCode) {
@@ -676,7 +675,7 @@ export default {
     },
     monitorClickColorQRSelect(field) {
       let data = {
-        item_code: this.originalDicountPriceItemcode.itemCode,
+        item_code: this.originalDicountPriceItemcode.itemCode||this.defaultCode.other.default_model_code||this.defaultCode[this.lang].default_model_code,
         item_name: this.itemName,
         area: "ConversionZone",
         field: field,
@@ -693,7 +692,7 @@ export default {
       let doc = document;
       if (event.target == doc.querySelector("#iconDown") || event.target == doc.querySelector("#iconUp")) {
         let data = {
-          item_code: this.originalDicountPriceItemcode.itemCode,
+          item_code: this.originalDicountPriceItemcode.itemCode||this.defaultCode.other.default_model_code||this.defaultCode[this.lang].default_model_code,
           item_name: this.itemName,
           area: "ConversionZone",
           field: "Moreviews",
@@ -717,7 +716,7 @@ export default {
         let stayTime = +((Date.now() - this.monitorMousemove.carouselTime) / 1000).toFixed(2);
 
         let data = {
-          item_code: this.originalDicountPriceItemcode.itemCode,
+          item_code: this.originalDicountPriceItemcode.itemCode||this.defaultCode.other.default_model_code||this.defaultCode[this.lang].default_model_code,
           item_name: this.itemName,
           area: "ConversionZone",
           field: "MainPicBlock",
