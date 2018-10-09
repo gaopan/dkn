@@ -42,11 +42,7 @@ export default {
         EN:Object.assign({},dataProto),
         MY:Object.assign({},dataProto),
       },
-      dataLoaded:{
-        ZH:false,
-        EN:false,
-        MY:false,
-      },
+
       isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
     };
   },
@@ -56,6 +52,7 @@ export default {
     //remove rfid_storeId In Storage tp prevent Cache
     let rfid_storeId = this.$router.currentRoute.params.rfid + "_" + this.storeId;
     let rfid_storeIdInStorage = localStorage.getItem(this.$router.currentRoute.params.rfid + "_" + this.storeId);      
+    
     if(rfid_storeIdInStorage){
       localStorage.removeItem(rfid_storeId);      
     }
@@ -78,6 +75,7 @@ export default {
   components: { ElementLoading, ProductDetails, ProductDescription },
   watch: {
     '$route.params.rfid': function() {
+      this.monitorCount = 0;
       this.init("scanRfid");
     }
   },
@@ -89,7 +87,9 @@ export default {
 
       initProperties.call(this, this.lang, behavior);
       initPageData.call(this, this.lang, behavior);
-      initTimeChecker.call(this);
+
+      //start timecount when productInfo api loaded
+      // initTimeChecker(this);
 
       function initProperties(lang,behavior) {
         //clear all data when user scan new QR code
@@ -116,35 +116,29 @@ export default {
 
         }
 
-        // if(behavior == "changeLang"){
-        //   if(this.AllLangDataBase[lang].productInfo)
-        //   this.AllLangDataBase[lang].modelCode = null;
-        //   this.AllLangDataBase[lang].itemCode = null;
-        //   this.AllLangDataBase[lang].productInfo = null;
-        //   this.AllLangDataBase[lang].noProductInfo = false;
-        //   this.AllLangDataBase[lang].userReviewInfo = null;
-        //   this.AllLangDataBase[lang].noUserReviewInfo = false;
-        //   this.AllLangDataBase[lang].stockInfo = null;
-        //   this.AllLangDataBase[lang].noStockInfo = false;
-        //   this.AllLangDataBase[lang].priceInfo = null;
-        //   this.AllLangDataBase[lang].noPriceInfo = false;
-        // }
       }
 
       function initPageData(lang,behavior) {
         this.showLoader = true;
         if(!this.AllLangDataBase[lang].productInfo || behavior == "scanRfid" || behavior == "createVue"){
+
+          if(this.intervalTimer)clearInterval(this.intervalTimer);  
+
           var productInfoPromise = ProductApi.getProductInfo(this.rfid, this.lang, this.country).then(res => {
             this.showLoader = false;
             this.AllLangDataBase[lang].productInfo = res.data;
+
+            initTimeChecker(this);
+
           }, err => {
+
             this.AllLangDataBase[lang].noProductInfo = true;
             this.$router.push('/error');
+
           })
+
         }else{
           this.showLoader = false;
-          // setTimeout(()=>{
-          // },1000)
         }
 
         if(!this.AllLangDataBase[lang].userReviewInfo || behavior == "scanRfid" || behavior == "createVue"){
@@ -166,6 +160,7 @@ export default {
         }
 
         if(!this.AllLangDataBase[lang].priceInfo || behavior == "scanRfid" || behavior == "createVue"){
+          // if(this.rfid == 3608459609668) this.country = "country";
           var pricePromise = ProductApi.getPrice(this.rfid, this.storeId, this.lang, this.country).then(res => {
             this.AllLangDataBase[lang].priceInfo = res.data;
             this.AllLangDataBase[lang].noPriceInfo = false;
@@ -175,17 +170,21 @@ export default {
         }
       }
 
-      function initTimeChecker() {
-        if (this.intervalTimer) {
-          clearInterval(this.intervalTimer);
-          this.intervalTimer = null;
+      function initTimeChecker(context) {
+        if (context.intervalTimer) {
+          clearInterval(context.intervalTimer);
+          context.intervalTimer = null;
         }
-        this.intervalTimer = setInterval(function() {
-          if (vm.monitorCount === 1 * 60 - 1) {
-            clearInterval(vm.intervalTimer);
-            vm.$router.push("/index")
+
+        context.monitorCount = 0;
+
+        context.intervalTimer = setInterval(function() {
+          if (context.monitorCount === 1 * 60 - 1) {
+            clearInterval(context.intervalTimer);
+            context.$router.push("/index")
           } else {
-            vm.monitorCount += 1;
+            context.monitorCount += 1;
+            // console.log(context.monitorCount)
           }
         }, 1000);
       }
@@ -207,7 +206,6 @@ export default {
       this.AllLangDataBase[this.lang].itemCode = args;
     },
     monitorUserAction(event) {
-      event = event || window.event;
       this.monitorCount = 0;
     },
     changeProductInfo(args) {
