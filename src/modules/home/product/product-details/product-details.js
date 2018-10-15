@@ -605,7 +605,7 @@ export default {
           if (!!strikeout_price) {
 
             original = this.divideFloat(strikeout_price);
-            off = +(((+sale_price) * 100 / (+strikeout_price)).toFixed(0))
+            off = +((( 1-(+sale_price) / (+strikeout_price)) * 100 ).toFixed(0))
           }
         }
         return { original, discount, off }
