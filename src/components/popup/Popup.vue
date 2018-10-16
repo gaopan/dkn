@@ -11,7 +11,7 @@
 
           <div class="modal-footer">
               <button class="modal-default-button" @click="$emit('close')">
-                明白了
+                {{buttonTxt}}
               </button>
           </div>
         </div>

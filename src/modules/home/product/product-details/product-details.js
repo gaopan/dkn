@@ -1,5 +1,6 @@
 import ProductConfig from '../product.config.js'
 import ProductApi from "@/api/modules/product/productInfo.js"
+import Popup from "@/components/popup/Popup.vue"
 
 import { Carousel, Slide } from "@/components/carousel"
 import CustomSelect from "@/components/custom-select"
@@ -69,7 +70,8 @@ let dataProperty = {
       scrollTarget: null,
       scrollNavTime: 0,
     },
-    itemName:null,  
+    itemName:null, 
+    showModal: false,
     isTouch: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)  
 }
 export default {
@@ -101,7 +103,7 @@ export default {
       type:  [String,Number]
     }
   },
-  components: { Carousel, Slide, CustomSelect },
+  components: { Carousel, Slide, CustomSelect, Popup },
   data() {
     return Object.assign({},dataProperty);
   },
@@ -291,9 +293,11 @@ export default {
           }
           return true;
         })
+        // default_model_code = undefined;
         if (typeof default_model_code == "undefined") {
           modelsDatBase.every((model, modelIndex) => {
             if (model.ModelCode) {
+              this.showModal = true;
               default_model_code = model.ModelCode;
               return false;
             }

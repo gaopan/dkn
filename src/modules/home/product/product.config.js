@@ -20,7 +20,10 @@ let config = {
     tip2: { MY: "We are still working on the detail", EN: "We are still working on the detail", ZH: "我們正努力更新中." },
     tip3: { MY: "information.", EN: "information.", ZH: "" },
     emptyPriceLabel: { MY: "Please check label or ask SA to get the price", EN: "Please check label or ask SA to get the price", ZH: "請查看商品標簽或向店員詢問價格信息" },
-    QRTip: { MY: "Scan this QR code with your phone, get product information on decathlon.my!", EN: "Scan this QR code with your phone, get product information on decathlon.tw!", ZH: "請用手機掃二維碼，從迪卡儂官網上獲取產品信息！" }
+    QRTip: { MY: "Scan this QR code with your phone, get product information on decathlon.my!", EN: "Scan this QR code with your phone, get product information on decathlon.tw!", ZH: "請用手機掃二維碼，從迪卡儂官網上獲取產品信息！" },
+    emptyModelCodeInfoTitle: { MY: "The product info you are scanning is not ready,", EN: "The product info you are scanning is not ready,", ZH: "本產品資訊系統還在建置中" },
+    emptyModelCodeInfoSubtitle: { MY: "we recommand you more extended models.", EN: "we recommand you more extended models.", ZH: "目前尚有其他顏色款式可提供參考。" },
+    emptyModelCodeLabel: { MY: " I got it", EN: " I got it", ZH: "明白了" },
   }
 }
 

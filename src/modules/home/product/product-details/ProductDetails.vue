@@ -119,6 +119,15 @@
       </div>
     </div>
     <div class="product-shadow" id="ProductShadow" v-show="bShowShadow||bShowQRCode" :style = "{'paddingBottom':shadowPaddingB}"></div>
+
+    <div class="empty-modelCode-popup">
+      <popup v-if="showModal" @close="showModal = false" :buttonTxt = "labels.emptyModelCodeLabel[lang]">
+        <div class="empty-description-wrapper" slot="body">
+          <p class="empty-description-title">{{labels.emptyModelCodeInfoTitle[lang]}}</p>
+          <p class="empty-description-subtitle">{{labels.emptyModelCodeInfoSubtitle[lang]}}</p>
+        </div>
+      </popup>
+    </div>    
   </section>
 </template>
 <script src="./product-details.js"></script>

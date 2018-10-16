@@ -34,7 +34,7 @@
     </section>
     
     <div class="empty-zhProduct-popup">
-      <popup v-if="showModal" @close="showModal = false">
+      <popup v-if="showModal" @close="showModal = false" :buttonTxt = "'我明白了'">
         <div class="empty-description-wrapper" slot="body">
           <p class="empty-description-title">抱歉，中文产品简介还没有准备好。</p>
           <p class="empty-description-subtitle">您过两天来就能看到啦。</p>
